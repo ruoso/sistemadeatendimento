@@ -1,0 +1,286 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+    [%# Montando o espaço de informações sobre o local de atendimento. %]
+    [% MAIN_INFORMACOES = BLOCK %]
+    <DIV ID="bloco_informacoes">
+
+        <h3 id="TitInformacoes" class="titulos">Informações</h3><br>
+        <DIV ID="informacoes_status">
+            <table>
+                <tr>
+                    <td>Mesa: </td>
+                    <td class="status">[% status_guiche.guiche.identificador %]</td>
+                </tr>
+                <tr>
+                    <td>Atendente:</td>
+                    <td class="status">[% status_guiche.guiche.funcionario %] </td>
+                </tr>
+                <tr>
+                    <td>Estado: </td>
+                    <td class="status">[% status_guiche.guiche.estado %] </td>
+                </tr>
+            </table>
+        </DIV>              
+
+        [% IF status_guiche.guiche.estado == 'concluido' || status_guiche.guiche.estado == 'disponivel' %]
+        [% IF lista_no_show %]
+        <h3 id="TitAtendAtrasados" class="titulos">Atendimentos Atrasados:</h3><br>
+        <DIV ID="atendimentos_no_show">
+            <UL>
+                [% FOREACH no_show IN lista_no_show.lista_atendimentos.atendimento %]
+                    <li>
+                        Atendimento: [% no_show.id_atendimento %] - Senha: [% no_show.senha %] [% c.prototype.link_to_remote('Atender', { url => '/cb/atendente/atender_no_show/' _ no_show.id_atendimento }) %] 
+                    </li>
+                [% END %]
+            </UL>
+        </DIV>              
+        [% END %]
+        [% END %]
+
+        [% IF status_guiche.guiche.estado == 'concluido' || status_guiche.guiche.estado == 'disponivel' %]
+            [% IF lista_servicos %]
+                <h3 id="TitServicos" class="titulos">Serviços:</h3><br>
+                <DIV ID="servicos">
+                    <UL>
+                        [% FOREACH servico IN lista_servicos.lista_servicos.servico %]
+                            <li>
+                                Serviço: [% servico.nome %] - Classe: [% servico.id_classe %] [% c.prototype.link_to_remote('Ir para', { url => '/cb/atendente/iniciar_servico_interno/' _ servico.id_servico }) %] 
+                            </li>
+                        [% END %]
+                    </UL>
+                </DIV>              
+            [% END %]
+        [% END %]
+
+        [% IF status_guiche.guiche.estado == 'atendimento'  %]
+            [% IF lista_servicos_atendimento %]
+                <h3 id="TitServicos" class="titulos">Serviços:</h3><br>
+                <DIV ID="servicos">
+                    <UL>
+                        [% FOREACH servico IN lista_servicos_atendimento.lista_servicos.servico %]
+                            <li>
+                                Serviço: [% servico.nome %] - Classe: [% servico.id_classe %] [% c.prototype.link_to_remote('Iniciar Serviço', { url => '/cb/atendente/iniciar_servico_atendimento/' _ servico.id_servico }) %] 
+                            </li>
+                        [% END %]
+                    </UL>
+                 </DIV>                    
+            [% END %]
+
+        [% END %]
+
+        [% IF lista_guiches_encaminhar %]
+            <H3 class="titulos">Encaminhar para outra mesa</h3>
+                <DIV ID="lista_guiches_encaminhar" class="encaminhar">
+                    <form name="encaminhar" id="encaminhar" onsubmit="return encaminhar_atendimento()"> 
+                        Mesas: <select name="mesaDestino" id="mesaDestino" size="1" style="width: 300px">
+                        [% FOREACH guiche IN lista_guiches_encaminhar.lista_guiches.guiche %]
+                            [% IF guiche.estado != 'fechado' && guiche.id_guiche != status_guiche.guiche.id_guiche %]
+                                <option value="[% guiche.id_guiche %]">Mesa [% guiche.identificador %]</option>
+                            [% END %]
+                        [% END %]
+                        </select><br /><br />
+                        Motivo: <input type="text" name="motivoEnc" id="motivoEnc" style="width: 300px" maxlength="100"><br /><br />
+                        <button value="Encaminhar" id="BtEnc" type="submit">Encaminhar</button>         
+                    </form>
+                </DIV>
+        [% END %]
+
+        [% IF status_guiche.guiche.estado == 'interno' %]
+            <h3 id="TitServicos" class="titulos">Serviço em andamento:</h3><br>
+            <DIV ID="servicos">
+                <form name="interno" id="interno" onsubmit="return setar_info_interno()">
+                <table>
+                    <tr>
+                        [% FOREACH servico IN status_guiche.guiche.servicos.servico %]
+                            <td>Serviço: [% servico.nome %]</td>
+                            <td>Classe: [% servico.id_classe %]</td>
+                            [% IF servico.informacoes %]
+                                <td><input type="hidden" name="txtInformacoes" id="txtInformacoes" style="width: 100%" maxlength="100" value=""> ([% servico.informacoes %]) </td>
+                                <td align="right"><button value="SetarInformacoes" type="submit" style="width: 100%">Redefinir Informações</button></td>
+                            [% ELSE %]
+                                <td><input type="text" name="txtInformacoes" id="txtInformacoes" style="width: 100%" maxlength="100" value="[% servico.informacoes %]"></td>
+                                <td align="right"><button value="SetarInformacoes" type="submit" style="width: 100%">Registrar Informações</button></td>
+                            [% END %]
+                        [% END %]
+                    </tr>
+                </table>
+                </form>
+            </DIV>  
+        [% END %]
+
+        [% IF status_guiche.guiche.estado == 'atendimento' %]
+                    [% IF status_guiche.guiche.servicos.servico %]
+                    <h3  id="TitServicos" class="titulos">Serviços em andamento:</h3><br>
+                    <DIV ID="servicos">
+                        <table>
+                            [% FOREACH servico IN status_guiche.guiche.servicos.servico %]
+                                <tr>
+                                    <td>Serviço: [% servico.nome %]</td>
+                                    <td>Classe: [% servico.id_classe %]</td>
+                                    <td valign="bottom">
+                                        <div>
+                                        <form style="margin: 0; padding:0" name="serv_atend[% servico.id_servico %]" id="serv_atend[% servico.id_servico %]" onsubmit="return setar_info_atendimento(serv_atend[% servico.id_servico %])">
+                                            <table><tr>
+                                            [% IF servico.informacoes %]
+                                                <td><input type="hidden" name="id_servico" value="[% servico.id_servico %]"><input type="hidden" name="txtInformacoes" id="txtInformacoes" style="width: 100%" maxlength="100" value=""> ([% servico.informacoes %])</td>
+                                                <td><button value="SetarInformacoes" type="submit" style="width: 100%">Redefinir Informações</button></td>
+                                            [% ELSE %]
+                                                <td><input type="hidden" name="id_servico" value="[% servico.id_servico %]"><input type="text" name="txtInformacoes" id="txtInformacoes" style="width: 100%" maxlength="100" value="[% servico.informacoes %]"></td>
+                                                <td><button value="SetarInformacoes" type="submit" style="width: 100%">Registrar Informações</button></td>
+                                            [% END %]
+                                            </tr></table>
+                                        </form>
+                                        </div>
+                                    </td>
+                                    <td> [% c.prototype.link_to_remote('(Encerrar)' , { url => '/cb/atendente/fechar_servico_atendimento/' _ servico.id_servico }) %] </td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </DIV>              
+                    [% END %]
+        [% END %]
+
+        [% IF status_guiche.guiche.estado == 'pausa' %]
+        <h3>Motivo da Pausa: [% status_guiche.guiche.pausa_motivo %]</h3><br>
+        <DIV ID="pausa_motivo">
+            <form name="pausa" id="pausa" onsubmit="return setarmotivo()">
+            <table>
+                [% IF status_guiche.guiche.pausa_motivo %]    
+                    <tr>
+                    <td><input type="hidden" name="txtMotivo" id="txtMotivo" style="width: 100%" maxlength="100" value=""></td>
+                    <td align="right"><button value="SetarMotivo" type="submit" style="width: 100%">Redefinir</button> </td>
+                    </tr>
+                [% ELSE %]
+                    <tr><td><input type="text" name="txtMotivo" id="txtMotivo" style="width: 100%" maxlength="100" value="[% status_guiche.guiche.pausa_motivo %]"></td>
+                    <td align="right"><button value="SetarMotivo" type="submit" style="width: 100%">Registrar Motivo</button> </td></tr>
+                [% END %]
+            </table>
+            </form>
+        </DIV>              
+        [% END %]
+            
+        <div id="ContainerSenha">
+            <h3 class="titulos" id="TitSenha">Senha</h3>
+            <div id="Senha">[% status_guiche.guiche.senha %]</div>
+        </div>
+
+        [% IF status_guiche.guiche.agendamento %]
+        <BR><h3 id="TitAgendamento" class="titulos">Informações do Agendamento</H3><BR>
+        <div id="agendamento">
+          <P>Nome: [% status_guiche.guiche.agendamento.nome %]</P>
+          <P>Pessoa Física ou Jurídica: [% status_guiche.guiche.agendamento.tipopessoa %]</P>
+          <P>CPF/CNPJ: [% status_guiche.guiche.agendamento.cnpjf %]</P>
+          <P>Email: [% status_guiche.guiche.agendamento.email %]</P>
+        </div>
+        [% END %]
+
+    </DIV>
+    
+    [% END %]
+    $('bloco_informacoes').replace("[% MAIN_INFORMACOES | js %]");
+
+    [%# Montando menu das ações disponíveis para o atendente. %]
+    [% ACOES_ATENDENTE = BLOCK %]
+       <DIV ID="bloco_lista_acoes">
+        [% SWITCH status_guiche.guiche.estado %]
+            
+            [% CASE 'chamando' %]
+                <SPAN class="botao_acao acao_iniciar">
+                 [% c.prototype.link_to_remote('Iniciar Atendimento', { url => '/cb/atendente/iniciar_atendimento' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_devolver_senha">
+                 [% c.prototype.link_to_remote('Devolver Senha', { url => '/cb/atendente/devolver_senha' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_registrar_ausencia">
+                 [% c.prototype.link_to_remote('Registrar Ausência', { url => '/cb/atendente/registrar_no_show' , confirm => 'confirmar(\'Deseja mesmo registrar ausência?\')' }) %]
+                </SPAN>
+            
+            [% CASE 'atendimento' %]
+                <SPAN class="botao_acao acao_ir_para">
+                    [% c.prototype.link_to_remote('Ir Para', { url => '/cb/atendente/listar_servicos_atendimento' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_encaminhar">
+                    [% c.prototype.link_to_remote('Encaminhar', { url => '/cb/atendente/listar_guiches_encaminhar' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_concluir">
+                 [% c.prototype.link_to_remote('Concluir Atendimento', { url => '/cb/atendente/concluir_atendimento' }) %]
+                </SPAN>
+            [% CASE 'pausa' %]
+                <SPAN class="botao_acao acao_retornar_pausa">
+                    [% c.prototype.link_to_remote('Retornar da Pausa', { url => '/cb/atendente/retornar_pausa' }) %]
+                </SPAN>
+            
+            [% CASE 'interno' %]
+                <SPAN class="botao_acao acao_voltar_serv_interno">
+                    [% c.prototype.link_to_remote('Voltar', { url => '/cb/atendente/fechar_servico_interno' }) %]
+                </SPAN>
+
+            [% CASE 'concluido' %]
+                <SPAN class="botao_acao acao_fechar_mesa">
+                [% c.prototype.link_to_remote('Fechar Mesa', { url => '/cb/atendente/fechar_guiche' , confirm => 'confirmar(\'Deseja mesmo fechar mesa?\')'}) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_iniciar_pausa">
+                    [% c.prototype.link_to_remote('Iniciar Pausa', { url => '/cb/atendente/iniciar_pausa' , confirm => 'confirmar(\'Deseja mesmo iniciar uma pausa?\')'}) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_atender_ausente">
+                [% c.prototype.link_to_remote('Atender Ausente', { url => '/cb/atendente/listar_no_show' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_iniciar_servico">
+                [% c.prototype.link_to_remote('Ir Para', { url => '/cb/atendente/listar_servicos' }) %]
+                </SPAN>                                            
+                <SPAN class="botao_acao acao_disponivel">
+                [% c.prototype.link_to_remote('Disponível', { url => '/cb/atendente/disponivel' }) %]
+                </SPAN>
+            
+            [% CASE 'disponivel' %]
+                <SPAN class="botao_acao acao_fechar_mesa">
+                [% c.prototype.link_to_remote('Fechar Mesa', { url => '/cb/atendente/fechar_guiche', confirm => 'confirmar(\'Deseja mesmo fechar mesa?\')' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_iniciar_pausa">
+                    [% c.prototype.link_to_remote('Iniciar Pausa', { url => '/cb/atendente/iniciar_pausa' , confirm => 'confirmar(\'Deseja mesmo iniciar uma pausa?\')'}) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_atender_ausente">
+                [% c.prototype.link_to_remote('Atender Ausente', { url => '/cb/atendente/listar_no_show' }) %]
+                </SPAN>
+                <SPAN class="botao_acao acao_iniciar_servico">
+                [% c.prototype.link_to_remote('Ir Para', { url => '/cb/atendente/listar_servicos' }) %]
+                </SPAN>
+              
+            [% CASE 'avaliacao' %]
+                Aguardando o término da avaliação.
+                
+                
+        [% END %]
+       </DIV>
+    [% END %]
+    $('bloco_lista_acoes').replace("[% ACOES_ATENDENTE | js %]");
+	
+    [% bloco_senha = BLOCK %]
+   		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+   		<DIV id='header2' style='padding:0 0 0 330px; '>
+		    <P style='color:gray;'>
+		    	[% IF status_guiche.guiche.funcionario %]
+		    		Usuário<font color='black'>:</font> [% status_guiche.guiche.funcionario %] <BR /> 
+		    		(<SPAN class='link_dot'><a href="javascript:abrir_popup_senha()">Mudar Senha</a></SPAN>)<br />
+		    	[% END %]
+		    	(<a href="/static/doc/ajuda.html" target="_blank">Ajuda</a></SPAN>)
+		</DIV>
+	[% END %]
+
+    $('header2').replace("[% bloco_senha | js %]"); 

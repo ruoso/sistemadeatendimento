@@ -1,0 +1,38 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+<script language="javascript">
+[% USE JavaScript %]
+
+[% new_content_main = BLOCK %]
+<div id="content_main">
+<P>Você foi desconectado...</p>
+</div>
+[% END %]
+
+[% bloco_senha = BLOCK %]
+   		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+   		<DIV id='header2' style='padding:0 0 0 330px; '>
+		    <P style='color:gray;'>
+		    	(<a href="/static/doc/ajuda.html" target="_blank">Ajuda</a></SPAN>)
+		</DIV>
+[% END %]
+
+$('content_main').replace("[% new_content_main | js %]");
+$('header2').replace("[% bloco_senha | js %]"); 
+</script>

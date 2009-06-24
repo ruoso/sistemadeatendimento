@@ -1,0 +1,50 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[% INCLUDE 'header.tt' %]
+
+<H1 class='titulos'>Locais </H1>
+<TABLE class="tabs" cellspacing='0'>
+<CAPTION><SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/criar') %]">Novo</A></SPAN></CAPTION> 
+<TR class='titulosTabela'><TH>Id</TH>
+    <TH>Data Abertura</TH>
+    <TH>Data Encerramento</TH>
+    <TH>Nome</TH>
+    <TH>JID Emissor</TH>
+    <TH>JID Painel</TH>
+    <TH>JID Opiniometro</TH>
+    </TR>
+[% FOREACH local IN locais.all %]
+<TR class='titulosTabela'><TD><A HREF='[% c.uri_for('/locais/') %][% local.id_local %]'>[% local.id_local %]</A></TD>
+    <TD>[% local.vt_ini.strftime('%d/%m/%Y') %]</TD>
+    <TD>[% IF local.vt_fim.is_infinite() %]
+          atual (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/encerrar">Encerrar</A>)
+        [% ELSE %]
+          [% local.vt_fim.strftime('%d/%m/%Y') %]
+          (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/reabrir">Reabrir</A>)
+        [% END %]
+        </TD>
+    <TD>[% local.nome %]</TD>
+    <TD>[% local.jid_senhas %]</TD>
+    <TD>[% local.jid_painel %]</TD>
+    <TD>[% local.jid_opiniometro %]</TD>
+    </TR>
+[% END %]
+</TABLE>
+
+[% INCLUDE 'footer.tt' %]

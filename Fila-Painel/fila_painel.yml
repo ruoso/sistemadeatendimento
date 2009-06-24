@@ -1,0 +1,9 @@
+---
+name: Fila::Opiniometro
+Engine::XMPP2:
+    username: painel
+    domain: agents.fila.vhost
+    password: password
+    override_host: localhost
+timeout: 5
+output: /tmp/senhas_chamando.csv

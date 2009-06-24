@@ -1,0 +1,132 @@
+
+INTRODUÇÃO
+================================================================================
+
+Este é o código fonte do Sistema de Atendimento. O sistema é
+distribuído em diferentes módulos, segue uma lista dos módulos do
+sistema:
+
+  Fila-Administracao: Interface Web para gestão das configurações do
+    local de atendimento.
+
+  Fila-Agendamento: Interface Web para a realização de agendamentos de
+    atendimentos.
+
+  Fila-Opiniometro: Módulo de sistema para comunicação com dispositivo
+    de registro da avaliação dos atendimentos realizados.
+
+  Fila-Painel: Módulo de sistema para a notificação utilizando o
+    sistema de visualização da praça.
+
+  Fila-Senha: Módulo do sistema para a comunicação com o dispositivo
+    emissor de senha.
+
+  Fila-Servico: Módulo de regras de negócio responsável por todo o
+    controle do atendimento.
+
+  Fila-Web: Interface Web para o sistema de atendimento, incluindo
+    atendente, gerente e interface para emissão de senhas manual.
+
+Adicionalmente, os códigos-fonte do projeto incluem os seguintes
+diretórios:
+
+  Apache2: contém uma configuração de exemplo da interface Web doutiliza 
+    sistema para o sistema de atendimento.
+
+  DJabberd: contém uma configuração de exemplo para o servidor Jabber
+    DJabberd, parte fundamental do funcionamento do sistema.
+
+  patches: contém dois Patches a serem aplicados em bibliotecas
+    instaladas no sistema. Esses patches já foram enviados aos autores
+    originais das bibliotecas, mas ainda não estão incluídos nas
+    versões atuais.
+
+  ltsp: contém um template para a geração automática de uma página de
+    entrada para cada usuário no ltsp, já preenchendo a mesa onde o
+    atendente entrou e o login, para que o usuário precise apenas
+    preencher a senha.
+
+  documentacao: contém um conjunto diverso de documentações geradas
+    sobre o sistema, incluindo materiais utilizados em treinamentos.
+
+
+
+INSTALACAO DO BANCO DE DADOS
+================================================================================
+
+O sistema de atendimento sugere a utilização do banco de dados
+PostgreSql devido ao uso extensivo de cálculos temporais,
+funcionalidade essa que é uma das características fortes desse banco
+de dados.
+
+A configuração do banco de dados é feita nos arquivos:
+
+  Fila-Servico/fila_servico.yml
+  Fila-Administracao/fila_administracao.yml.
+
+Esses arquivos contém a configuração dos endereços para conexão e do
+nome do banco de dados. A configuração padrão presente no código como
+distribuído utiliza o banco de dados em "localhost", no banco de dados
+"fila" utilizando o usuário "postgres" com a senha "123". Você deve
+personalizar esses arquivos de acordo com a situação real no seu
+ambiente.
+
+Adicionalmente, o sistema de agendamento tem a configuração presente
+no arquivo:
+
+  Fila-Agendamento/fila_agendamento.yml
+
+O sistema de Agendamento usa um banco de dados diferente, para
+permitir que o agendamento seja feito em uma máquina diferente ou até
+mesmo em uma rede diferente, uma vez que o sistema de agendamento deve
+ser visível para a internet, enquanto o sistema de agendamento deve
+ser preservado dentro de uma rede privada.
+
+Para popular os bancos de dados, você pode usar os scripts:
+
+  Fila-Servico/script/fila_servico_db.pl
+
+e
+
+  Fila-Agendamento/script/fila_agendamento_db.pl
+
+
+para executar cada um desses scripts você deve entrar nos diretórios
+Fila-Servico e Fila-Agendamento respectivamente. Esses scripts geram
+um conjunto de instruções sql que podem ser utilizadas como entrada
+para o psql para a criação das estruturas de dados, incluindo alguns
+dados de exemplo.
+
+
+EXECUTANDO O SISTEMA
+================================================================================
+
+O sistema de atendimento utiliza como "barramento" de comunicação o
+servidor DJabberd, e como pode ser visto na configuração de exemplo, o
+uso desse servidor especificamente possibilita, através do uso do
+plugin DJabberd::Plugin::Balancer, a implementação de um balanceamento
+de carga para os serviços. Desta forma, em primeiro lugar é necessário
+iniciar o servidor DJabberd. Para fazer isso, pode-se executar:
+
+  djabberd -conf DJabberd/djabberd.conf
+
+Uma vez o servidor Jabber rodando, é possível iniciar o módulo de
+regras de negócio. Para isso, pode-se executar:
+
+  # dentro do diretório Fila-Servico
+  ./script/fila_servico_server.pl
+
+Neste momento, pode-se então iniciar o Apache2, utilizando a
+configuração de exemplo, que presume a cópia desse diretório para o
+diretório /usr/share/fila.
+
+
+DOCUMENTACOES
+================================================================================
+
+O sistema de atendimento é desenvolvido em Perl, e dessa forma, para
+olhar a documentação de cada um dos arquivos, você pode utilizar a
+ferramenta "perldoc", que irá exibir de uma maneira intuitiva a
+documentação de cada um desses arquivos.
+
+

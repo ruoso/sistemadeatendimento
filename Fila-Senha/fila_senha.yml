@@ -1,0 +1,14 @@
+---
+name: Fila::Senha
+Engine::XMPP2:
+    username: emissor
+    domain: agents.fila.vhost
+    password: password
+    override_host: 127.0.0.1
+portas:
+    impressora: emulate
+    emissor: emulate
+categorias:
+    - 1
+    - 2
+    - 3

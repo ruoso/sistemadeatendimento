@@ -1,0 +1,142 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[%# Template que desenha o modulo do gerente. %]
+<script language='javascript'>
+
+    [% USE JavaScript %]
+    
+    [%# Estrutura básica da página %]
+    [% new_content_main = BLOCK %]
+    <DIV ID="content_main">
+      <TABLE width="100%" cellspacing="1em">
+      <TR><TD width="30%" class="colunaUm" valign="top" height="350px">
+      <DIV ID="bloco_informacoes">
+       </DIV>
+      </TD><TD width="70%" ROWSPAN="2" valign="top">
+       <DIV ID="bloco_acoes">
+         <h3 id="TitAcoes" class="titulos">Ações</h3>
+         <DIV ID="bloco_lista_acoes"></DIV>
+       </DIV>
+       <DIV ID="bloco_guiches">
+         <div id="ContainerMesas" class="titulos">
+                <h3 id="TitMesas">Mesas</h3>
+         </div>
+         <DIV ID="lista_guiches"></DIV>
+       </DIV>
+      </TD></TR>
+      <TR><TD width="30%" class="colunaUm" valign="top">
+       <DIV ID="bloco_chat">
+       </DIV>
+      </TD></TR>
+      </TABLE>
+    </DIV>
+    </DIV>
+    [% END %]
+    $('content_main').replace("[% new_content_main | js %]");
+
+    [% PROCESS 'render/mesas.tt' %]
+
+    [% PROCESS 'render/guiches.tt' %]
+
+
+    [%# Montando estrutura do chat. %]
+    [% estrutura_chat = BLOCK %]
+    <DIV ID="bloco_chat">
+        <h3 id="Titchat" class="titulos">Chat</h3>
+        <DIV ID="CHAT_WINDOW">&nbsp;</DIV>
+        <DIV ID="CHAT_SEND">
+            <FORM name="chat" id="chat" onsubmit="return enviarchat()">
+                <select name="select_chat" id="select_chat" size="1" style="width: 100%">
+                </select>
+                <input type="text" name="txtTexto" id="txtTexto" style="width: 100%" maxlength="100"> 
+                <button value="Enviar" id="BtEnviar" type="submit">Enviar</button>
+            </FORM>
+        </DIV>
+    </DIV>
+    [% END %]
+    $('bloco_chat').replace("[% estrutura_chat | js %]");
+
+    var elAtivo;
+    var elSel;
+    var i;
+ 
+    function limpa_lista() {
+        elSel = document.getElementById('select_chat');  //pega elemento do select da lista do chat
+ 
+        //pega value do elemento selecionado.
+        for (i=0;i<elSel.length;i++) {
+            if (elSel.selectedIndex == i) {
+                elAtivo = elSel.options[i].value;
+                //alert('definindo ativo: ' + elAtivo + ' (' + elSel.options[i].value + ')');
+            }
+        }
+
+        //apaga todos os elementos
+        for (i=elSel.length; i>=0; i--) {
+            elSel.remove(i);
+        }
+    }
+ 
+    function add_option(texto,valor) {        
+        //adiciona novo elemento.
+        var y=document.createElement('option');
+        y.text=texto;
+        y.value=valor;
+        if (texto == '') { return }
+        try {
+            elSel.add(y,null); // standards compliant
+        }
+        catch(ex) {
+            elSel.add(y); // IE only
+        }
+    }
+ 
+    function define_ativo(){
+        for (i=0;i<elSel.length;i++) {
+            if (elSel.options[i].value == elAtivo) {
+                elSel.selectedIndex = i;
+                //alert('definindo ativo:' + i + ' - elAtivo = ' + elAtivo + ' - Value ativo no for=' + elSel.options[i].value);
+            }
+        }
+    }
+ 
+    function enviarchat() {
+        var url = '/cb/gerente/enviar_chat';
+        var params =  $('chat').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        $('txtTexto').value='';
+        return false;
+    }
+
+    function abrir_popup(html) {
+        var my_window = window.open("", "Lista de encaminhamentos","menubar=1,resizable=1,scrollbars=1,status=0,width=600,height=350");
+        my_window.document.write(html);
+    }
+
+   
+    [% PROCESS 'render/status_local_gerente.tt' %]
+    
+</script>
+
+[% PROCESS 'render/chat.tt' %]
+
+

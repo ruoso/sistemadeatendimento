@@ -1,0 +1,46 @@
+NAME
+    Atendimento - Armazena os agendamentos realizados
+
+DESCRIPTION
+    No sistema de agendamento, ficam armazenados nessa tabela todos os
+    agendamentos realizados.
+
+NAME
+    Expediente - Lista cada expediente do local
+
+DESCRIPTION
+    Permite a configuração da hora de inicio e fim de cada dia da semana
+    para cada local, permitindo configurar, por exemplo, o funcionamento
+    apenas pela manhã no sábado.
+
+NAME
+    Feriado - Dias de não funcionamento dos locais
+
+DESCRIPTION
+    Utiliza-se essa tabela para configurar os dias extra-ordinários nos
+    quais a praça de atendimento não funciona.
+
+NAME
+    Fila::Agendamento::DB::IntervalosView - Acesso ao view intervalos
+
+SYNOPSIS
+      CREATE VIEW intervalos AS SELECT inicio, inicio + interval '15
+      minutes' AS fim FROM (select (date_trunc('day',now()) + dias *
+      interval '1 day' + hora * interval '1 hour' + atend * interval '15
+      minutes') AS inicio from generate_series(0,15) dias,
+      generate_series(8, 17) hora, generate_series(0,3) atend) AS
+      t(inicio) WHERE extract(dow FROM t.inicio) between 1 and 5 AND
+      t.inicio >= NOW() + interval '1 hour';
+
+DESCRIPTION
+    Este view é utilizado para listar os próximos intervalos possiveis
+    para o registro de novos agendamentos.
+
+NAME
+    Local - Define cada local para agendamento
+
+DESCRIPTION
+    Cada local de agendamento deve ter o seu registro, e é através dessa
+    entidade que é montada a grelha dos horários livres ou ocupados que é
+    exibida na interface.
+

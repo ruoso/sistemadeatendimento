@@ -1,0 +1,41 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[% INCLUDE 'header.tt' %]
+
+<FORM METHOD="POST" ACTION="[% c.uri_for('/passo0') %]">
+<FIELDSET>
+<LEGEND>Dados Pessoais</LEGEND>
+[% error %]
+<P><LABEL>Nome: <INPUT TYPE="text" name="nome" value="[% nome | html %]"/></LABEL></P>
+<P><LABEL><input type="radio" name="tipopessoa" value="F" [% IF tipopessoa == 'F' %]CHECKED[% END %] /> Pessoa Física</LABEL>
+   <LABEL><input type="radio" name="tipopessoa" value="J" [% IF tipopessoa == 'J' %]CHECKED[% END %]/> Pessoa Jurídica</LABEL></P>
+<P><LABEL>CPF/CNPJ: <INPUT TYPE="text" name="cnpjf"  value="[% cnpjf | html %]"/></LABEL></P>
+<P><LABEL>Email: <INPUT TYPE="text" name="email"  value="[% email | html %]" /></LABEL></P>
+<P><LABEL>Praça de Atendimento: <SELECT NAME="id_local">
+[% FOREACH loc IN local.all %]
+  <OPTION VALUE="[% loc.id_local %]" [% IF id_local == loc.id_local %]SELECTED[% END %]>[% loc.nome %]</OPTION>
+[% END %]
+ </SELECT>
+</P>
+<P><INPUT TYPE="submit" VALUE="Avançar" /></P>
+</FIELDSET>
+
+</FORM>
+
+[% INCLUDE 'footer.tt' %]

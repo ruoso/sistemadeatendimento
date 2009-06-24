@@ -1,0 +1,186 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[% INCLUDE 'header.tt' %]
+
+<FIELDSET>
+	<LEGEND  class='legend'>Dados do Local</LEGEND>
+	<FORM ACTION='[% c.uri_for('/locais/') %][% local.id_local %][% '/salvar' %]' METHOD='POST'>
+		<INPUT TYPE='hidden' name='submitted' value=1 />
+		<P><LABEL>Id: [% local.id_local %]</LABEL></P>
+		<P><LABEL>Data Abertura: [% local.vt_ini.strftime('%d/%m/%Y') %]</LABEL></P>
+		<P><LABEL>Data Encerramento: [% IF local.vt_fim.is_infinite() %]
+		          atual (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/encerrar">Encerrar</A>)
+		        [% ELSE %]
+		          [% local.vt_fim.strftime('%d/%m/%Y') %]
+		          (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/reabrir">Reabrir</A>)
+		        [% END %]</LABEL></P>
+		<P><LABEL>Nome: <INPUT TYPE='text' size='40' NAME='nome' VALUE='[% c.req.param('nome') | html %]' /></LABEL></P>
+		<P><LABEL>JID Emissor: <INPUT TYPE='text' size='40' NAME='jid_senhas' VALUE='[% c.req.param('jid_senhas') | html %]' /></LABEL></P>
+		<P><LABEL>JID Painel: <INPUT TYPE='text' size='40' NAME='jid_painel' VALUE='[% c.req.param('jid_painel') | html %]' /></LABEL></P>
+		<P><LABEL>JID Opiniometro: <INPUT TYPE='text' size='40' NAME='jid_opiniometro' VALUE='[% c.req.param('jid_opiniometro') | html %]' /></LABEL></P>
+			<P><INPUT TYPE='submit' VALUE='Salvar'/></P>
+	</FORM>
+
+	<HR>
+
+	<TABLE  class="tabs"  cellspacing='0'>
+		<CAPTION align='left'>
+		Guichês
+		<SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/guiche/criar">Novo</A></SPAN>
+		</CAPTION>
+		<TR class='titulosTabela'><TH>Id</TH>
+		    <TH>Identificador</TH>
+		    <TH>Abertura</TH>
+		    <TH>Encerramento</TH>
+		    <TH>JID Opiniometro</TH></TR>
+		[% FOREACH guiche IN guiches.all %]
+		<TR class='titulosTabela'><TD><A HREF='[% c.uri_for('/locais/') %][% local.id_local %]/guiche/[% guiche.id_guiche %]'>[% guiche.id_guiche %]</A></TD>
+		    <TD>[% guiche.identificador %]</TD>
+		    <TD>[% guiche.vt_ini.strftime('%d/%m/%Y') %]</TD>
+		    <TD>[% IF guiche.vt_fim.is_infinite() %]
+		          atual (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/guiche/[% guiche.id_guiche %]/encerrar">Encerrar</A>)
+		        [% ELSE %]
+		          [% guiche.vt_fim.strftime('%d/%m/%Y') %]
+		          (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/guiche/[% guiche.id_guiche %]/reabrir">Reabrir</A>)
+		        [% END %]</TD>
+		    <TD>[% guiche.jid_opiniometro %]</TD></TR>
+		[% END %]
+	</TABLE>
+
+	<br /><br /><br />
+
+	<TABLE class="tabs"  cellspacing='0'>
+		<CAPTION align='left'>
+			Categorias
+			<SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/categoria/criar">Nova</A></SPAN>
+		</CAPTION>
+		<TR class='titulosTabela'><TH>Id</TH><TH>Inicio</TH><TH>Fim</TH><TH>Nome</TH><TH>Código</TH><TH>Prioridade</TH>
+		    <TH>Limite Tempo em Espera</TH><TH>Limite Pessoas em Espera</TH><TH>Ordem</TH>
+		</TR>
+		[% FOREACH categoria IN configuracoes.all %]
+			<TR class='titulosTabela'><TD>[% categoria.id_categoria %]</TD>
+			    <TD>[% categoria.vt_ini.strftime('%d/%m/%Y') %]</TD>
+			    <TD>[% IF categoria.vt_fim.is_infinite() %]
+			          atual (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/categoria/[% categoria.id_categoria %]/encerrar">Encerrar</A>)
+			        [% ELSE %]
+			          [% categoria.vt_fim.strftime('%d/%m/%Y') %]
+			        [% END %]</TD>
+			    <TD>[% categoria.categoria.nome %]</TD>
+			    <TD>[% categoria.categoria.codigo %]</TD>
+			    <TD>[% categoria.prioridade %]</TD>
+			    <TD>[% categoria.limite_tempo_espera %] Segundos</TD>
+			    <TD>[% categoria.limite_pessoas_espera %]</TD>
+			    <TD>[% categoria.ordem %]</TD>
+			</TR>
+		[% END %]
+	</TABLE>
+
+	<br /><br /><br />
+
+	<TABLE class="tabs"  cellspacing='0'>
+		<CAPTION align='left'>
+			Limites
+			<SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/limite/criar">Nova</A></SPAN>
+		</CAPTION>
+		<TR class='titulosTabela'>
+			<TH>Id</TH>
+			<TH>Inicio</TH>
+			<TH>Fim</TH>
+			<TH>Nome</TH>
+			<TH>Limite</TH>
+		</TR>
+		[% FOREACH limite IN limites.all %]
+			<TR class='titulosTabela'><TD>[% limite.id_estado %]</TD>
+			    <TD>[% limite.vt_ini.strftime('%d/%m/%Y') %]</TD>
+			    <TD>[% IF limite.vt_fim.is_infinite() %]
+			          atual (<A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/limite/[% limite.id_estado %]/encerrar">Encerrar</A>)
+			        [% ELSE %]
+			          [% limite.vt_fim.strftime('%d/%m/%Y') %]
+			        [% END %]</TD>
+			    <TD>[% limite.estado.nome %]</TD>
+			    <TD>[% limite.segundos %] Segundos</TD>
+			</TR>
+		[% END %]
+	</TABLE>
+
+	<br /><br /><br />
+
+	<TABLE class="tabs"  cellspacing='0'>
+		<CAPTION align='left'>
+			Ordem das perguntas do opiniometro
+			<SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/conf_perguntas/criar">Nova</A></SPAN>
+		</CAPTION>
+		<TR class='titulosTabela'>
+			<TH>Inicio<BR>→<BR>Fim</TH>
+			<TH>Pergunta 1<BR>Pergunta 2<BR>Pergunta 3<BR>Pergunta 4<BR>Pergunta 5</TH>
+		</TR>
+		[% FOREACH perg IN conf_perguntas.all %]
+			<TR class='titulosTabela'>
+			    <TD>[% perg.vt_ini.strftime('%d/%m/%Y') %]<BR>→<BR>
+			    [% IF perg.vt_fim.is_infinite() %]
+			          atual 
+			        [% ELSE %]
+			          [% perg.vt_fim.strftime('%d/%m/%Y') %]
+			        [% END %]
+			    </TD>
+				<TD>
+					[% perg.pergunta1.pergunta | html %] <BR />
+					[% perg.pergunta2.pergunta | html %] <BR />
+					[% perg.pergunta3.pergunta | html %] <BR />
+					[% perg.pergunta4.pergunta | html %] <BR />
+					[% perg.pergunta5.pergunta | html %] <BR />
+				</TD>
+			</TR>
+		[% END %]
+	</TABLE>
+	
+	<br /><br /><br />
+
+	<TABLE class="tabs"  cellspacing='0'>
+		<CAPTION align='left'>
+			Ordem das perguntas do opiniometro (praça)
+			<SPAN class='botao_acao adicionar'><A HREF="[% c.uri_for('/locais/') %][% local.id_local %]/conf_perguntas_praca/criar">Nova</A></SPAN>
+		</CAPTION>
+		<TR class='titulosTabela'>
+			<TH>Inicio<BR>→<BR>Fim</TH>
+			<TH>Pergunta 1<BR>Pergunta 2<BR>Pergunta 3<BR>Pergunta 4<BR>Pergunta 5</TH>
+		</TR>
+		[% FOREACH perg IN conf_perguntas_praca.all %]
+			<TR class='titulosTabela'>
+			    <TD>[% perg.vt_ini.strftime('%d/%m/%Y') %]<BR>→<BR>
+			    [% IF perg.vt_fim.is_infinite() %]
+			          atual 
+			        [% ELSE %]
+			          [% perg.vt_fim.strftime('%d/%m/%Y') %]
+			        [% END %]
+			    </TD>
+				<TD>
+					[% perg.pergunta1.pergunta | html %] <BR />
+					[% perg.pergunta2.pergunta | html %] <BR />
+					[% perg.pergunta3.pergunta | html %] <BR />
+					[% perg.pergunta4.pergunta | html %] <BR />
+					[% perg.pergunta5.pergunta | html %] <BR />
+				</TD>
+			</TR>
+		[% END %]
+	</TABLE>
+
+</FIELDSET>
+
+[% INCLUDE 'footer.tt' %]

@@ -1,0 +1,59 @@
+diff --git a/0.08/trunk/lib/DBIx/Class/ResultSource.pm b/0.08/trunk/lib/DBIx/Class/ResultSource.pm
+index b723517..58b3483 100644
+--- a/0.08/trunk/lib/DBIx/Class/ResultSource.pm
++++ b/0.08/trunk/lib/DBIx/Class/ResultSource.pm
+@@ -480,6 +480,10 @@ will result in the JOIN clause
+ 
+ You can specify as many foreign => self mappings as necessary.
+ 
++You can also specify a scalar ref as the value on the condition to
++provide arbitrary join conditions, but that must still be used on the
++foreign table fields.
++
+ Valid attributes are as follows:
+ 
+ =over 4
+@@ -792,22 +796,28 @@ sub resolve_condition {
+       # XXX should probably check these are valid columns
+       $k =~ s/^foreign\.// ||
+         $self->throw_exception("Invalid rel cond key ${k}");
+-      $v =~ s/^self\.// ||
+-        $self->throw_exception("Invalid rel cond val ${v}");
+-      if (ref $for) { # Object
+-        #warn "$self $k $for $v";
+-        $ret{$k} = $for->get_column($v) if $for->has_column_loaded($v);
+-        #warn %ret;
+-      } elsif (!defined $for) { # undef, i.e. "no object"
+-        $ret{$k} = undef;
+-      } elsif (ref $as eq 'HASH') { # reverse hashref
+-        $ret{$v} = $as->{$k};
+-      } elsif (ref $as) { # reverse object
+-        $ret{$v} = $as->get_column($k);
+-      } elsif (!defined $as) { # undef, i.e. "no reverse object"
+-        $ret{$v} = undef;
++      if ($v =~ s/^self\.//) {
++        if (ref $for) { # Object
++          #warn "$self $k $for $v";
++          $ret{$k} = $for->get_column($v) if $for->has_column_loaded($v);
++          #warn %ret;
++        } elsif (!defined $for) { # undef, i.e. "no object"
++          $ret{$k} = undef;
++        } elsif (ref $as eq 'HASH') { # reverse hashref
++          $ret{$v} = $as->{$k};
++        } elsif (ref $as) { # reverse object
++          $ret{$v} = $as->get_column($k);
++        } elsif (!defined $as) { # undef, i.e. "no reverse object"
++          $ret{$v} = undef;
++        } else {
++          $ret{"${as}.${k}"} = "${for}.${v}";
++        }
+       } else {
+-        $ret{"${as}.${k}"} = "${for}.${v}";
++        if (ref $for) {
++          $ret{$k} = $v;
++        } else {
++          $ret{"${as}.${k}"} = $v;
++        }
+       }
+     }
+     return \%ret;

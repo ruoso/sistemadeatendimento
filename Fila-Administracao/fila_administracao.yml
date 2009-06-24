@@ -1,0 +1,6 @@
+---
+name: Fila::Administracao
+Model::DB:
+    schema_class: Fila::Servico::DB
+    connect_info:
+        - 'dbi:Pg:host=127.0.0.1;database=fila;user=fila;password=senha'

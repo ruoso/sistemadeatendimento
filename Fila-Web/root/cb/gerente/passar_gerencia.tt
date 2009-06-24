@@ -1,0 +1,45 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[%# Template que desenha a janela do passar_gerencia %]
+<script language="javascript">
+	[% PopupPassarGerente = BLOCK %]
+	<html><body>
+	   <link rel='stylesheet' href='/static/css/main.css' type='text/css' />
+	    <title>Passar Gerência</title>
+	    <FIELDSET>
+			<LEGEND class='legend'>Mudar Gerente </LEGEND>
+			<FORM ACTION='JavaScript:window.close' Method='POST'>   
+				<table> 
+					[% FOREACH funcionario IN lista_funcionarios.funcionario  %]				
+	                        <li>[% c.prototype.link_to_remote('Associar', { url => '/cb/gerente/associar_gerente/' _ funcionario.id_funcionario , confirm => 'confirmar(\'Deseja mesmo associá-lo(a) como gerente?\')'}) %] [% funcionario.nome %]</li>
+					[% END %]
+				</table>
+				<HR />
+				<button value="Salvar" id="BtSalvar" type="submit">Cancelar</button>
+			</FORM> 
+		</FIELDSET>
+	</body></html>
+	[% END %]
+  [%#  function abrir_popup(html) { %]
+  [%#       my_window = window.open(html, '','menubar=0,resizable=0,scrollbars=1,status=0,width=500,height=180'); %]
+  [%#       my_window.document.write(html); %]
+  [%#   } %]
+
+abrir_popup("[% PopupPassarGerente | js %]")
+</script>

@@ -1,0 +1,269 @@
+NAME
+    Agendamento - Informação auxiliar de agendamento
+
+DESCRIPTION
+    Quando o atendimento a ser realizado foi agendado previamente, essa
+    tabela deve conter informações acerca do titular do agendamento para
+    permitir uma verificação por parte do atendente.
+
+NAME
+    AtendenteGuiche - Registro temporal da associação entre funcionário e
+    guichê.
+
+DESCRIPTION
+    Do momento em que um funcionário abre o guichê até o momento em que
+    ele fecha, ele deve estar associado ao guichê.
+
+NAME
+    Atendimento - Entidade central do processo de atendimento
+
+DESCRIPTION
+    Essa entidade agrega todas as informações de um atendimento desde o
+    momento em que a senha é emitida até o momento em que ele registra a
+    opinião. Praticamente todos os relacionamentos e atributos são
+    temporais, com a excessão da senha, que é sempre a mesma ao longo de
+    toda a vida do atendimento.
+
+NAME
+    CategoriaAtendimento - Valores possiveis de categorias
+
+DESCRIPTION
+    A categorização do atendimento possibilita o estabelecimento de
+    prioridades no atendimento. Essa tabela registra todas as categorias em
+    uso no sistema, estejam elas habilitadas para a emissão de senha ou
+    não, sejam elas utilizadas por um ou por todos os locais.
+
+NAME
+    Categoria - Lista as categorias de atendimento
+
+DESCRIPTION
+    Esta tabela lista todas as categorias passiveis de fazer parte do
+    processo de atendimento, mas a configuração efetiva dessas categorias
+    no contexto do local acontece na tabela ConfiguracaoCategoria.
+
+NAME
+    ClasseServico - Classificação dos serviços a serem realizados pelos
+    atendentes
+
+DESCRIPTION
+    Essa tabela define uma estrutura de classificação para os serviços
+    realizados dentro e fora de atendimento nos guichês.
+
+NAME
+    ConfiguracaoCategoria - Configuração de uma categoria em um local
+
+DESCRIPTION
+    Essa tabela define a configuração de uma categoria na praça,
+    incluindo questões como a posição dessa categoria no equipamento
+    emissor de senhas, a prioridade dessa categoria para a chamada das
+    senhas e limites para alerta.
+
+NAME
+    ConfiguracaoLimite - Controle gerencial dos guichês
+
+DESCRIPTION
+    Essa tabela armazena valores limites em segundos para que um guichê
+    permaneça no mesmo estado. Se um guichê permanecer por mais tempo do
+    que os definidos aqui, o gerente deve ser notificado.
+
+NAME
+    ConfiguracaoPerguntas - Configuração das perguntas do opiniometro do
+    atendimento
+
+DESCRIPTION
+    Essa tabela guarda o registro temporal das configurações das perguntas
+    nos opiniometros dos atendimentos.
+
+NAME
+    ConfiguracaoPerguntasPraca - Define a ordem das perguntas no opiniometro
+    geral
+
+DESCRIPTION
+    Esta tabela mantém um registro temporal da informação da
+    configuração do opiniometro geral, listando quais são as cinco
+    perguntas a serem respondidas.
+
+NAME
+    EstadoAtendimento - Atributo temporal do atendimento
+
+DESCRIPTION
+    Esta tabela contém todo o registro temporal do atributo "estado" do
+    atendimento. Os tipos de estado ficam listados na tabela
+    TipoEstadoAtendimento.
+
+NAME
+    EstadoGuiche - Registro temporal do atributo "estado" do guiche
+
+DESCRIPTION
+    Esta tabela lista o registro temporal, bem como o atual, do valor do
+    atributo "estado" do guiche.
+
+NAME
+    EstadoLocal - Registro temporal dos estados do local
+
+DESCRIPTION
+    Registro temporal do valor do atributo "estado" do local.
+
+NAME
+    FuncionarioLocal - Associação do Funcionário ao Local
+
+DESCRIPTION
+    Esta tabela lista os funcionários que estão habilitados a serem
+    atendentes em um local, ou seja, aqueles que podem abrir um guichê.
+    Esta tabela mantém o registro temporal dessas associações.
+
+NAME
+    Funcionario - Funcionário que pode trabalhar em qualquer local
+
+DESCRIPTION
+    A entidade funcionário é transversal aos locais de atendimento,
+    permitindo que um funcionário tome parte de mais de um local de
+    atendimento ao longo do tempo.
+
+NAME
+    GerenteLocal - Registro temporal de quem é o gerente
+
+DESCRIPTION
+    Um local de atendimento precisa, a qualquer momento, ter um, e somente
+    um, gerente. Essa tabela guarda o registro histórico de quem foi o
+    gerente em cada momento.
+
+NAME
+    GuicheAtendimento - Registro temporal do vinculo entre um atendimento e
+    um guiche
+
+DESCRIPTION
+    No momento em que uma senha é chamada, o atendimento é vinculado a
+    aquele guichê, e essa associação deve permanecer válida durante todo
+    o tempo que o guichê estiver relacionado a esse atendimento. Essa
+    tabela mantém um registro temporal de todas as vinculações.
+
+NAME
+    GuicheEncaminhamento - Lista privada de espera de um guiche
+
+DESCRIPTION
+    Esta tabela lista os atendimentos com espera prioritária para um
+    guichê que foram "encaminhados" por outros guichês. É importante
+    notar que um atendimento só pode ser encaminhado depois de ele ter sido
+    inicialmente atendido por um outro guichê. Essa funcionalidade permite
+    o redirecionamento de um atendimento para um profissional melhor
+    capacitado em uma determinada área.
+
+NAME
+    Guiche - Guichê de atendimento
+
+DESCRIPTION
+    Esta tabela representa a mesa especifica onde são realizados os
+    atendimentos. Praticamente todos os atributos e relacionamentos são
+    temporais, com excessão do local, uma vez que um guichê sempre irá
+    pertencer ao mesmo local.
+
+NAME
+    Local - Praça de atendimento
+
+DESCRIPTION
+    Essa é a entidade central do sistema, que relaciona a praça de
+    atendimento, direta ou indiretamente, todas as outras entidades são
+    relacionadas a um local.
+
+NAME
+    Pausa - Registro temporal das pausas dos atendentes
+
+DESCRIPTION
+    Esta tabela mantém o registro histórico das pausas realizadas pelos
+    atendentes ao longo do tempo.
+
+NAME
+    PerguntaAvaliacao - Todas as perguntas do opiniometro
+
+DESCRIPTION
+    Esta tabela lista todas as perguntas que podem ser configuradas no
+    opiniometro do guiche.
+
+NAME
+    PerguntaAvaliacaoPraca - As perguntas que podem ser configuradas no
+    opiniometro geral
+
+DESCRIPTION
+    Esta tabela lista todas as perguntas que podem ser associadas ao
+    opiniometro geral da praça.
+
+NAME
+    RespostaAvaliacao - Registro temporal das respostas do opiniometro
+
+DESCRIPTION
+    Esta tabela guarda todos os registros de opinião associados aos
+    atendimentos.
+
+NAME
+    RespostaAvaliacaoPraca - Registro dos preenchimentos no opiniometro
+    geral
+
+DESCRIPTION
+    Esta tabela contém o registro temporal de todas as avaliações gerais
+    da praça realizadas.
+
+NAME
+    Senha - Representação do identificador visivel do atendimento
+
+DESCRIPTION
+    Apesar da senha ser o identificador visivel do atendimento, a senha é
+    reutilizada ao longo do tempo, mas a associação entre senha e
+    atendimento não é temporal, o que significa que um atendimento mantém
+    o identificador visivel do inicio ao fim. O sistema deve garantir que
+    dois atendimentos não estão associados i  mesma senha ao mesmo tempo.
+
+NAME
+    ServicoAtendimento - Registro histórico dos serviços realizados dentro
+    de um atendimento
+
+DESCRIPTION
+    Essa tabela contém o registro temporal de todos os serviços realizados
+    no contexto de um atendimento.
+
+NAME
+    ServicoGuiche - Registro temporal dos servicos internos
+
+DESCRIPTION
+    Essa tabela mantem o registro temporal dos serviços internos, ou seja,
+    realizados fora do contexto de um atendimento.
+
+NAME
+    ServicoInterno - Lista de serviços internos
+
+DESCRIPTION
+    O serviço interno é um serviço realizado por um atendente em um
+    guichê fora do contexto de um atendimento.
+
+NAME
+    Servico - Serviços que podem ser realizados em um guichê
+
+DESCRIPTION
+    Contém os serviços que podem ser realizados em um guichê.
+
+NAME
+    TipoEstadoAtendimento - Valores possiveis para o estado de um
+    atendimento
+
+DESCRIPTION
+    Esta tabela mantém a lista dos valores possiveis para o estado de um
+    atendimento. Apesar de essa configuração estar em um banco de dados,
+    existe um conjunto de valores que são obrigatórios para o bom
+    funcionamento do sistema.
+
+NAME
+    TipoEstadoGuiche - Quais os valores de estado de um guichê
+
+DESCRIPTION
+    Esta tabela lista os valores de estado que um guichê pode ter. Apesar
+    desses valores estarem configurados em banco de dados, existe um
+    conjunto de valores minimos que precisam estar inseridos nessa tabela.
+
+NAME
+    TipoEstadoLocal - Valores possiveis para o atributo "estado" do Local
+
+DESCRIPTION
+    Esta tabela contém os valores possiveis para o atributo "estado" do
+    local. Apesar de haver a configuração em banco de dados, existe um
+    conjunto minimo de valores obrigatórios.
+

@@ -1,0 +1,236 @@
+<!--
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+-->
+<Schema name="Fila">
+  <Dimension type="StandardDimension" name="Local">
+    <Hierarchy hasAll="true" primaryKey="id_local" primaryKeyTable="d_local">
+      <Table name="d_local" schema="public" />
+      <Level
+         approxRowCount="10" name="Nome" table="d_local" column="nome"
+         type="String" uniqueMembers="false" levelType="Regular"
+         hideMemberIf="Never" caption="Nome" captionColumn="nome" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="Guiche">
+    <Hierarchy hasAll="true" primaryKey="id_guiche" primaryKeyTable="d_guiche">
+      <Table name="d_guiche" schema="public" />
+      <Level
+         name="Identificador" table="d_guiche" column="identificador"
+         type="String" uniqueMembers="false" levelType="Regular"
+         hideMemberIf="Never" caption="Identificador" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="Horario">
+    <Hierarchy hasAll="true" primaryKey="horario" primaryKeyTable="d_horario">
+      <Table name="d_horario" schema="public" />
+      <Level
+         name="Hora" table="d_horario" column="hora" type="Integer"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never"
+         caption="Hora" />
+      <Level
+         name="Minuto" table="d_horario" column="minuto" type="Integer"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="Minuto">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="Atendente">
+    <Hierarchy hasAll="true" primaryKey="id_atendente" primaryKeyTable="d_atendente">
+      <Table name="d_atendente" schema="public" />
+      <Level
+         name="Atendente" table="d_atendente" column="matricula" type="String"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="matricula" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="CategoriaPrioritaria">
+    <Hierarchy hasAll="true" primaryKey="id_categoria" primaryKeyTable="d_categoria">
+      <Table name="d_categoria" schema="public" />
+      <Level
+         name="Prioritaria" table="d_categoria" column="prioritaria"
+         type="Boolean" uniqueMembers="false" levelType="Regular"
+         hideMemberIf="Never" caption="Proritaria" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="CategoriaNome">
+    <Hierarchy hasAll="true" primaryKey="id_categoria" primaryKeyTable="d_categoria">
+      <Table name="d_categoria" schema="public" />
+      <Level
+         name="Nome" table="d_categoria" column="nome" type="String"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="TimeDimension" name="Anos">
+    <Hierarchy hasAll="true" primaryKey="data" primaryKeyTable="d_data">
+      <Table name="d_data" schema="public" />
+      <Level
+         approxRowCount="5" name="Ano" table="d_data" column="ano"
+         type="Integer" uniqueMembers="false" levelType="TimeYears"
+         hideMemberIf="Never" caption="Ano" />
+      <Level
+         approxRowCount="12" name="Mes" table="d_data" column="mes"
+         type="Integer" uniqueMembers="false" levelType="TimeMonths"
+         hideMemberIf="Never" caption="Mes" />
+      <Level
+         approxRowCount="30" name="DiaDoMes" table="d_data"
+         column="dia" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia do Mes" />
+      <Level
+         approxRowCount="7" name="DiaDaSemana" table="d_data"
+         column="diasemana" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia da Semana" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="TimeDimension" name="Meses">
+    <Hierarchy hasAll="true" primaryKey="data" primaryKeyTable="d_data">
+      <Table name="d_data" schema="public" />
+      <Level
+         approxRowCount="12" name="Mes" table="d_data" column="mes"
+         type="Integer" uniqueMembers="false" levelType="TimeMonths"
+         hideMemberIf="Never" caption="Mes" />
+      <Level
+         approxRowCount="30" name="DiaDoMes" table="d_data"
+         column="dia" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia do Mes" />
+      <Level
+         approxRowCount="7" name="DiaDaSemana" table="d_data"
+         column="diasemana" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia da Semana" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="TimeDimension" name="DiasDoMes">
+    <Hierarchy hasAll="true" primaryKey="data" primaryKeyTable="d_data">
+      <Table name="d_data" schema="public" />
+      <Level
+         approxRowCount="30" name="DiaDoMes" table="d_data"
+         column="dia" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia do Mes" />
+      <Level
+         approxRowCount="12" name="Mes" table="d_data" column="mes"
+         type="Integer" uniqueMembers="false" levelType="TimeMonths"
+         hideMemberIf="Never" caption="Mes" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="TimeDimension" name="DiasDaSemana">
+    <Hierarchy hasAll="true" primaryKey="data" primaryKeyTable="d_data">
+      <Table name="d_data" schema="public" />
+      <Level
+         approxRowCount="30" name="DiaDaSemana" table="d_data"
+         column="diasemana" type="Integer" uniqueMembers="false"
+         levelType="TimeDays" hideMemberIf="Never" caption="Dia do Mes" />
+      <Level
+         approxRowCount="12" name="Mes" table="d_data" column="mes"
+         type="Integer" uniqueMembers="false" levelType="TimeMonths"
+         hideMemberIf="Never" caption="Mes" />
+    </Hierarchy>
+  </Dimension>
+
+
+  <Cube name="Quantidade de Atendimentos" cache="true" enabled="true">
+    <Table name="f_quantidade_atendimentos" schema="public" alias="QuantidadeAtendimentos" />
+    <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
+    <DimensionUsage source="Guiche" name="Guiche" foreignKey="id_guiche" />
+    <DimensionUsage source="Horario" name="Horario" foreignKey="horario" />
+    <DimensionUsage source="Atendente" name="Atendente" foreignKey="id_atendente" />
+    <DimensionUsage source="CategoriaPrioritaria" name="CategoriaPrioritaria" foreignKey="id_categoria" />
+    <DimensionUsage source="CategoriaNome" name="CategoriaNome" foreignKey="id_categoria" />
+    <DimensionUsage source="Anos" name="Anos" foreignKey="data" />
+    <DimensionUsage source="Meses" name="Meses" foreignKey="data" />
+    <DimensionUsage source="DiasDoMes" name="DiasDoMes" foreignKey="data" />
+    <DimensionUsage source="DiasDaSemana" name="DiasDaSemana" foreignKey="data" />
+    <Measure
+       name="Quantidade" column="quantidade" datatype="Integer"
+       aggregator="sum" visible="true" />
+
+    <Measure
+       name="Minimo Tempo Espera" column="min_tempo_espera" datatype="Integer"
+       aggregator="min" visible="true" />
+    <Measure
+       name="Maximo Tempo Espera" column="max_tempo_espera" datatype="Integer"
+       aggregator="max" visible="true" />
+    <Measure
+       name="Soma Tempo Espera" column="sum_tempo_espera" datatype="Integer"
+       aggregator="sum" visible="true" />
+    
+    <Measure
+       name="Minimo Tempo Deslocamento" column="min_tempo_deslocamento" datatype="Integer"
+       aggregator="min" visible="true" />
+    <Measure
+       name="Maximo Tempo Deslocamento" column="max_tempo_deslocamento" datatype="Integer"
+       aggregator="max" visible="true" />
+    <Measure
+       name="Soma Tempo Deslocamento" column="sum_tempo_deslocamento" datatype="Integer"
+       aggregator="sum" visible="true" />
+
+    <Measure
+       name="Minimo Tempo Atendimento" column="min_tempo_atendimento" datatype="Integer"
+       aggregator="min" visible="true" />
+    <Measure
+       name="Maximo Tempo Atendimento" column="max_tempo_atendimento" datatype="Integer"
+       aggregator="max" visible="true" />
+    <Measure
+       name="Soma Tempo Atendimento" column="sum_tempo_atendimento" datatype="Integer"
+       aggregator="sum" visible="true" />
+
+    <CalculatedMember name="Media Tempo Espera" dimension="Measures">
+      <Formula>([Measures].[Soma Tempo Espera] / [Measures].[Quantidade])</Formula>
+    </CalculatedMember>
+    <CalculatedMember name="Media Tempo Deslocamento" dimension="Measures">
+      <Formula>([Measures].[Soma Tempo Deslocamento] / [Measures].[Quantidade])</Formula>
+    </CalculatedMember>
+    <CalculatedMember name="Media Tempo Atendimento" dimension="Measures">
+      <Formula>([Measures].[Soma Tempo Atendimento] / [Measures].[Quantidade])</Formula>
+    </CalculatedMember>
+
+
+  </Cube>
+
+  
+  <Cube name="Quantidade por Estado por Tempo" cache="true" enabled="true">
+    <Table name="f_quantidade_estados" schema="public" alias="QuantidadeAtendimentos" />
+    <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
+    <DimensionUsage source="CategoriaPrioritaria" name="CategoriaPrioritaria" foreignKey="id_categoria" />
+    <DimensionUsage source="CategoriaNome" name="CategoriaNome" foreignKey="id_categoria" />
+    <DimensionUsage source="Horario" name="Horario" foreignKey="horario" />
+    <DimensionUsage source="Anos" name="Anos" foreignKey="data" />
+    <DimensionUsage source="Meses" name="Meses" foreignKey="data" />
+    <DimensionUsage source="DiasDoMes" name="DiasDoMes" foreignKey="data" />
+    <DimensionUsage source="DiasDaSemana" name="DiasDaSemana" foreignKey="data" />
+    <Measure
+       name="Pessoas Esperando" column="quantidade_espera" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Pessoas em deslocamento" column="quantidade_chamando" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Pessoas em atendimento" column="quantidade_atendimento" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Pessoas ausentes" column="quantidade_no_show" datatype="Integer"
+       aggregator="avg" visible="true" />
+  </Cube>
+
+
+</Schema>

@@ -1,0 +1,23 @@
+---
+name: Fila::ETL
+Model::DB:
+    schema_class: 'Fila::ETL::DB'
+    connect_info:
+        - 'dbi:Pg:host=localhost;database=filadw'
+        - ruoso
+        - teste
+Model::DBAgendamento:
+    schema_class: 'Fila::Agendamento::DB'
+    connect_info:
+        - 'dbi:Pg:host=localhost;database=agendamento'
+        - ruoso
+        - teste
+Model::DBSERVI:
+    schema_class: 'Fila::Servico::DB'
+    connect_info:
+        - 'dbi:Pg:host=localhost;database=fila'
+        - ruoso
+        - teste
+Model::Federado:
+    federacao:
+        1: DBSERVI

@@ -1,0 +1,76 @@
+Notas de temporalidade do modelo de dados
+=========================================
+
+Todas as entidades/atributos/relacionamentos não listados aqui devem ser entendidos como ATEMPORAIS.
+
+Atendimento
+-----------
+
+A entidade atendimento é TEMPORAL e tem um /lifespan/ que vai do momento em que uma senha é emitida até o momento em que o atendimento é encerrado.
+
+- id_atendimento: Chave primária, sequencial;
+- categoria: TEMPORAL e pode ser alterada por uma transferência de atendimento;
+- senha: ATEMPORAL, uma vez que a senha é a âncora para identificar o atendimento;
+- local: ATEMPORAL, uma vez que um atendimento não é transferido de um local para outro;
+- guichê: TEMPORAL, uma vez que a relação pode existir no estado em que o atendimento está sendo apenas "chamado", e pode haver tanto um cancelamento da chamada quanto uma re-chamada em um guichê diferente, assim como no caso de redirecionamento do atendimento, o mais provável é que o atendimento seja realizado por guichês diferentes;
+- estado: TEMPORAL, uma vez que o estado de um atendimento vai sendo alterado ao longo do tempo;
+- serviço: TEMPORAL, um atendimento pode representar a realização de mais de um serviço;
+
+ConfiguracaoCategoria
+---------------------
+
+A entidade é TEMPORAL e registra o período durante o qual uma determinada configuração foi válida.
+
+Local
+-----
+
+A entidade é TEMPORAL, referindo-se ao período de que um local de atendimento é inaugurado até o momento em que ele é desativado.
+
+- id_local: Chave primária, sequencial;
+- nome: ATEMPORAL, mesmo que o nome mude, ainda representa o mesmo local;
+- estado: TEMPORAL
+- gerente: TEMPORAL
+
+Guiche
+------
+
+A entidade é TEMPORAL, possibilitando a representação da alteração do número de guiches em um determinado local.
+
+- id_guiche: Chave primária, sequencial;
+- identificador: ATEMPORAL representa a identificação viual do guichê;
+- local: ATEMPORAL, um guichê nunca é transferido de um local para outro;
+- estado: TEMPORAL
+- atendente: TEMPORAL
+- servico: TEMPORAL
+
+Pausa
+-----
+
+A entidade é TEMPORAL, refletindo apenas os intervalos de indisponibilidade
+
+- id_pausa: Chave primária, sequencial;
+- guiche: ATEMPORAL, uma pausa refere-se a um guichê apenas;
+- funcionario: ATEMPORAL, refere-se a apenas um funcionário;
+- motivo: ATEMPORAL, mesmo que o motivo mude, a pausa ainda é a mesma;
+
+Serviço
+-------
+
+A entidade é TEMPORAL, refletindo o período durante o qual aquele serviço poderia ser realizado.
+
+- id_serviço: Chage primária, sequencial;
+- nome: ATEMPORAL, a mudança de nome não muda o que o serviço representa;
+- classe: ATEMPORAL, se um serviço mudar de classe, deve ser compreendido como um novo serviço;
+
+PerguntaAvaliacao
+-----------------
+
+A entidade é TEMPORAL, refletindo o tempo durante o qual aquela pergunta foi realizada.
+
+- id_pergunta: Chave primária, sequencial;
+- pergunta: Mudanças no texto da pergunta não implicam mudança na pergunta em si;
+
+RespostaAvaliação
+-----------------
+
+A entidade é TEMPORAL, mas INSTANTÂNEA, representando o momento em que a resposta foi dada, o que significa que, uma vez registrada, a resposta não é alterada.

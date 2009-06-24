@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+-->
+<xsd:schema
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:fila="urn:oktiva:fila:tipos"
+  targetNamespace="urn:oktiva:fila:tipos"
+  elementFormDefault="qualified">
+
+  <xsd:annotation>
+   <xsd:documentation xml:lang="pt-br">
+
+    Este schema descreve os tipos XML para a comunicação interna e
+    externa do sistema de gestão de atendimento Fila. Os tipos
+    descritos aqui serão utilizados como partes das mensagens SOAP a
+    serem trocadas entre os vários agentes do sistema.
+
+    Os elementos descritos por esse schema são bastante flexíveis no
+    que diz respeito ao quão completos os dados precisam ser. A idéia
+    é permitir que os elementos possam ser reutilizados só para
+    transferir entidades completas, mas também para transferir
+    informações incompletas relacionadas a uma entidade, o que pode
+    ser relevante no caso de consultas, que podem retornar apenas um
+    conjunto específico de dados, ou para serviços que precisem de
+    dados do mesmo tipo de uma entidade, mas que não representam uma
+    entidade já existente no sistema.
+
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType name="dados_status_local">
+   <xsd:sequence>
+    <xsd:annotation>
+     <xsd:documentation xml:lang="pt-br">
+      Este é um conjunto de dados instantâneos sobre o local, serve para
+      monitorar a capacidade de atendimento e a demanda do local.
+     </xsd:documentation>
+    </xsd:annotation>
+    <xsd:element name="id_categoria" type="xsd:int" minOccurs="0" />
+    <xsd:element name="codigo" type="xsd:string" minOccurs="0" />
+    <xsd:element name="espera_mais_antiga" type="xsd:dateTime" minOccurs="0" />
+    <xsd:element name="quantidade_espera" type="xsd:int" minOccurs="0" />
+    <xsd:element name="quantidade_atendida" type="xsd:int" minOccurs="0" />
+    <xsd:element name="tempo_medio_espera" type="xsd:time" minOccurs="0" />
+    <xsd:element name="tempo_medio_atendimento" type="xsd:time" minOccurs="0" />
+    <xsd:element name="alert" type="xsd:boolean" minOccurs="0" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosLocal">
+   <xsd:annotation>
+    <xsd:documentation xml:lang="pt-br">
+     Local representa uma "praça" de atendimento, onde vários guichês
+     estarão disponíveis para o atendimento ao público.
+    </xsd:documentation>
+   </xsd:annotation>
+   <xsd:sequence>
+    <xsd:element name="id_local" minOccurs="0"  type="xsd:integer" />
+    <xsd:element name="vt_ini" minOccurs="0"  type="xsd:dateTime" />
+    <xsd:element name="vt_fim" minOccurs="0"  type="xsd:dateTime" />
+    <xsd:element name="nome" minOccurs="0"  type="xsd:string" /> 
+    <xsd:element name="estado" minOccurs="0"  type="xsd:string" /> 
+    <xsd:element name="encaminhamentos" minOccurs="0"  type="xsd:string" /> 
+    <xsd:element name="encaminhamentos_abertos" minOccurs="0"  type="xsd:string" /> 
+    <xsd:element name="jid_gerente" minOccurs="0" type="xsd:string" />
+    <xsd:element name="status" minOccurs="0">
+     <xsd:complexType>
+      <xsd:sequence>
+       <xsd:element name="agregado" type="fila:dados_status_local" />
+       <xsd:element name="categorias">
+        <xsd:complexType>
+         <xsd:sequence>
+          <xsd:element name="categoria" minOccurs="0" maxOccurs="unbounded" type="fila:dados_status_local" />
+         </xsd:sequence>
+        </xsd:complexType>
+       </xsd:element>
+      </xsd:sequence>
+     </xsd:complexType>
+    </xsd:element> 
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosGuiche">
+   <xsd:annotation>
+    <xsd:documentation xml:lang="pt-br">
+     O Guiche representa uma das estações em uma praça de atendimento.
+    </xsd:documentation>
+   </xsd:annotation>
+   <xsd:sequence>
+    <xsd:element name="id_guiche" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_local" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="identificador" minOccurs="0" type="xsd:string" />
+    <xsd:element name="estado" minOccurs="0" type="xsd:string" />
+    <xsd:element name="estado_desde" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="alert" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="funcionario" minOccurs="0" type="xsd:string" />
+    <xsd:element name="id_funcionario" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="jid" minOccurs="0" type="xsd:string" />
+    <xsd:element name="id_atendimento" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="senha" minOccurs="0" type="xsd:string" />
+    <xsd:element name="estado_atendimento" minOccurs="0" type="xsd:string" />
+    <xsd:element name="estado_atendimento_desde" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="pausa_motivo" minOccurs="0" type="xsd:string" />
+    <xsd:element name="nome_servico" minOccurs="0" type="xsd:string" />
+    <xsd:element name="pular_opiniometro" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="servicos" minOccurs="0">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="servico" type="fila:TipoDadosServico" minOccurs="0" maxOccurs="unbounded" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="agendamento" minOccurs='0'>
+     <xsd:complexType>
+      <xsd:sequence>
+       <xsd:element name="nome" type="xsd:string" />
+       <xsd:element name="tipopessoa" type="xsd:string" />
+       <xsd:element name="cnpjf" type="xsd:string" />
+       <xsd:element name="email" type="xsd:string" />
+      </xsd:sequence>
+     </xsd:complexType>
+    </xsd:element>
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaGuiches">
+   <xsd:sequence>
+    <xsd:element name="guiche" type="fila:TipoDadosGuiche" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosAtendimento">
+   <xsd:sequence>
+    <xsd:element name="id_atendimento" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="vt_ini" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="vt_fim" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="id_local" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_senha" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_categoria" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_guiche" minOccurs="0" type="xsd:string" />
+    <xsd:element name="senha" minOccurs="0" type="xsd:string" />
+    <xsd:element name="estado" minOccurs="0" type="xsd:string" />
+    <xsd:element name="guiche" minOccurs="0" type="xsd:string" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosCategoria">
+   <xsd:sequence>
+    <xsd:element name="id_categoria" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="nome" minOccurs="0" type="xsd:string" />
+    <xsd:element name="codigo" minOccurs="0" type="xsd:string" />
+    <xsd:element name="ordem" minOccurs="0" type="xsd:string" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaCategorias">
+   <xsd:sequence>
+    <xsd:element name="categoria" type="fila:TipoDadosCategoria" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosFuncionario">
+   <xsd:sequence>
+    <xsd:element name="jid" minOccurs="0" type="xsd:string" />
+    <xsd:element name="nome" minOccurs="0" type="xsd:string" />
+    <xsd:element name="gerente" minOccurs="0" type="xsd:boolean" />
+    <xsd:element name="atendente" minOccurs="0" type="xsd:boolean" />
+    <xsd:element name="id_funcionario" minOccurs="0" type="xsd:integer" />   
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaFuncionarios">
+   <xsd:sequence>
+    <xsd:element name="funcionario" type="fila:TipoDadosFuncionario" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosAvaliacaoAtendimento">
+   <xsd:sequence>
+    <xsd:element name="resposta" minOccurs="0" maxOccurs="unbounded">
+     <xsd:complexType>
+      <xsd:sequence>
+       <xsd:element name="id_pergunta" type="xsd:integer" />
+       <xsd:element name="resposta" type="xsd:integer" />
+      </xsd:sequence>
+     </xsd:complexType>
+    </xsd:element>
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaAtendimentos">
+   <xsd:sequence>
+    <xsd:element name="atendimento" type="fila:TipoDadosAtendimento" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosServico">
+   <xsd:sequence>
+    <xsd:element name="id_servico" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_guiche" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_classe" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="vt_ini" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="vt_fim" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="nome" minOccurs="0" type="xsd:string" />
+    <xsd:element name="informacoes" minOccurs="0" type="xsd:string" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaServicos">
+   <xsd:sequence>
+    <xsd:element name="servico" type="fila:TipoDadosServico" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosEncaminhamento">
+   <xsd:sequence>
+    <xsd:element name="id_atendimento" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="id_guiche" minOccurs="0" type="xsd:string" />
+    <xsd:element name="id_guiche_origem" minOccurs="0" type="xsd:string" />
+    <xsd:element name="vt_ini" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="vt_fim" minOccurs="0" type="xsd:dateTime" />
+    <xsd:element name="informacoes" minOccurs="0" type="xsd:string" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TipoDadosListaEncaminhamentos">
+   <xsd:sequence>
+    <xsd:element name="encaminhamento" type="fila:TipoDadosEncaminhamento" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="local" type="fila:TipoDadosLocal" />
+  <xsd:element name="guiche" type="fila:TipoDadosGuiche" />
+  <xsd:element name="lista_guiches" type="fila:TipoDadosListaGuiches" />
+  <xsd:element name="atendimento" type="fila:TipoDadosAtendimento" />
+  <xsd:element name="categoria" type="fila:TipoDadosCategoria" />
+  <xsd:element name="lista_categorias" type="fila:TipoDadosListaCategorias" />
+  <xsd:element name="funcionario" type="fila:TipoDadosFuncionario" />
+  <xsd:element name="avaliacao_atendimento" type="fila:TipoDadosAvaliacaoAtendimento" />
+  <xsd:element name="lista_atendimentos" type="fila:TipoDadosListaAtendimentos" />
+  <xsd:element name="servico" type="fila:TipoDadosServico" />
+  <xsd:element name="lista_servicos" type="fila:TipoDadosListaServicos" />
+  <xsd:element name="encaminhamento" type="fila:TipoDadosEncaminhamento" />
+  <xsd:element name="lista_encaminhamentos" type="fila:TipoDadosListaEncaminhamentos" />
+  <xsd:element name="lista_funcionarios" type="fila:TipoDadosListaFuncionarios" />
+  
+
+</xsd:schema>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+-->
+<wsdl:definitions
+  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+  xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:filatp="urn:oktiva:fila:tipos"
+  xmlns:filasv="urn:oktiva:fila:servico"
+  targetNamespace="urn:oktiva:fila:servico">
+
+ <import namespace="urn:oktiva:fila:tipos"
+         uri="fila-servico.xsd" />
+
+ <wsdl:message name="render_gerente">
+  <wsdl:part name="local" element="filatp:local" />
+  <wsdl:part name="lista_guiches" element="filatp:lista_guiches" />
+  <wsdl:part name="lista_encaminhamentos" element="filatp:lista_encaminhamentos" />
+ </wsdl:message>
+
+ <wsdl:message name="render_atendente">
+  <wsdl:part name="guiche" element="filatp:guiche" />
+ </wsdl:message>
+
+ <wsdl:message name="render_chat">
+  <wsdl:part name="lista_guiches" element="filatp:lista_guiches" />
+ </wsdl:message>
+
+ <wsdl:message name="render_error">
+  <wsdl:part name="Fault" element="soapenv:Fault" />
+ </wsdl:message>
+
+ <wsdl:portType name="render_gerente">
+  <wsdl:operation name="render_gerente">
+   <wsdl:input message="filasv:render_gerente" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:portType name="render_atendente">
+  <wsdl:operation name="render_atendente">
+   <wsdl:input message="filasv:render_atendente" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:portType name="render_chat">
+  <wsdl:operation name="render_chat">
+   <wsdl:input message="filasv:render_chat" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:portType name="render_error">
+  <wsdl:operation name="render_error">
+   <wsdl:input message="filasv:render_error" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="render_gerente_soapxmpp" type="filasv:render_gerente">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
+  <wsdl:operation name="render_gerente">
+   <soap:operation style="document" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:binding name="render_atendente_soapxmpp" type="filasv:render_atendente">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
+  <wsdl:operation name="render_atendente">
+   <soap:operation style="document" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:binding name="render_chat_soapxmpp" type="filasv:render_chat">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
+  <wsdl:operation name="render_chat">
+   <soap:operation style="document" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+<wsdl:binding name="render_error_soapxmpp" type="filasv:render_error">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
+  <wsdl:operation name="render_error">
+   <soap:operation style="document" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:service name="FilaWebAppCallback">
+  <wsdl:port name="render_gerente" binding="filasv:render_gerente_soapxmpp">
+   <soap:address location="xmpp://gerente@people.fila.vhost/cb/render/gerente" />
+  </wsdl:port>
+  <wsdl:port name="render_atendente" binding="filasv:render_atendente_soapxmpp">
+   <soap:address location="xmpp://atendente@people.fila.vhost/cb/render/atendente" />
+  </wsdl:port>
+  <wsdl:port name="render_chat" binding="filasv:render_chat_soapxmpp">
+   <soap:address location="xmpp://gerente@people.fila.vhost/cb/render/gerente" />
+  </wsdl:port>
+  <wsdl:port name="render_error" binding="filasv:render_error_soapxmpp">
+   <soap:address location="xmpp://alguem@people.fila.vhost/cb/render/error" />
+  </wsdl:port>
+ </wsdl:service>
+
+</wsdl:definitions>

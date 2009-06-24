@@ -1,0 +1,249 @@
+<html>
+<HEAD>
+        <!-- <img src="bg_cabecalho2.gif"> -->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<!--        <img src="/static/images/bg_cabecalho2.gif"> -->
+        <TITLE>Sistema de Atendimento</TITLE>
+        <link rel="stylesheet" href="/static/css/main.css" type="text/css" />
+        
+    </HEAD>
+<BODY>
+<DIV id="BackHeader">
+	    <DIV id="header"><H1>Sistema de Atendimento<a name="link_topo"></a></H1></div>
+</DIV>
+<div id="ConteudoAjuda"> 
+		    <center><h1>Apostila do Treinamento</h1></center>
+		  <h2>Atribuições do administrador</h2>
+		  <p>   As principais atribuições do administrador neste sistema são:</p>
+		  <LI><a href="#link_func">Cadastrar atendentes e gerente; </li></a>
+		  <LI><a href="#link_categorias">Organizar categorias de senha, se necessário, criar novas;</li></a>
+		  <li><a href="#link_locais">Atribuir prioridades e limites às categorias de senha;</li></a>
+		  <LI><a href="#link_locais">Criar limites de tempo para o atendente permanecer em um determinado estado, facilitando dessa forma a “fiscalização” do gerente;</li></a>
+		  <LI><a href="#link_servico">Organizar e/ou criar novos serviços de atendimento;</li></a>
+		  <LI><a href="#link_servico_interno">Organizar e/ou criar novos serviços internos; </li></a>
+		  <LI><a href="#link_pergunta_opi">Organizar e/ou criar perguntas que serão feitas ao cidadão nos opiniômetros;</li></a>
+		  <LI><a href="#link_pergunta_opi_praca">Organizar e/ou criar perguntas que serão feitas ao cidadão no opiniômetro da praça;</li></a>
+		  
+		<h2> Conceitos</h2>
+		<ol><b>1. Opiniômetro:</b> na praça, vão existir dois tipos de opiniômetro, um que estará ligado diretamente à mesa e outro que estará na praça, para que o usuário a qualquer momento, dê sua opinião  a respeito dos questionamentos. Eles podem ou não exibir as mesmas perguntas.</ol>
+		<ol><b>2. Categoria:</b> vão ser emitidas senhas de categorias diferentes de acordo com  o necessidade do cidadão. As principais categorias são: Normal (N); Preferencial (P), destinada a gestantes, idosos, pessoas com criança de colo ou deficientes; Servidor (S), destinada a atendimento de servidores da prefeitura e Agendamento (A), que não será emitido através do emissor da praça já que se trata de um atendimento agendado pela Internet. Cada categoria tem uma prioridade determinada que pode ser reconfigurada de acordo com a necessidade de cada praça.</ol>
+		<ol><b>3. Atendente:</b> funcionário que possui permissão para entrar no sistema e realizar atendimentos.  </ol>
+		<ol><b>4. Gerente:</b> atendente que recebe atribuição do administrador para gerenciar o expediente;</ol>
+		<ol><b>5. Serviço Atendimento:</b> às vezes, durante o atendimento, é necessário consultar ou utilizar outros sistemas, como: Base de Conhecimento, SCUMA, SPU, etc. Cabe ao administrador, adicionar esses serviços ao local para que os atendentes possam registrar de maneira mais rápida as atividades realizadas.</ol>
+		<ol><b>	6. Serviços (Interno):</b> são serviços que o atendente precisa realizar e que o torna indisponível para atendimentos, como por exemplo: digitalizar documentos, consultar a Base de Conhecimento, xerox de documentos, dentre outros que o administrador julgar necessário.</ol>
+		<ol><b>7. Classes de Serviços: </b>maneira de organizar serviços com a mesma funcionalidade. </ol>
+		
+		<h2>Interface do administrador</h2>
+		
+			<IMG SRC="ajei/menu.gif">
+				<p>O campo “Menu” é sempre exibido do lado esquerdo da tela. Através dele, pode-se visualizar os seguintes itens:</p>
+			<LI><a href="#link_categorias">Categorias</li></a>
+			<LI><a href="#link_func">Funcionários </li></a>
+			<LI><a href="#link_locais">Locais </li></a>
+			<LI><a href="#link_servico">Serviços </li></a>
+			<LI><a href="#link_servico_interno">Serviços (interno) </li></a>
+			<LI><a href="#link_classes_servico">Classes de Serviços</li></a>
+			<LI><a href="#link_pergunta_opi">Perguntas do Opiniômetro</li></a>
+			<LI><a href="#link_pergunta_opi_praca">Perguntas do Opiniômetro (Praça)</li></a>
+			<p>Detalharemos a seguir cada item:</p>
+				
+		<h2>CATEGORIAS<a name="link_categorias"></a></h2>
+			
+			<h3>Figura inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Categoria” do "Menu" é pressionado.</h4>	
+			<IMG SRC="ajei/cat1.gif"width="277" height="250">
+			<p>Este item exibe uma tabela com as categorias existentes no sistema e torna possível a criação de novas categorias através do botão “Adicionar”. </h3></p>
+			<h3>Como criar uma nova categoria?</h3>	
+			<br><IMG SRC="ajei/cat2.gif"width="240" height="150">
+			<p>Ao se clicar o botão Adicionar, surgirá no lado direito da tela o campo “Dados da Categoria”. Para criar uma nova categoria, basta preenchê-lo corretamente e clicar no botão “Salvar”, o sistema atribui automaticamente um ID à nova categoria.</p>
+			<h3>Como exibir os dados das categorias?</h3>
+			<IMG SRC="ajei/cat3.gif">
+			<p>Na figura inicial é mostrada uma tabela de categorias onde são exibidas as principais características de cada uma, como: ID, Nome e Código. </p>
+			<p>Ao se clicar no ID da categoria correspondente, é possível visualizá-lo e modificá-lo. Caso algma modificação seja realizada, é preciso pressionar o botão “Salvar” para se registrar as mudanças. Somente o campo ID não é passível de modificação.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+
+		<h2>FUNCIONÁRIOS<a name="link_func"></a></h2>
+			
+			<h3>Figura inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Funcionario” do "Menu" é pressionado.</h4>	
+			<img src="ajei/func1.gif">
+			<p>Ao clicar neste item, o administrador poderá visualizar na tela todos os dados dos atendentes dentro de uma tabela. São exibidos o <b>ID</b> (número único de identificação dentro do banco de dados do sistema),
+			   o <b>Nome</b> ( nome do atendente), o <b>Nome de Usuário</b> (identificação do atendente no momento do login), <b>Atendente no Local</b>(mostra se o funcionário é atendente no momento) e <b>Gerente do Local</b>
+			   (mostra se o funcionário é o gerente do local).</p>
+			<h3>Como criar um novo funcionário?</h3>
+			<img src="ajei/func2.gif">
+			<p>Na tela inicial, acima da tabela, é possível visualizar o botão “Adicionar”. Este botão permite ao administrador criar, incluir novos atendentes.</p>
+			<p>Ao clicar esse botão, surge na tela o campo “Criar Funcionário”. Esta ação é muito fácil de ser executada, bastando para isso, preencher os campos com as informações <b>Nome</b>,
+			   nome do funcionário, <b>Nome de Ususário</b> que é o nome utilizado para o login no sistema e clicar no botão <b>Salvar</b>. Exemplo, adicionar o atendente João da Silva:</p>
+			<p>Nome: João da Silva</p>
+			<p>Nome de usuário: joao</p>
+			<p><b>obs.: Nesse momento o funcionário ainda não é Atendente do local!</b></p> 
+			<h3>Como editar as características do funcionário?</h3>
+			<img src="ajei/func3.gif">   
+			<p>Na tabela mostrada na tela inicial, o ID do funcionário é um link para exibir suas características atuais. Ao clicar, surge o campo <b>Dados do Funcionário</b> onde são mostrados seus dados: <b>ID, Nome, Nome de
+			   Usuário, Nova Senha, Confirmar</b>. Somente o ID não pode ser modificado.
+			<br>
+			<br>
+			<b>Como tornar o Funcionário um Atendente ou Gerente do local?</b>
+			<p>Para que o funcionário passe a ser atendente, é preciso escolher o local em que ele será atendente e depois clicar no botão <b>associar</b>. O mesmo deve ser feito caso o administrador queira tornar o atendente
+			   Gerente do Local. </p>
+			<p>Para que as possíveis modificações sejam registradas, é preciso clicar no botão <b>Salvar</b>.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+
+		<h2>LOCAIS<a name="link_locais"></a></h2>
+			
+			<h3>Figura inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Locais” do "Menu" é pressionado.</h4>	
+			<img src="ajei/loc1.gif">
+			<p>Este item mostra um botão <b>Adicionar</b> e logo abaixo, uma tabela que exibe as principais características dos Locais existentes no sistema, como: <B>ID; Data de Abertura; 
+			   Data Encerramento</b> (onde se pode encerrar o local no sistema através do clique na palavra “Encerrar”)<b>; Nome; JID Emissor</b> (o endereço do emissor no sistema que torna 
+			   possível a troca de informações)</b>; JID Painel(endereço no sistema para onde serão enviadas as informações que serão exibidas no painel do local)<b> e JID Opiniometro</b> (endereço no sistema
+			   para onde são enviadas as informações ao opiniometro da praça).</p>
+			<h3>Visualização dos dados do Local </h3>
+			<img src="ajei/loc3.gif">
+			<p>Com um clique no ID do local, pode-se visualizar o campo <b>Dados do Local</b>, com as configurações do local (ID, Data Abertura - constantes; Data Encerramento, pode encerrar o local clicando em <b>Encerrar</b>;
+			   Nome; JID Emissor; JID Painel). Não é recomendável, apesar de ser possível, modificar os dados dos endereços dos JID's. Para salvar alguma alteração que tenha sido realizada, deve-se clicar no botão <b>Salvar</b>.
+			   Logo abaixo, são exibidas cinco tabelas: <b> Guichês, Categorias, Limites, Ordem das perguntas do opiniometro e Ordem das perguntas do opiniometro (praça).</b> </p>
+			<p>As funções de cada tabela, serão explicadas individualmente.</p>   
+			<h3>1. Guichês</h3>
+			<img src="ajei/locgui.gif">  
+				<p>Nessa tabela são exibidas as características de cada mesa associada ao local, como: <b>ID</b> (identificação da mesa no sistema e link para edição dos “Dados da Mesa”); 
+			    <b>Identificador</b> (o “nome” da mesa que aparece nas telas do gerente e do atendente); <b>Abertura</b> (data de atribuição da mesa ao local); <b>Encerramento</b> (onde se pode tornar a mesa indisponível no local 
+				   clicando na palavra “Encerrar”) e  <b>JID Opiniômetro</b> (endereço usado para a comunicação do opiniômetro ligado à mesa com o sistema). <p>
+					<h3>1.1. Como criar novas Mesas para o Local?</h3>
+					<img src="ajei/loc5.gif">
+						<p>Ao se clicar no botão <b>Adicionar</b>, logo abaixo da palavra Guichês mostrada na figura acima, é mostrado o campo <b>Dados da Mesa</b>. Para se criar uma nova mesa, basta 
+						preencher corretamente os campos Identificador e JID Opiniômetro. </p>
+						<p>Após certificar-se que o preenchiento está correto, clique no botão <b>Salvar</b>.</p>
+					<h3>1.2. Como editar os dados da Mesa?</h3>
+					<img src="ajei/loc6.gif">
+						<p>Como foi dito anteriormente, o ID da Mesa é um link para mostrar as características da Mesa correspondente. É possível encerrar a mesa clicando na palavra <b>Encerrar</b>, modificar o <b>Identificador da mesa</b> e/ou
+						   modificar o <b>JID Opiniometro</b>.</p>
+						<p> No entanto, para que as modificações sejam registradas com sucesso, é preciso clicar no botão <b>Salvar</b>.</p> 
+			<h3>2. Categorias</h3>
+			<img src="ajei/loccat.gif">			
+				<p>Nesta tabela, são exibidas as categorias de atendimento existentes no sistema bem como suas principais características, como :<b>ID</b> (identificação de cada categoria no sistema); <b>Início</b> (data que começou a fazer parte do local);
+			   	<b>Fim</b> (onde se pode tornar a categoria indisponível no sistema, clicando em “Encerrar”);<b>  Nome; Código </b>(letra que representa a categoria);<b> Prioridade</b> (número que é multiplicado pelo tempo real de espera de cada senha dessa categoria,
+			       ou seja, quanto maior esse número menos tempo a senha vai ficar na fila esperando já que para o sistema ela vai estar a mais tempo que as outras); <b> Limite Tempo em Espera</b> (tempo máximo de espera para senhas dessa categoria, ou seja, tempo que é 
+			       estipulado como ideal para a pessoa com a senha aguarde na fila); <b>Limite de Pessoas em Espera</b> (número máximo de senhas esperando pelo atendimento) e  <b>Ordem</b> (ordem, de cima para baixo, em que as categorias são mostradas no emissor).</p>
+				<p> No entanto, para que a categoria esteja disponível no local, é preciso adicioná-la através do botão <b>Adicionar</b>. Acompanhe os detalhes no tópico abaixo.</p>
+					<h3>2.1. Adicionando Categorias ao local</h3>
+					<img src="ajei/loc7.gif">			
+						<p>Após o clique no botão <b>Adicionar</b>, aparecerá o campo <b>Dados da Configuração</b> então escolha a categoria na barra de seleção, digite a prioridade, o limite de espera em segundos, o limite de pessoas em espera e a ordem em que vai estar listada 
+			   			   no emissor (caso a categoria não seja mostrada no emissor, deve-se atribuir a ela a ordem '0'). Após certificar-se de que os dados estão corretos, clique no botão <b>Salvar</b>. </p>
+						<p><b>Obs.: Caso você configure a mesma categoria mais de uma vez, será considerada a configuraçã mais recente.</b></p>
+			<h3>3.Limites</h3>
+			<img src="ajei/loclim.gif">						
+				<p>Nesta tabela, são exibidas algumas características dos limites de tempo para cada possível estado da mesa, como: <b>ID</b> (identificação do estado da mesa no sistema); <b>Início </b>(data de criação do limite no sistema); <b>Fim</b> (onde se pode tornar
+			   	   o limite indisponível para o local, clicando em “Encerrar”);<b> Nome</b>(estado da mesa); <b>Limite</b> (tempo em segundos de tolerância para a mesa ficar nesse estado). </p>
+					<h3>3.1. Como atribuir Limites ao local?</h3>
+					<img src="ajei/loc8.gif">	
+						<p>Para atribuir um limite a um determinado estado, basta clicar no botão <b>Adicionar</b>. Aparecerá o campo <b>Dados do Limite</b> então escolha o estado na barra de seleção, digite o limite de espera em segundos e clique no botão <b>Salvar</b>.
+						<p>Lembrando que apenas o limite configurado mais recentemente do mesmo estado será considerado.</p>
+			<h3>4. Ordem das perguntas do opiniômetro</h3>
+			<img src="ajei/locopo.gif">
+				<p>Mostra a ordem das perguntas que serão exibidas nos opiniômetros ligados às mesas de cima para baixo, bem como a sua data de início e fim no local. Para modificar as perguntas ou a ordem delas, deve-se clicar no botão <b>Adicionar</b>. Acompanhe passo-a-passo no tópico abaixo.</p>
+					<h3>4.1. Modificando a ordem das perguntas do opiniômetro</h3>
+					<img src="ajei/loc9.gif">			
+						<p>Aparecerá o campo <b>Dados</b>, onde se pode selecionar a 1ª, 2ª, 3ª, 4ª e 5ª pergunta. Em seguida, clique em <b>Salvar</b>.</p>
+						<p><b>Importante: Cuidado para não colocar perguntas repetidas!</b></p>
+			<h3>5. Ordem das perguntas do opiniômetro(praça)</h3>
+			<img src="ajei/locopop.gif">			
+				<p>Mostra a ordem das perguntas que serão exibidas no opiniômetro da praça de cima para baixo, bem como a sua data de início e fim no local. Para modificar a ordem ou as perguntas, deve-se clicar no botão <b>Adicionar</b>. Acompanhe passo-a-passo no tópico abaixo.</p>
+					<h3>5.1. Modificando a ordem das perguntas do opiniômetro(praça)</h3>
+					<img src="ajei/loc10.gif">
+						<p>Aparecerá o campo <B>Dados</b>, onde se pode selecionar a 1ª, 2ª, 3ª, 4ª e 5ª pergunta. Em seguida, clique em <b>Salvar</B>. </p>
+						<p><b>Importante: Cuidado para não colocar perguntas repetidas!</b></p>
+			<h4><a href="#link_topo">Topo</h4></a>
+		
+		<h2>SERVIÇOS<a name="link_servico"></a></h2>
+			
+			<h3>Tela inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Serviços” do "Menu" é pressionado.</h4>	
+			<img src="ajei/serv1.gif">
+			<p>Este item exibe o botão <b>Adicionar</b> e uma tabela listando todos os serviços existentes durante o expediente, bem como suas principais características.</p>
+			<p>Na tabela, pode-se visualizar características do serviço, tais como: <b>ID</b> (que é um número  de identificação do serviço no sistema e funciona como um link para a visualização e possíveis modificações do serviço);
+			   <b>data de abertura; data encerramento</b> (onde se pode encerrar o serviço, ou seja, torná-lo indisponível no sistema, através do clique na palavra “Encerrar”); <b>Nome do Serviço e a Classe</b> correspondente.</p>
+			<h3>Criando novos serviços</h3>
+			<img src="ajei/serv2.gif">
+			<p>O botão <b>Adicionar</b> ao ser pressionado, permite a criação de um novo serviço no sistema de maneira muito simples. Basta escrever o nome do serviço no campo <b>Nome</b>, escolher a <b>Classe</b> correspondente ao serviço na barra de seleção abaixo e pressionar o botão <b>Salvar</b>.</p>
+			<p>O sistema atribui automaticamente um ID ao novo serviço.</p>
+			<h3>Modificando serviços já existentes</h3>
+			<img src="ajei/serv3.gif">
+			<p>Como já foi dito anteriormente, o ID do serviço é um link que ao ser clicado, abre o campo <b>Dados do Serviço</b>. </p>
+			<p>É possível visualizar os dados do serviço e modificar seu Nome e/ou sua Classe. No entanto, para se registrar as modificações é preciso clicar no botão <b>Salvar</b>.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+
+		<h2>SERVIÇOS (INTERNO)<a name="link_servico_interno"></a></h2>
+			
+			<h3>Tela inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Serviços (interno)” do "Menu" é pressionado.</h4>	
+			<img src="ajei/int1.gif">
+			<p>Este item exibe o botão <b>Adicionar</b> e uma tabela listando todos os serviços internos existentes, bem como suas principais características.</p>
+			<p>Na tabela, pode-se visualizar características do serviço, tais como: <b>ID</b> (que é um número  de identificação do serviço interno no sistema e funciona como um link para a visualização e possíveis modificações); 
+			   <b>data de abertura; data encerramento</b> (onde se pode encerrar o serviço no sistema, ou seja, torná-lo indisponível no sistema, através do clique na palavra “Encerrar”); <b>Nome do Serviço e a Classe</b> correspondente.</p>
+			<h3>Criando novos serviços internos</h3>
+			<img src="ajei/int2.gif">
+			<p>O botão <b>Adicionar</b> ao ser pressionado, permite a criação de um novo serviço interno no sistema de maneira muito simples. Basta escrever o nome do serviço no campo <b>Nome</b>, escolher a <b>Classe</b> correspondente ao serviço na barra de seleção abaixo e pressionar o botão <b>Salvar</b>. </p>
+			<p>O sistema atribui um ID ao novo serviço interno automaticamente.</p>
+			<h3>Modificando serviços internos já existentes</h3>
+			<img src="ajei/int3.gif">
+			<p>Como já foi dito anteriormente, o ID do serviço é um link que ao ser clicado, abre o campo <b>Dados do Serviço</b>. </p>
+			<p>É possível visualizar os dados do serviço interno e modificar seu Nome e/ou sua Classe. No entanto, para se registrar as modificações é preciso clicar no botão <b>Salvar</b>.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+			
+		<h2>CLASSES DE SERVIÇOS<a name="link_classes_servico"></a></h2>
+			
+			<h3>Tela inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Classes” do "Menu" é pressionado.</h4>	
+			<img src="ajei/cla1.gif">
+			<p>Ao clicar neste item, é exibido uma tabela com as classes existentes no sistema, bem como seu ID e nome.</p>
+			<h3>Visualizando os dados da Classe</h3>
+			<img src="ajei/cla3.gif">
+			<p> Ao se clicar no ID correspondente de cada classe, surge o campo <b>Dados da classe</b>, onde os dados da classe podem ser modificados, ou simplesmente conferidos.</p>
+			<p> Caso alguma alteração seja feita, para torná-la permanente, é necessário pressionar o botão <b>Salvar</b>.</p>
+			<h3>Criando novas Classes</h3>
+			<img src="ajei/cla2.gif">
+			<p>Para adicionar uma nova classe, basta clicar no botão <b>Adicionar</b> (que é exibido acima da tabela de todas as classes existentes). Surgirá o campo “Adicionar Classe”, então é só preencher corretamente os dados ID e “Nome” e, em seguida, clicar em “Salvar”.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+
+		<h2>PERGUNTAS DO OPINIÔMETRO<a name="link_pergunta_opi"></a></h2>
+			
+			<h3>Tela inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Perguntas do Opiniometro” do "Menu" é pressionado.</h4>	
+			<img src="ajei/pe1.gif">
+			<p>Este item exibe um botão <b>Adicionar</b> e uma tabela com as configurações de cada pergunta, como: <b>ID</b> (identificação da pergunta no sistema que também funciona como link para edição e possíveis modificações na pergunta correspondente); <b>Data de Abertura </b>(data da criação da pergunta no sistema);
+			   <b>Data de encerramento</b>(mostra a data de encerramento ou “Encerrar”, que deve ser pressionado para tornar a pergunta indisponível no sistema) e <b>Pergunta</b>(exibe a pergunta propriamente dita que é exibida em cada opiniômetro).</p>
+			<h3>Criando as Perguntas</h3>
+			<img src="ajei/pe2.gif">
+			<p>O botão adicionar ao ser pressionado, cria um campo chamado <b>Criar Pergunta</b> e permite a implementação de uma nova pergunta no sistema. Para isso, basta escrever a pergunta e clicar no botão </b>Salvar</b>. O sistema cria um ID para a pergunta automaticamente.</p>
+			<p>Ao criar novas perguntas, tome o cuidado de não estar copiando uma pergunta que já existe ou estar fazendo a mesma pergunta com outras palavras!</p>
+			<h3>Visualizando as Perguntas</h3>
+			<img src="ajei/pe4.gif">
+			<p>Como já foi dito, o ID da pergunta serve como link para a sua visualização. Após o pressionamento é mostrado o campo <b>Dados da Pergunta</b>, seu ID e a pergunta, que pode ser modificada.</p>
+			<p>Para se registrar as modificações é preciso pressionar o botão <b>Salvar</b>.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+
+		<h2>PERGUNTAS DO OPINIÔMETRO (PRAÇA)<a name="link_pergunta_opi_praca"></a></h2>
+			
+			<h3>Tela inicial</h3>
+			<h4>Esta é a figura inicial que surge do lado direito da tela quando o item “Perguntas do Opiniometro (praça)” do "Menu" é pressionado.</h4>	
+			<img src="ajei/pp1.gif">
+			<p>Este item exibe um botão <b>Adicionar</b> e uma tabela com as configurações de cada pergunta, como: <b>ID</b>(identificação da pergunta da praça no sistema que também funciona como link para edição e possíveis modificações na pergunta correspondente); <b>Data de Abertura </b>(data da criação da pergunta da praça no sistema);
+			   <b>Data de encerramento</b>(mostra a data de encerramento ou “Encerrar”, que deve ser pressionado para tornar a pergunta da praça indisponível no sistema) e <B>Pergunta</b> (exibe a pergunta que é exibida no opiniômetro da praça). </p>
+			<h3>Criando as Perguntas</h3>
+			<img src="ajei/pp2.gif">  
+			<p>O botão adicionar ao ser pressionado, cria um campo chamado <b>Criar Pergunta</b> e permite a implementação de uma nova pergunta no sistema. Para isso, basta escrever a pergunta e clicar no botão </b>Salvar</b>. O sistema cria um ID para a pergunta automaticamente.</p>
+			<p>Ao criar novas perguntas, tome o cuidado de não estar copiando uma pergunta que já existe ou estar fazendo a mesma pergunta com outras palavras!</p>
+			<h3>Visualizando as Perguntas</h3>
+			<img src="ajei/pp3.gif">
+			<p>Como já foi dito, o ID da pergunta serve como link para a sua visualização. Após o pressionamento é mostrado o campo <b>Dados da Pergunta</b>, seu ID e a pergunta, que pode ser modificada.</p>
+			<p>Para se registrar as modificações é preciso pressionar o botão <b>Salvar</b>.</p>
+			<h4><a href="#link_topo">Topo</h4></a>
+		
+</div>
+</body>
+</html>    
+
+ 
+

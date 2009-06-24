@@ -1,0 +1,41 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+	<script>
+    [% BLOCO = BLOCK %]
+       <DIV ID="bloco_informacoes">
+			<p>Status: [% status_local %]</p>
+			
+			<DIV>
+			[% FOREACH categoria IN categorias.lista_categorias.categoria %]
+				<DIV><SPAN><A href='Javascript:solicitar_senha([% categoria.id_categoria %])'>[% categoria.nome %]</a></SPAN></DIV>
+			[% END %]
+			</DIV>
+			
+				<DIV ID="senha0">
+				</DIV>
+       </DIV>
+    [% END %]
+    $('bloco_informacoes').replace("[% BLOCO | js %]"); 
+
+	function solicitar_senha(categoria) {
+		new Ajax.Request('/emissor/solicitar_senha/' + categoria, {});
+	}
+
+	$('footer').replace("<DIV id='footer'><P>Interface do Emissor </P></DIV>");
+</script>

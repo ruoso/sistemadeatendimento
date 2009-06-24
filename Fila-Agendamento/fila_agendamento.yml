@@ -1,0 +1,14 @@
+---
+name: Fila::Agendamento
+Model::DB:
+    schema_class: 'Fila::Agendamento::DB'
+    connect_info:
+        - 'dbi:Pg:host=localhost;database=agendamento;user=postgres;password=123'
+View::Email:
+    sender:
+        mailer: IO
+    default:
+        content_type: text/plain
+        charset: utf8
+        view: TT
+        from: agendamento@atendimento.fortaleza.ce.gov.br

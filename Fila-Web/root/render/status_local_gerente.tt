@@ -1,0 +1,88 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+    [%# Montando o espaço de informações sobre o local de atendimento. %]
+    [% MAIN_INFORMACOES = BLOCK %]
+    <DIV ID="bloco_informacoes">
+      <P ID="INFORMACOES">
+        <h3 class="titulos">[% status_local.local.nome %] - [% status_local.local.estado %]</h3>
+        <TABLE width="100%" id="InfoSenhas">
+         <TR><TH id="TitCategoria" rowspan="2" style="border-bottom: solid 1px black">Categoria</TH><TH><img src="/static/images/icon_relogio.jpg" /> Esperando</TH><TH>Desde</TH></TR><TR><TH style="border-bottom: solid 1px black">Media Espera</TH><TH style="border-bottom: solid 1px black">Media Atend.</TH></TR>
+         <TR><TD rowspan="2" style="border-bottom: solid 1px black">Todas</TD><TD>[% status_local.local.status.agregado.quantidade_espera %]&nbsp;</TD>
+                 <TD>[% dtf.f(status_local.local.status.agregado.espera_mais_antiga) %]&nbsp;</TD></TR>
+             <TR><TD style="border-bottom: solid 1px black">[% status_local.local.status.agregado.tempo_medio_espera %]&nbsp;</TD>
+                 <TD style="border-bottom: solid 1px black">[% status_local.local.status.agregado.tempo_medio_atendimento %]&nbsp;</TD></TR>
+        [% FOREACH categoria IN status_local.local.status.categorias.categoria %]
+         <TR style="border-bottom: solid 1px black">
+           <TD rowspan="2" style="border-bottom: solid 1px black;[% IF categoria.alert %]background-color: red[%END%]">[% categoria.codigo %]</TD>
+           <TD>[% categoria.quantidade_espera %]&nbsp;</TD>
+           <TD>[% dtf.f(categoria.espera_mais_antiga) %]&nbsp;</TD></TR>
+         <TR><TD style="border-bottom: solid 1px black">[% categoria.tempo_medio_espera %]&nbsp;</TD>
+           <TD style="border-bottom: solid 1px black">[% categoria.tempo_medio_atendimento %]&nbsp;</TD>
+         </TR>
+        [% END %]
+        </TABLE>
+     </P>
+    </DIV>
+    [% END %]
+
+    $('bloco_informacoes').replace("[% MAIN_INFORMACOES | js %]");
+
+    [%# Montando menu das ações disponíveis para o gerente. %]
+    [% MAIN_ACOES = BLOCK %]
+       <DIV ID="bloco_lista_acoes">
+            [% IF status_local.local.estado != 'aberto' %]
+            <SPAN class="botao_acao acao_abrir">
+                [% c.prototype.link_to_remote('Abrir Local', { url => '/cb/local/abrir' }) %]
+            </SPAN>
+            [% END %]
+            
+            [% IF status_local.local.estado == 'aberto' %]
+            <SPAN class="botao_acao encerrar_senhas">
+                [% c.prototype.link_to_remote('Encerrar Senhas', { url => '/cb/local/encerrar_senhas', confirm => 'confirmar(\'Deseja mesmo encerrar senhas?\')' }) %]
+            </SPAN>
+            [% END %]
+            
+            [% IF status_local.local.estado != 'fechado' %]
+            <SPAN class="botao_acao fechar_local">
+                [% c.prototype.link_to_remote('Fechar Local', { url => '/cb/local/fechar' , confirm => 'confirmar(\'Deseja mesmo fechar local?\')' }) %]
+            </SPAN>
+            [% END %]
+
+            [% IF status_local.local.estado != 'fechado' %]
+            <SPAN class="botao_acao fechar_mesas">
+                [% c.prototype.link_to_remote('Fechar Todas as Mesas', { url => '/cb/local/fechar_todos' , confirm => 'confirmar(\'Deseja mesmo fechar todas as mesas do local?\')' }) %]
+            </SPAN>
+            <SPAN class="botao_acao forcar_fechar">
+                [% c.prototype.link_to_remote('Forçar Fechar Local', { url => '/cb/local/fechar_local_force' , confirm => 'confirmar(\'ATENÇÃO! Você irá encerrar todos os atendimentos do local! Deseja realmente fazer isso?\')' }) %]
+            </SPAN>
+            [% END %]
+       </DIV>
+    [% END %]
+    $('bloco_lista_acoes').replace("[% MAIN_ACOES | js %]"); 
+
+[% bloco_senha = BLOCK %]
+   		<DIV id='header2' style='padding:0 0 0 330px; '>
+		    <P style='color:gray;'>
+		            (<SPAN class='link_dot'>[% c.prototype.link_to_remote('Passar Gerência', { url => '/cb/gerente/passar_gerencia' }) %])
+		            <BR>
+    		       	(<a href="/static/doc/gerenteajuda.html" target="_blank">Ajuda</a></SPAN>)
+    		</P>
+		</DIV>
+[% END %]
+    $('header2').replace("[% bloco_senha | js %]"); 

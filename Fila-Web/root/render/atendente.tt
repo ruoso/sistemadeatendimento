@@ -1,0 +1,179 @@
+[%#
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+%]
+[%# Template que desenha o modulo do atendente. %]
+<script language="javascript">
+
+	function checksenha() {
+		if ($('nova_senha').value != $('confirmar_senha').value) { 
+			window.alert("Erro: As senhas não conferem. blzbzkzbzkz"); 
+			return false;
+		}
+		return true;
+	}
+
+	[% bloco_popup = BLOCK %]
+	<html><body>
+	    <link rel='stylesheet' href='/static/css/main.css' type='text/css' />
+	    <title>Mudar Senha</title>
+	    <FIELDSET>
+			<LEGEND class='legend'>Mudar Senha de acesso ao sistema</LEGEND>
+			 <FORM ACTION='/cb/atendente/mudar_senha' onsubmit="return checksenha()" Method='POST'>  
+			[%# <form name="change" id="change" onsubmit="return checksenha()">%]
+				<table> 
+					<tr>
+						<td><INPUT TYPE='hidden' name='submitted' value='1' /><LABEL>Senha atual: </LABEL></td>
+						<td><INPUT TYPE='password' NAME='senha_atual' VALUE='' /></td>
+					</tr>
+					<tr>
+						<td>
+							<LABEL>Nova Senha: </LABEL>
+						</td>
+						<td>
+							<INPUT TYPE='password' NAME='nova_senha' VALUE='' />
+							<INPUT TYPE='hidden' name='jid' value='[% status_guiche.guiche.jid %]' />
+						</td>
+					</tr>
+					<tr>
+						<td><LABEL>Confirmar Nova Senha: </LABEL></td>
+						<td><INPUT TYPE='password' NAME='confirmar_senha' VALUE='' /></td>
+					</tr>
+				</table>
+				<HR />
+			[%#	<P><input type='submit' name='action' value='Salvar' onClick=return checksenha();></P> %]
+				<button value="Salvar" id="BtSalvar" type="submit">Salvar</button>
+			</FORM>
+		</FIELDSET>
+	</body></html>
+	[% END %]
+
+	function abrir_popup_senha() {
+		return abrir_popup("[% bloco_popup | js %]");
+	}
+
+    function abrir_popup(html) {
+        my_window = window.open(html, '','menubar=0,resizable=0,scrollbars=1,status=0,width=500,height=180');
+        my_window.document.write(html);
+    }
+</script>
+
+<script language='javascript'>
+
+    [% USE JavaScript %]
+    
+    [%# Estrutura básica da página %]
+    [% new_content_main = BLOCK %]
+   
+    <DIV ID="content_main">
+      <TABLE width="100%" cellspacing="1em"> 
+      <TR><TD width="338px" class="colunaUm" height="200px" valign="top">
+       <DIV ID="bloco_acoes">
+         <h3 id="TitAcoes" class="titulos">Ações:</h3>
+         <DIV ID="bloco_lista_acoes"></DIV>
+       </DIV>
+      </TD><TD rowspan="2" valign="top">
+       <DIV ID="bloco_informacoes">
+       </DIV>
+      </TD></TR>
+      <TR><TD class="colunaUm" valign="top">
+       <DIV ID="bloco_chat">
+       </DIV>
+      </TD></TR>
+      </TABLE>
+    </DIV>
+    </DIV>
+    
+    
+    [% END %]
+    $('content_main').replace("[% new_content_main | js %]");
+
+    [%# Montando estrutura do chat. %]
+    [% estrutura_chat = BLOCK %]
+    <DIV ID="bloco_chat">
+        <h3 id="TitChat" class="titulos">Chat</h3>
+        <DIV ID="CHAT_WINDOW">&nbsp;</DIV>
+        <DIV ID="CHAT_SEND">
+            <form name="chat" id="chat" onsubmit="return enviarchat()">
+            	<input type="hidden" name="chatTo" value="[% dados_local.local.jid_gerente | html %]">
+                <input type="text" name="txtTexto" id="txtTexto" style="width: 100%" maxlength="100"> 
+                <button value="Enviar" id="BtEnviar" type="submit">Enviar</button>
+            </FORM>
+        </DIV>
+    </DIV>
+    [% END %]
+    $('bloco_chat').replace("[% estrutura_chat | js %]");
+
+
+    [% PROCESS 'render/status_atendente.tt' %]
+
+
+</script>
+
+<script language="javascript">    
+    function enviarchat() {
+        var url = '/cb/atendente/enviar_chat';
+        var params =  $('chat').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        $('txtTexto').value='';
+        return false;
+    }
+    function setarmotivo() {
+        var url = '/cb/atendente/setar_motivo_pausa';
+        var params =  $('pausa').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        $('txtMotivo').value='';
+        return false;
+    }
+    function encaminhar_atendimento() {
+        var url = '/cb/atendente/encaminhar_atendimento';
+        var params =  $('encaminhar').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        return false;
+    }
+    function setar_info_interno() {
+        var url = '/cb/atendente/setar_info_interno';
+        var params =  $('interno').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        $('txtInformacoes').value='';
+        return false;
+    }
+    function setar_info_atendimento(nomeform) {
+        var url = '/cb/atendente/setar_info_atendimento';
+        var params =  $(nomeform).serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        return false;
+    }
+
+
+</script>
+

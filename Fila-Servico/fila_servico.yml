@@ -1,0 +1,11 @@
+---
+name: Fila::Servico
+Engine::XMPP2:
+    username: motor
+    password: password
+    domain: gestao.fila.vhost
+    override_host: 127.0.0.1
+Model::DB:
+    schema_class: 'Fila::Servico::DB'
+    connect_info:
+        - 'dbi:Pg:host=127.0.0.1;database=fila;user=fila;password=senha'

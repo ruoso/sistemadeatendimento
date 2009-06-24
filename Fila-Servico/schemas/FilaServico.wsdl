@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
+#
+# Este arquivo é parte do programa FILA - Sistema de Atendimento
+#
+# O FILA é um software livre; você pode redistribui-lo e/ou modifica-lo
+# dentro dos termos da Licença Pública Geral GNU como publicada pela
+# Fundação do Software Livre (FSF); na versão 2 da Licença.
+#
+# Este programa é distribuido na esperança que possa ser util, mas SEM
+# NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer
+# MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU
+# para maiores detalhes.
+#
+# Você deve ter recebido uma cópia da Licença Pública Geral GNU, sob o
+# título "LICENCA.txt", junto com este programa, se não, escreva para a
+# Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
+-->
+<wsdl:definitions
+  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+  xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:filatp="urn:oktiva:fila:tipos"
+  xmlns:filasv="urn:oktiva:fila:servico"
+  targetNamespace="urn:oktiva:fila:servico">
+
+ <import namespace="urn:oktiva:fila:tipos"
+         uri="fila-servico.xsd" />
+
+ <wsdl:message name="solicitacao_local">
+  <wsdl:part name="local" element="filatp:local" />
+ </wsdl:message>
+ <wsdl:message name="resposta_local">
+  <wsdl:part name="local" element="filatp:local" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_guiches">
+  <wsdl:part name="lista_guiches" element="filatp:lista_guiches" />
+ </wsdl:message>
+
+ <wsdl:message name="solicitacao_funcionario">
+  <wsdl:part name="funcionario" element="filatp:funcionario" />
+ </wsdl:message>
+ <wsdl:message name="resposta_funcionario">
+  <wsdl:part name="funcionario" element="filatp:funcionario" />
+ </wsdl:message>
+
+ <wsdl:message name="solicitacao_lista_funcionarios">
+  <wsdl:part name="lista_funcionarios" element="filatp:lista_funcionarios" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_funcionarios">
+  <wsdl:part name="lista_funcionarios" element="filatp:lista_funcionarios" />
+ </wsdl:message>
+
+ <wsdl:message name="solicitacao_encaminhamento">
+  <wsdl:part name="encaminhamento" element="filatp:encaminhamento" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_encaminhamentos">
+  <wsdl:part name="lista_encaminhamentos" element="filatp:lista_encaminhamentos" />
+ </wsdl:message>
+ 
+ <wsdl:portType name="GestaoLocal">
+  <wsdl:operation name="dados_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_local" />
+  </wsdl:operation>
+  <wsdl:operation name="abrir_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="encerrar_senhas">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="status_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_local" />
+  </wsdl:operation>
+  <wsdl:operation name="status_guiches">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_lista_guiches" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_local_force">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_guiche">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_todos">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="escalonar_senha">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="dados_funcionario">
+   <wsdl:input message="filasv:solicitacao_funcionario" />
+   <wsdl:output message="filasv:resposta_funcionario" />
+  </wsdl:operation>
+  <wsdl:operation name="encerrar_atendimento">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="devolver_senha">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="concluir_atendimento">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="pular_opiniometro">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_encaminhamentos">
+   <wsdl:input message="filasv:solicitacao_encaminhamento" />
+   <wsdl:output message="filasv:resposta_lista_encaminhamentos" />
+  </wsdl:operation>
+  <wsdl:operation name="associar_gerente">
+   <wsdl:input message="filasv:solicitacao_funcionario" />
+   <wsdl:output message="filasv:resposta_funcionario" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_funcionarios">
+   <wsdl:input message="filasv:solicitacao_lista_funcionarios" />
+   <wsdl:output message="filasv:resposta_lista_funcionarios" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="GestaoLocalSOAPXMPP" type="filasv:GestaoLocal">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="dados_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="abrir_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="encerrar_senhas">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="status_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="status_guiches">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_local_force">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="escalonar_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="dados_funcionario">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="encerrar_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="devolver_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_guiche">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_todos">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="concluir_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="pular_opiniometro">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="listar_encaminhamentos">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="associar_gerente">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="listar_funcionarios">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:message name="solicitacao_guiche">
+  <wsdl:part name="guiche" element="filatp:guiche" />
+ </wsdl:message>
+ <wsdl:message name="resposta_guiche">
+  <wsdl:part name="guiche" element="filatp:guiche" />
+ </wsdl:message>
+
+ 
+ <wsdl:portType name="GestaoGuiche">
+  <wsdl:operation name="dados_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_local" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_guiches">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_lista_guiches" />
+  </wsdl:operation>
+  <wsdl:operation name="abrir_guiche">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="GestaoGuicheSOAPXMPP" type="filasv:GestaoGuiche">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="dados_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="listar_guiches">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="abrir_guiche">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:message name="solicitacao_atendimento">
+  <wsdl:part name="atendimento" element="filatp:atendimento" />
+ </wsdl:message>
+ <wsdl:message name="resposta_atendimento">
+  <wsdl:part name="atendimento" element="filatp:atendimento" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_categorias">
+  <wsdl:part name="lista_categorias" element="filatp:lista_categorias" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_atendimentos">
+  <wsdl:part name="lista_atendimentos" element="filatp:lista_atendimentos" />
+ </wsdl:message>
+
+ <wsdl:portType name="GestaoSenha">
+  <wsdl:operation name="dados_local">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_local" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_categorias">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_lista_categorias" />
+  </wsdl:operation>
+  <wsdl:operation name="solicitar_senha">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+   <wsdl:output message="filasv:resposta_atendimento" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="GestaoSenhaSOAPXMPP" type="filasv:GestaoSenha">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="dados_local">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="listar_categorias">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="solicitar_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:message name="solicitacao_lista_servicos">
+  <wsdl:part name="lista_servicos" element="filatp:lista_servicos" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_servicos">
+  <wsdl:part name="lista_servicos" element="filatp:lista_servicos" />
+ </wsdl:message>
+ <wsdl:message name="resposta_lista_servicos_atendimento">
+  <wsdl:part name="lista_servicos" element="filatp:lista_servicos" />
+ </wsdl:message>
+ <wsdl:message name="solicitacao_servico">
+  <wsdl:part name="servico" element="filatp:servico" />
+ </wsdl:message>
+ <wsdl:message name="resposta_servico">
+  <wsdl:part name="servico" element="filatp:servico" />
+ </wsdl:message>
+ 
+ <wsdl:portType name="GestaoAtendente">
+  <wsdl:operation name="registrar_no_show">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_no_show">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+   <wsdl:output message="filasv:resposta_lista_atendimentos" />
+  </wsdl:operation>
+  <wsdl:operation name="atender_no_show">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_atendimento">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="devolver_senha">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="concluir_atendimento">
+   <wsdl:input message="filasv:solicitacao_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="disponivel">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_guiche">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_pausa">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="encaminhar_atendimento">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="setar_motivo_pausa">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_servico_interno">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_servico_interno">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_servicos">
+   <wsdl:input message="filasv:solicitacao_servico" />
+   <wsdl:output message="filasv:resposta_lista_servicos" />
+  </wsdl:operation>
+  <wsdl:operation name="status_guiche">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+   <wsdl:output message="filasv:resposta_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="setar_info_interno">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_servico_atendimento">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="fechar_servico_atendimento">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="setar_info_atendimento">
+   <wsdl:input message="filasv:solicitacao_servico" />
+  </wsdl:operation>
+  <wsdl:operation name="retornar_pausa">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_servicos_atendimento">
+   <wsdl:input message="filasv:solicitacao_servico" />
+   <wsdl:output message="filasv:resposta_lista_servicos_atendimento" />
+  </wsdl:operation>
+  <wsdl:operation name="mudar_senha">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+   <wsdl:output message="filasv:resposta_guiche" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="GestaoAtendenteSOAPXMPP" type="filasv:GestaoAtendente">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="registrar_no_show">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="listar_no_show">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="atender_no_show">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="devolver_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="concluir_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="disponivel">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="encaminhar_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_pausa">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="setar_motivo_pausa">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_guiche">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="status_guiche">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_servico_interno">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_servico_interno">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="listar_servicos">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="setar_info_interno">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="iniciar_servico_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="fechar_servico_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="setar_info_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="retornar_pausa">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="listar_servicos_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+  <wsdl:operation name="mudar_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:message name="envio_avaliacao">
+  <wsdl:part name="avaliacao_atendimento" element="filatp:avaliacao_atendimento" />
+ </wsdl:message>
+
+ <wsdl:portType name="GestaoOpiniometro">
+  <wsdl:operation name="registrar_avaliacao">
+   <wsdl:input message="filasv:envio_avaliacao" />
+  </wsdl:operation>
+  <wsdl:operation name="registrar_avaliacao_praca">
+   <wsdl:input message="filasv:envio_avaliacao" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="GestaoOpiniometroSOAPXMPP" type="filasv:GestaoOpiniometro">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="registrar_avaliacao">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="registrar_avaliacao_praca">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:portType name="Scheduler">
+  <wsdl:operation name="escalonar_senha">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="refresh_gerente">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="refresh_painel">
+   <wsdl:input message="filasv:solicitacao_local" />
+  </wsdl:operation>
+  <wsdl:operation name="refresh_guiche">
+   <wsdl:input message="filasv:solicitacao_guiche" />
+  </wsdl:operation>
+ </wsdl:portType>
+
+ <wsdl:binding name="SchedulerSOAPXMPP" type="filasv:Scheduler">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="rpc"/>
+  <wsdl:operation name="escalonar_senha">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="refresh_gerente">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="refresh_guiche">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="refresh_painel">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:service name="FilaServico">
+  <wsdl:port name="Scheduler" binding="filasv:SchedulerSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/scheduler/" />
+  </wsdl:port>
+  <wsdl:port name="GestaoLocal" binding="filasv:GestaoLocalSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/gestao/local/" />
+  </wsdl:port>
+  <wsdl:port name="GestaoGuiche" binding="filasv:GestaoGuicheSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/gestao/guiche/" />
+  </wsdl:port>
+  <wsdl:port name="GestaoSenha" binding="filasv:GestaoSenhaSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/gestao/senha/" />
+  </wsdl:port>
+  <wsdl:port name="GestaoOpiniometro" binding="filasv:GestaoOpiniometroSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/gestao/opiniometro/" />
+  </wsdl:port>
+  <wsdl:port name="GestaoAtendente" binding="filasv:GestaoAtendenteSOAPXMPP">
+   <soap:address location="xmpp://motor@gestao.fila.vhost/ws/gestao/atendente/" />
+  </wsdl:port>
+ </wsdl:service>
+
+</wsdl:definitions>

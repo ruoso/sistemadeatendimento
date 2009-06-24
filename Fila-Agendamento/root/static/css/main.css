@@ -1,0 +1,181 @@
+
+body {
+  padding : 0; color:#000;
+  margin : 0; font-size: 12px;
+  font-family : Arial, Sans-Serif;
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
+a:link{
+  text-decoration: none;
+  color: #B20F0F;
+}
+
+#BackHeader {width: 100%;  height : 134px; background: url('../images/bg_cabecalho.gif') repeat-x;}
+
+#header {
+ height : 89px; padding:45px 0 0 557px; background: url('../images/bg_cabecalho.jpg') no-repeat; 
+}
+
+#header h1 {
+  margin: 0; padding: 0; font-size : 20px;
+  color : white;
+  font-family : Arial;
+}
+
+.titulos {font-size: 16px; padding: 3px 0 5px 5px; border-bottom: 1px solid #ed1c24; margin: 0 0 15px 0;}
+
+#content_main {
+  margin : 0;
+  padding : 0 20px;
+}
+
+#footer {
+  width : 100%;
+  clear : both;
+  margin : 0;
+  margin-top : 1em;
+  border-top : 0.05em solid black;
+}
+
+#footer p {
+  margin : 0.2em;
+  padding : 0.2em;
+  font-size : 0.4em;
+}
+
+label {
+  display : block;
+}
+
+.error {
+  color : red;
+  font-weight : bold;
+}
+
+div #bloco_acoes {
+  width: 100%;
+  clear: both;
+}
+
+div #bloco_informacoes {
+  clear: both;
+  width: 100%; font-size: 12px;
+}
+
+div #bloco_chat {
+  clear: both;
+  width: 100%;
+}
+
+div #bloco_guiches {
+  clear: both;
+  width: 100%;
+}
+
+#CHAT_WINDOW {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+  border: 1px solid #999;
+}
+
+#CHAT_SEND {
+  display: block;
+  clear: both;
+  width: 100%;
+}
+
+.botao_acao {
+  display: block; height: 41px; float: left; margin: 0 15px 15px 0;
+}
+
+.chat_remetente {
+    display: block;
+    font-weight: bold;
+}
+
+tbody {
+    border: solid 1px black;
+}
+.colunaUm {padding: 0 30px 0 0;}
+.botao_acao a {display:block; float: left; font-size:0; text-indent: -999px;}
+
+#InfoSenhas {font-size: 12px;}
+#TitCategoria {background: url('../images/icon_cat.jpg') 0 center no-repeat; padding: 0 0 0 16px;}
+
+.fechar_local a {background: url('../images/bt_fechar_local.jpg') no-repeat; width: 111px; height:34px;}
+.fechar_mesas a {background: url('../images/bt_fechar_mesas.jpg') no-repeat; width: 183px; height:34px;}
+.forcar_fechar a {background: url('../images/bt_forcar_fechar.png') no-repeat; width: 153px; height:37px;}
+
+.acao_abrir a {background: url('../images/bt_abrir_local.jpg') no-repeat; width: 101px; height:34px;}
+.encerrar_senhas a {background: url('../images/bt_encerrar_senhas.jpg') no-repeat; width: 139px; height:34px;}
+
+.acao_iniciar a {background: url('../images/bt_iniciar_atend.png') no-repeat; width: 174px; height:38px;}
+.acao_devolver_senha a {background: url('../images/bt_devol_senha.png') 0 5px no-repeat; width: 124px; height:37px;}
+.acao_registrar_ausencia a {background: url('../images/bt_registrar_ausencia.png') no-repeat; width: 103px; height:33px;}
+.acao_concluir a {background: url('../images/bt_concluir_atend.png') no-repeat; width: 179px; height:41px;}
+.acao_ir_para a {background: url('../images/bt_ir_para.png') no-repeat; width: 126px; height:34px;}
+.acao_encaminhar a {background: url('../images/bt_encaminhar_atend.png') no-repeat; width: 109px; height:37px;}
+.acao_retornar_pausa a {background: url('../images/bt_retornar_pausa.jpg') no-repeat; width: 159px; height:34px;}
+.acao_voltar_serv_interno a {background: url('../images/bt_voltar_serv_interno.png') no-repeat; width: 180px; height:37px;}
+.acao_fechar_mesa a {background: url('../images/bt_fechar_mesa.jpg') no-repeat; width: 139px; height:34px;}
+.acao_iniciar_pausa a {background: url('../images/bt_iniciar_pausa.jpg') no-repeat; width: 119px; height:36px;}
+.acao_atender_ausente a {background: url('../images/bt_listar_ausentes.jpg') no-repeat; width: 148px; height:30px;}
+.acao_disponivel a {background: url('../images/bt_disponivel.png') no-repeat; width: 105px; height:31px;}
+.acao_iniciar_servico a {background: url('../images/bt_iniciar_servico.jpg') no-repeat; width: 165px; height:33px;}
+
+.opi a {font-size:0; text-indent: -999px; display: block; margin:15px auto 0 auto;}
+.acao_opi_on a {background: url('../images/icon_opi_on.png') no-repeat; width: 23px; height:28px;}
+.acao_opi_off a {background: url('../images/icon_opi_off.png') no-repeat; width: 23px; height:28px;}
+.nick_azul     {color: blue; font-size: 12px; font-weight: none; font-family: Arial; }
+.nick_vermelho {color: red;  font-size: 12px; font-weight: none; font-family: Arial; }
+.chat_mensagem {color: black; font-size: 12px; font-weight: none; font-family: Arial;}
+
+#TitChat {background: url('../images/icon_chat.jpg') 48px 0 no-repeat; height: 24px;}
+#ContainerMesas {height: 30px}
+
+#ContainerMesas h3 {font-weight: normal; margin: 0; padding: 0}
+#TitMesas {background: url('../images/icon_mesa.jpg') 65px 0 no-repeat; height: 24px;  float: left; width: 200px; text-align: left;}
+#TitEncaminhamentos {background: url('../images/icon_encaminhar.png') 0px 0 no-repeat; height: 24px; float: right; width: 205px; 
+text-align:right}
+
+
+#ContainerSenha {padding-top: 40px;}
+#TitSenha {background: url('../images/icon_senha.jpg') 65px 0 no-repeat; height: 24px;}
+#Senha {font-size: 50px;}
+
+#encaminhar {padding: 10px; margin:15px auto 0 auto;}
+
+.mesas {float: left; border: solid 1px #999; margin: 0.1em; width: 160px; height: 95px; font-size: 12px;}
+
+.mesas .guiche {color: #FFF; font-size: 25px; width: 28px; text-align: center;}
+.mesas .guiche_ativo {background-color: #009933;}
+.mesas .guiche_pausa {background-color: #FFCB08;}
+.mesas .guiche_inativo {background-color: #ED1C24;}
+.mesas .guiche_fechado {background-color: #c0c0c0;}
+
+#txtTexto, #txtDestinatario {border: 1px solid #999; padding:2px; font-family: Arial; font-size: 12px; color: #636563; margin: 10px 0 0 0;}
+#BtEnviar {display:block; font-size:0; text-indent: -999px;  padding: 0; margin: 10px auto 0 auto; border:0; 
+background: url('../images/bt_enviar_chat.jpg') no-repeat; width: 182px; height:22px; }
+
+#informacoes_status {font-size: 14px; padding-bottom: 20px;} 
+#informacoes_status .status {font-size: 20px;}
+#servicos {padding-bottom: 20px;}
+#bloco_informacoes {padding-bottom: 10px;}
+
+.motivo a       { color: black;   background: #DDD; text-decoration: none;}
+.motivo a:hover { color: black;  background: #FF8; text-decoration: none;}
+
+
+#ContainerEncaminhamentos {padding: 10px;}
+
+#TabEncaminhamentos td {text-align: center;}
+#TabEncaminhamentos {font-family: Arial; font-size: 12px;}
+
+.titulosTabela {background-color: #ed1c24; color:#fff; font-weight:bold;}

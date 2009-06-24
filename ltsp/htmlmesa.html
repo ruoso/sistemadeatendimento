@@ -1,0 +1,21 @@
+<html>
+    <head></head>
+    <body onLoad="logar()">
+        <script language="javascript" type="text/javascript" src="./prototype-1.6.0.2.js"></script>
+        <script language="javascript" type="text/javascript">
+            function logar() {
+                var url = 'http://localhost/cgi-bin/nph-app.cgi';
+                var myhash = new Hash();
+                myhash.set('guiche', '01');
+                myhash.set('usuario', 'atendente01');
+                new Ajax.Request(url, { 
+                    method: 'post', 
+                    parameters: myhash
+                });
+                
+            }
+            document.location.href="http://localhost/";
+        </script>
+    </body>
+
+</html>

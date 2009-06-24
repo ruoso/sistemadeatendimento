@@ -1,0 +1,122 @@
+Cubo:
+  - Nome: Quantidade de Atendimentos
+  - Descrição: Conta o número de atendimentos iniciados.
+  - Dimensões:
+    - Local
+    - Categoria
+    - Guichê
+    - Atendente
+    - Tempo
+  - Medidas:
+    - TotalAtendimentos
+
+Cubo:
+  - Nome: Ocupação dos Guichês
+  - Descrição: Ancorado no início dos atendimentos, constata
+    o número de atendimentos simultâneos
+  - Dimensões:
+    - Local
+    - Tempo
+  - Medidas:
+    - MediaAtendimentosSimultaneos
+    - MinimoAtendimentosSimultaneos
+    - MaximoAtendimentosSimultaneos
+
+Cubo:
+  - Nome: Duração dos Atendimentos
+  - Descrição: Ancorado no final dos atendimentos, constata
+    a duração dos atendimentos realizados
+  - Dimensões:
+    - Local
+    - Categoria
+    - Guichê
+    - Atendente
+    - Servico
+    - ClasseServico
+    - Tempo
+  - Medidas:
+    - TotalDuracaoAtendimento
+    - MediaDuracaoAtendimento
+    - MinimoDuracaoAtendimento
+    - MaximoDuracaoAtendimento
+
+
+Cubo 3:
+  - Nome: Duração dos Deslocamentos
+  - Descrição: Ancorado no final do "chamando", constata o tempo de
+    deslocamento.
+  - Dimensões:
+    - Local
+    - Categoria
+    - Guichê
+    - Atendente
+    - Tempo
+  - Medidas:
+    - TotalTempoDeslocamento
+    - MediaTempoDeslocamento
+    - MinimoTempoDeslocamento
+    - MaximoTempoDeslocamento
+
+Cubo 2:
+  - Nome: Duração da Espera
+  - Descrição: Anorada no inicio do "chamando", constata a quantidade de
+    pessoas esperando.
+  - Dimensões:
+    - Local
+    - Categoria
+    - Tempo
+  - Medidas:
+    - TotalTempoEspera
+    - MediaTempoEspera
+    - MaximoTempoEspera
+    - MinimoTempoEspera
+    - MediaEsperasSimultaneas
+    - MinimoEsperasSimultaneas
+    - MaximoEsperasSimultaneas
+
+Cubo 3:
+  - Nome: Quantidade Ausentes.
+  - Dimensões:
+    - Local
+    - Categoria
+    - Tempo
+  - Medidas:
+    - TotalAusentes
+
+Cubo 4:
+  - Nome: Número de Guichês abertos
+  - Descrição: Ancorado na abertura do guichê, conta o total de abertos.
+  - Dimensões:
+    - Local
+    - Tempo
+  - Medidas:
+    - MediaGuichesAbertos
+    - MinimoGuichesAbertos
+    - MaximoGuichesAbertos
+
+Cubo 5:
+  - Nome: Ociosidade
+  - Descrição: Ancorado no início dos estados "concluído" e "disponível",
+    constata o total de tempo ocioso.
+  - Dimensões:
+    - Local
+    - Atendente
+    - Guiche
+    - Tempo
+  - Medidas:
+    - TotalTempoOcioso
+
+Cubo 6:
+  - Nome: Satisfacao
+  - Dimensões:
+    - Local
+    - Categoria
+    - Guichê
+    - Atendente
+    - Pergunta
+    - Servico
+    - ClasseServico
+    - Tempo
+    - Resposta
+  - Medidas:
+    - TotalRepostas

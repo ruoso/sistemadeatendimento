@@ -1,0 +1,139 @@
+<html>
+<HEAD>
+        <!-- <img src="bg_cabecalho2.gif"> -->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<!--        <img src="/static/images/bg_cabecalho2.gif"> -->
+        <TITLE>Sistema de Atendimento</TITLE>
+        <link rel="stylesheet" href="/static/css/main.css" type="text/css" />
+        
+    </HEAD>
+<BODY>
+<DIV id="BackHeader">
+	    <DIV id="header"><H1>Sistema de Atendimento<a name="link_voltar"></a></H1></div>
+</DIV>
+<div id="ConteudoAjuda"> 
+	 <center><h1>Apostila do Treinamento</h1></center>
+
+	 <h2>Dúvidas mais freqüentes</h2>
+	 	
+	 	<p>Para facilitar a sua vida, durante a utilização deste sistema, só surgirão na tela ações que você poderá realizar em cada estado. Por isso observa-se uma mudança de botões.</p>
+		<p>Perguntas comuns:</p>
+	 	<ol><a href="#link_p0">0. Como saber qual o meu estado?</a></ol>	
+	    <ol><a href="#link_p1">1. Como ficar “Disponível” e poder chamar senhas?</a></ol>
+	    <ol><a href="#link_p2">2. Como iniciar uma Pausa?</a></ol>
+	    <ol><a href="#link_p3">3. Como iniciar um Serviço durante o atendimento?</a></ol>
+		<ol><a href="#link_p4">4. Como encaminhar atendimento?	 </a></ol>   
+		<ol><a href="#link_p5">5. Como faço para me comunicar com o gerente?	  </a></ol>  
+	    <ol><a href="#link_p6">6. Quanto tempo devo esperar por um cidadão cuja senha eu esteja “Chamando”?</a></ol>
+	    <ol><a href="#link_p7">7. Um cidadão chegou na minha mesa mas sua vez já tinha passado. Ele ainda poderá ser atendido?</a></ol>
+		<ol><a href="#link_p8">8. Como faço para fechar mesa?	  </a></ol> 
+		<ol><a href="#link_p9">9. Eu poderei mudar a minha senha de acesso?</a></ol>	
+		<p>Para maiores esclarecimentos, leia o restante desta documentação.</p>	
+	    
+	 <h2> Conceitos</h2>
+		
+		<ol><b>1. Local: </b>Cada local tem um identificador único. As mesas e o atendente  estão sempre associados a um local (físico) específico.</ol>
+		<ol><b>2. Gerente:</b> O gerente de uma praça é um atendente a quem é atribuído o papel dentro de um intervalo de tempo determinado. Esse tempo pode ter o final em aberto, significando que ele é o gerente até que seja informada outra decisão.</ol>
+		<ol><b>3. Atendente:</b> O atendente, no momento em que ele assume uma mesa para atendimento, tem   um papel temporário naquele local,  e pode ser assumido por outro atendente  a qualquer momento.</ol>
+		<ol><b>4. Mesa:</b> A mesa é a estação de atendimento onde o cidadão será recebido (atendido). Tem uma ligação física com o local, uma vez que o equipamento do “Opiniômetro” está associado àquele computador especificamente.</ol>
+		<ol><b>5. Expediente:</b> Um expediente é o intervalo de tempo entre a abertura e o fechamento da praça. Durante um expediente as mesas podem ser abertas e fechadas de acordo com a necessidade, permitindo que, através do uso de turnos, uma mesma mesa possa ser usada por mais de um atendente.</ol>
+		<ol><b>6. Senhas:</b> serão sempre seqüenciais dentro de um mesmo expediente, iniciando de 001 para cada categoria. No entanto, se houverem mais de 999 senhas emitidas para uma dada categoria dentro de um mesmo expediente, as senhas podem voltar a 001, sempre utilizando senhas de atendimentos já completamente encerradas e com horário apropriado e impresso.</ol>
+		<ol><b>7. Atendimento:</b> Um atendimento começa no momento em que o cidadão solicita uma senha no “Emissor de Senha” e termina quando: o atendimento é concluído e o cidadão registra a avaliação do atendimento no opiniômetro, ou, o atendimento é concluído pelo gerente que encerra o atendimento porque o cidadão se recusou a registrar a avaliação ou quando o cidadão não reivindica o atendimento até 3  (senhas) após  ser chamada.</ol>
+		<ol><b>8. Ausente:</b> Este é o conceito que designa o momento em que uma senha é chamada, mas ninguém comparece para o atendimento. O sistema implementa uma tolerância de 3 senhas, o que significa que depois que a senha é chamada, o cidadão pode pedir para ser atendido “em atraso” até de 3 senhas.</ol>
+		<ol><b>9. Iniciar Serviço:</b> Esta é a situação que descreve o momento em que o atendente precisa realizar alguma atividade “interna” extra SAC, que vai deixá-lo indisponível para novos atendimentos. O sistema permite que seja selecionado um serviço dentre uma lista previamente definida, assim como permite que sejam registradas informações referentes a esse serviço em específico.</ol>
+		<ol><b>10. Serviço em Atendimento: </b>Da mesma forma que para o serviço interno, também é possível detalhar cada um dos serviços realizados ao longo de um atendimento. Essa informação é importante para possibilitar a extração de informações estatísticas sobre todo o processo de atendimento. Assim como no serviço “interno”, também é possível registrar informações adicionais, como por exemplo, a referência de um protocolo em um outro sistema.</ol>
+				
+	<h2>Entendendo o processo do atendimento</h2>
+		
+		<p>Quando um atendimento é criado, ele começa no estado “espera”, o que significa que ele está na fila para que seja escalonado para atendimento em um das mesas. O escalonamento acontece de acordo com o tempo em espera, priorizado proporcionalmente de acordo com as categorias.</p>
+		<p>No momento em que chega a vez de um atendimento, o estado do atendimento passa para “chamando”, a senha é exibida no painel, já vinculado a uma mesa específica. Ao mesmo tempo, também aparece na tela do gerente e do atendente a informação de qual senha está sendo chamada.</p>
+		<p>Neste momento existem quatro possibilidades:</p>
+		<li>1. O cidadão apresenta-se a mesa, e o atendente inicia o atendimento.
+		<li>2. Ninguém comparece, e o atendente registra “ausente”.</li>
+		<li>3. O atendente encaminha a senha para outra mesa, caso o tipo de atendimento não seja sua especialidade.</li>
+		<li>4. O atendente ou o gerente desfazem a chamada, retornando a senha para o estado “espera”, para que o atendente possa entrar em “pausa” .</li>
+		<p>Sendo iniciado o atendimento, o atendente pode:</p>
+		<h3>1.Ir para, outro sistema(spu, scuma etc.)</h3>
+		<p>Para isso, basta clicar no botão “Ir Para” e escolher o serviço associado. Será possível então registrar informações adicionais sobre o serviço em execução, como o número do protocolo.</p>
+		<p>Ao concluir o serviço, basta clicar no botão “Concluir Serviço” e o sistema retornará ao estado de atendimento, onde pode ser iniciado outro serviço ou o atendimento pode ser concluído.</p>
+		<h3>2.Concluir o atendimento.</h3>
+		<p>Para concluir o atendimento, basta clicar no botão “Concluir atendimento”. O opiniômetro irá ser inciado, e logo que o cidadão registrar as respostas, a mesa entrará no estado “concluído”.</p>
+		<p>Ao realizar serviços, podem ser registradas informações adicionais, mas em um determinado momento o atendente deverá concluir o atendimento. Quando o atendimento for concluído, o opiniômetro será acionado para que o cidadão registre a avaliação. Caso o cidadão se recuse a registrar a avaliação, o atendente solicita ao  gerente para encerrar o atendimento mesmo assim.</p>
+		<p>No momento em que o atendimento é encerrado, a mesa coloca-se em estado “concluído”, que permite que o atendente então escolha se vai:</p>
+		<h3>1.Iniciar uma pausa.</h3>
+		<p>Para iniciar uma pausa, basta clicar no botão “Iniciar Pausa”. A mesa será já colocada em estado de pausa, e então será possível registrar o motivo da pausa. Para retornar da pausa, basta clicar no botão “Terminar Pausa”.</p>
+		<h3>2.Iniciar um serviço interno.</h3>
+		<p>Assim como o “Ir Para” no atendimento, é possível clicar no “Iniciar Serviço”, que irá listar uma lista de serviços possíveis. Pode-se então selecionar o serviço e registrar informações adicionais. Quando estiver concluído, basta clicar no botão “Concluir Serviço”.</p>
+		<h3>3.Fechar a mesa.</h3>
+		<p>Fechar a mesa é o jeito correto de encerrar um dia de trabalho. Ao fazer isso a mesa estará então disponível para outro atendente assumir. O usuário será automaticamente deslogado do sistema.</p>
+		<h3>4.Atender “ausente”.</h3>
+		<p>Será apresentada uma lista das senhas “ausentes” ainda válidas para iniciar atendimento. Clicando na senha será iniciado o atendimento normalmente.</p>
+		<h3>5.Ficar “Disponível” para outro atendimento.</h3>
+		<p>Ao clicar em “disponível” o sistema irá atribuir uma nova senha a essa mesa, se houverem senhas em espera, ou irá fazê-lo logo que uma senha seja emitida.</p>
+		<p>O processo de escalonamento só irá enviar senhas para as mesas disponíveis, e vai fazer isso sempre no momento em que o atendente ficar “disponível”. É importante perceber que o estado das mesas estará sempre visível na tela do gerente, exibindo a hora em que o atendente passou para aquele estado, permitindo ao gerente ter um controle sobre a eficiência do atendimento.</p>
+		<p>Sempre que uma mesa estiver no estado “concluído”, o atendente também pode atender um “ausente”, desde que a senha ainda esteja dentro do limite de tolerância determinado. É importante sempre conferir que o número do atendimento confere com o número da senha no sistema.</p>
+
+	<h2>Conhecendo a interface do sistema</h2>
+	
+		<h3>Interface do Atendente</h3>
+		<p>Para facilitar o uso do sistema, a interface do sistema é desenhada de uma maneira consistente e que é mantida durante todo o uso. A interface é dividida em 3 áreas, que permitem uma fácil navegação. </p>
+		<p>As áreas são:</p>
+		<ol><b>1. Ações: </b>Todas as ações que podem ser realizadas pelo atendente em qualquer momento estarão sempre agrupadas nessa área da tela, permitindo uma fácil localização. Sempre que uma ação tiver um impacto irreversível será apresentada uma caixa de confirmação para evitar a execução acidental dessas ações.</ol>
+		<ol><b>2. Chat: </b>A qualquer momento o atendente pode chamar o gerente para conversar com ele com o  uso de mensagens instantâneas. Essa opção é util para, por exemplo, solicitar diretamente ao gerente o encerramento de um atendimento quando o cidadão se recusou a fazer a avaliação, ou para solicitar uma pausa.</ol>
+		<ol><b>3. Informações:</b> Mostra as informações sobre o estado atual, por exemplo, quando está chamando uma senha, mostra qual é a senha sendo chamada, quando vai para uma pausa, abre um espaço para preencher o motivo da pausa.</ol>
+		
+	<h2>Respostas</h2>
+	
+		<h3>0.Como saber qual o meu estado?<a name="link_p0"></a></h3>
+		<p>Você pode ver qual é o seu estado atual na parte de “Informações”, no lado direito da tela.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>1. Como ficar “Disponível” e poder chamar senhas?<a name="link_p1"></a></h3>
+		<p>Vai depender do seu estado atual.</p> 
+		<p>Se você estiver em “Avaliação”, deve esperar o fim da avaliação do cidadão. Caso o cidadão não tiver feito a avaliação ou o opiniômetro estiver com defeito, você deve pedir para o gerente encerrar seu atendimento.</p>
+		<p>Se você estiver “Concluído”, basta pressionar o botão “Disponível”.</p>
+		<p>Se você estiver em “Pausa”, clique em “Retornar da Pausa” e, em seguida, “Disponível”.</p>
+		<p>Se você estiver “Interno”, clique em “Encerrar serviço interno” e em seguida “Disponível”.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>2. Como iniciar uma Pausa?<a name="link_p2"></a></h3>
+		<p>Se estiver “Disponível” ou “Concluído”, basta clicar no botão “Iniciar Pausa”. </p>
+		<p>Se estiver “Chamando”, clique em “Devolver Senha” e em seguida em “Iniciar Pausa”.</p>
+		<p>Aparecerá um campo onde se pode escrever o motivo da pausa. Este motivo ficará armazenado nas estatísticas. Escreva o motivo e em seguida clique em “Registrar”. Pode-se mudar o motivo da pausa. Para tanto, basta clicar em “Redefinir” e digitar o motivo novamente.</p>
+		<p>Para retornar da pausa basta clicar o botão “Retornar da Pausa”.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>3. Como iniciar um Serviço durante o atendimento?<a name="link_p3"></a></h3>
+		<p>Para iniciar serviços, como SPU ou SCUMA, clique em “Iniciar Serviço”. Aparecerá na tela uma lista, então clique no link correspondente ao serviço desejado. Aparecerá um campo onde poderá ser feito um detalhamento do serviço, por exemplo: qual o protocolo do serviço, o que está sendo feito, etc.  Após concluir o serviço, clique em “Encerrar”. É possível abrir mais de um serviço durante o  mesmo atendimento. No entanto, não se pode “Concluir Atendimento” sem antes concluir os serviços abertos.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>4. Como encaminhar atendimento?<a name="link_p4"></a></h3>
+		<p>Durante o atendimento se o cidadão solicitar um serviço que você não souber efetuar ou que não seja sua especialidade, basta clicar em encaminhar. Deve-se escolher a mesa para a qual se deseja encaminhar e em seguida registrar um motivo para o encaminhamento.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>5. Como faço para me comunicar com o gerente?<a name="link_p5"></a></h3>
+		<p>Através do Chat. Digite a mensagem e em seguida clique em “Enviar” ou pressione ENTER.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+
+		<h3>6. Quanto tempo devo esperar por um cidadão cuja senha eu esteja “Chamando”?<a name="link_p6"></a></h3>
+		<p>Quanto tempo o gerente achar conveniente. Dentro do sistema há uma alternativa para que não se perca tempo esperando por uma senha que é “Registrar Ausente”. O atendente pode efetuar o registro sem a permissão do gerente.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>7. Um cidadão chegou na minha mesa mas sua vez já tinha passado. Ele ainda poderá ser atendido?<a name="link_p7"></a></h3>
+		<p>Sim, desde que esteja dentro sempre do limite de tolerância determinado. Ao terminar o atendimento atual, pressione “Listar Ausente”. Se a senha ainda estiver listada, clique em “Atender” e inicie o atendimento normalmente.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+			
+		<h3>8. Como faço para fechar mesa?<a name="link_p8"></a></h3>
+		<p>É necessário estar “Concluído” ou “Disponível”. Em seguida clique em “Fechar Mesa”. Caso esteja acontecendo algum problema, solicite ao gerente o fechamento de sua mesa.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+		
+		<h3>9. Eu poderei mudar a minha senha de acesso?<a name="link_p9"></a></h3>
+		<p>Sim, no canto superior direito da tela, existe um link “Mudar Senha”. Ao clicar nele, será aberto uma janela onde deverá ser preenchido a “Senha Atual”, ou seja, a senha que está sendo usada até aquele momento, a “Nova Senha”, que é a senha que a partir de então será usada, e “Confirmar Senha”, onde deve ser digitada a nova senha novemente. Lembrando que, se você atualizar a tela após mudar a senha, será mostrada uma mensagem de erro, mas não se desespere: basta “logar” novamente, já utilizando a nova senha.</p>
+		<h4><a href="#link_voltar">Voltar</h4></a>
+
+</div>
+</BODY>
+</html>    
+
+ 
+
