@@ -44,7 +44,6 @@ sub auto :Private {
 
 # todas essas operações são read-only, então não precisamos fazer
 # nenhuma checagem de autenticação.
-
 sub escalonar_senha :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
   my ($self, $c, $query) = @_;
 
@@ -54,6 +53,7 @@ sub escalonar_senha :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
   $c->stash->{funcionario} = $c->stash->{gerente}->funcionario;
   $c->forward('/ws/gestao/local/escalonar_senha');
 
+  $c->stash->{soap}->compile_return(undef);
 }
 
 sub refresh_gerente :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
@@ -65,6 +65,7 @@ sub refresh_gerente :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
   $c->stash->{funcionario} = $c->stash->{gerente}->funcionario;
   $c->forward('/ws/gestao/local/refresh_gerente');
 
+  $c->stash->{soap}->compile_return(undef);
 }
 
 sub refresh_painel :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
@@ -76,6 +77,7 @@ sub refresh_painel :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
   $c->stash->{funcionario} = $c->stash->{gerente}->funcionario;
   $c->forward('/ws/gestao/local/refresh_painel');
 
+  $c->stash->{soap}->compile_return(undef);
 }
 
 sub refresh_guiche :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
@@ -85,10 +87,11 @@ sub refresh_guiche :WSDLPort('Scheduler') :DBICTransaction('DB') :MI {
   $c->stash->{guiche} = $c->model('DB::Guiche')->find({ id_guiche => $id_guiche });
   $c->stash->{atendente} = $c->stash->{guiche}->atendente_atual->first;
   $c->stash->{funcionario} = $c->stash->{atendente}->funcionario;
-  $c->stash->{local} = $c->model->{guiche}->local;
+  $c->stash->{local} = $c->stash->{guiche}->local;
   $c->stash->{gerente} = $c->stash->{local}->gerente_atual->first;
   $c->forward('/ws/gestao/atendente/refresh_atendente');
 
+  $c->stash->{soap}->compile_return(undef);
 }
 
 1;

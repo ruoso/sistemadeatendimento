@@ -91,7 +91,7 @@ sub end : Private {
       for my $id_guiche (@{$c->stash->{refresh_guiche}}) {
         $c->model('SOAP')->transport->connection($c->engine->connection($c));
         $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/scheduler']);
-        $c->model('SOAP::Scheduler')->escalonar_senha({ local => { id_guiche => $id_guiche } });
+        $c->model('SOAP::Scheduler')->refresh_guiche({ guiche => { id_guiche => $id_guiche } });
       }
     }
 

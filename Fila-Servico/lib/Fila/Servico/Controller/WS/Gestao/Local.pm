@@ -105,7 +105,7 @@ sub refresh_gerente :Private {
          # Essa operação é somente leitura, dessa forma, vamos mandar o
          # model alterar o tipo da transação, de forma a reduzir a
          # contenção de locks
-         $storage->dbh_do('SET TRANSACTION READ ONLY');
+         $storage->dbh->do('SET TRANSACTION READ ONLY');
 
          my $local = $self->status_local($c, {});
          my $guiches = $self->status_guiches($c, {});
