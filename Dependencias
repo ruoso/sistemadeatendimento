@@ -1,0 +1,79 @@
+Fila-Servico:
+
+ Catalyst::Runtime
+ Catalyst::Controller::SOAP
+ Catalyst::Model::SOAP
+ Catalyst::Model::DBIC::Schema
+ DBIx::Class
+ DBIx::Class::Schema
+ DateTime
+ DateTime::Format::Pg
+ DateTime::Format::XSD
+ Digest::MD5
+ Net::XMPP2
+ Sub::Name
+ XML::Compile::SOAP
+ XML::CompileX::Transport::SOAPXMPP
+
+Fila-Web:
+
+ Catalyst::Runtime
+ Catalyst::Controller::SOAP
+ Catalyst::Model::SOAP
+ Catalyst::View::TT
+ Catalyst::Plugin::Prototype
+ Catalyst::Plugin::Session
+ DateTime
+ DateTime::Format::XSD
+ Net::XMPP2
+ EV
+ XML::Compile::SOAP
+ XML::CompileX::Transport::SOAPXMPP
+
+Fila-Administracao:
+
+ Catalyst::Runtime
+ Catalyst::View::TT
+ Catalyst::Model::DBIC::Schema
+ DateTime
+ DateTime::Format::Pg
+ DBIx::Class
+ DBIx::Class::Schema
+
+Fila-Agendamento:
+
+ Catalyst::Runtime
+ Catalyst::Model::DBIC::Schema
+ Catalyst::View::Email::Template
+ Catalyst::View::TT
+ DateTime
+ DateTime::Format::Pg
+ DBIx::Class
+ DBIx::Class::Schema
+ Business::BR::Ids
+
+Fila-ETL:
+
+ Catalyst::Runtime
+ Catalyst::Model::DBIX::Schema
+ DBIx::Class
+ DBIx::Class::Schema
+ DateTime::Format::Pg
+
+Fila-Opiniometro:
+
+ Catalyst::Runtime
+ Catalyst::Controller::SOAP
+ Catalyst::Model::SOAP
+ EV
+ XML::CompileX::Transport::SOAPXMPP
+
+Fila-Painel:
+
+ Catalyst::Runtime
+ Catalyst::Controller::SOAP
+ Catalyst::Model::SOAP
+ DateTime::Format::XSD
+ EV
+ Net::XMPP2
+ XML::CompileX::Transport::SOAPXMPP

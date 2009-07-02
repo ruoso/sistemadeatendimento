@@ -49,7 +49,16 @@ diretórios:
   documentacao: contém um conjunto diverso de documentações geradas
     sobre o sistema, incluindo materiais utilizados em treinamentos.
 
+PREPARACAO DAS DEPENDENCIAS
+================================================================================
 
+Cada um dos módulos pode ser instalado em uma máquina diferente. De
+forma a facilitar essa decisão, o arquivo Dependencias lista as
+dependências de módulos da CPAN para cada módulo do sistema. Para
+instalar esses módulos, verifique se não há um procedimento específico
+no seu sistema operacional, mas de maneira genérica, você usa o comando
+
+ # cpan install Nome::Do::Modulo
 
 INSTALACAO DO BANCO DE DADOS
 ================================================================================
