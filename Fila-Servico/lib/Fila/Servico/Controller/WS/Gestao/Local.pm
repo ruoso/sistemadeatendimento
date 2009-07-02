@@ -92,22 +92,34 @@ sub refresh_painel :Private {
 
 sub refresh_gerente :Private {
     my ($self, $c) = @_;
+
     # esse método é chamado por outras ações que precisam fazer um
     # callback para o gerente do local. As informações todas são
     # enviadas, para que possa ser apresentada a tela.
 
-    my $old = $c->stash->{soap}->compile_return();
+    my $storage = $c->model('DB')->storage;
+    $storage->ensure_connected;
 
-    my $local = $self->status_local($c, {});
-    my $guiches = $self->status_guiches($c, {});
-    my $encaminhamentos = $self->listar_encaminhamentos($c, {});
+    $storage->txn_do
+      (sub {
+         # Essa operação é somente leitura, dessa forma, vamos mandar o
+         # model alterar o tipo da transação, de forma a reduzir a
+         # contenção de locks
+         $storage->dbh_do('SET TRANSACTION READ ONLY');
 
-    $c->model('SOAP')->transport->connection($c->engine->connection($c));
-    $c->model('SOAP')->transport->addrs([$c->stash->{local}->gerente_atual->first->funcionario->jid.'/cb/render/gerente']);
-    $c->model('SOAP::CB::Gerente')->render_gerente({ %$local, %$guiches, %$encaminhamentos });
+         my $local = $self->status_local($c, {});
+         my $guiches = $self->status_guiches($c, {});
+         my $encaminhamentos = $self->listar_encaminhamentos($c, {});
 
-    $c->stash->{soap}->compile_return($old);
-
+         my $old = $c->stash->{soap}->compile_return();
+         $c->model('SOAP')->transport->connection
+           ($c->engine->connection($c));
+         $c->model('SOAP')->transport->addrs
+           ([$c->stash->{local}->gerente_atual->first->funcionario->jid.'/cb/render/gerente']);
+         $c->model('SOAP::CB::Gerente')->render_gerente
+           ({ %$local, %$guiches, %$encaminhamentos });
+         $c->stash->{soap}->compile_return($old);
+       });
 }
 
 
