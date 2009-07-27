@@ -147,6 +147,23 @@
     </Hierarchy>
   </Dimension>
 
+  <Dimension type="StandardDimension" name="PerguntaAvaliacao">
+    <Hierarchy hasAll="true" primaryKey="id_pergunta" primaryKeyTable="d_pergunta_avaliacao">
+      <Table name="d_pergunta_avaliacao" schema="public" />
+      <Level
+         name="PerguntaAvaliacao" table="d_pergunta_avaliacao" column="texto" type="String"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="pergunta" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension type="StandardDimension" name="RespostaAvaliacao">
+    <Hierarchy hasAll="true" primaryKey="id_resposta" primaryKeyTable="d_resposta_avaliacao">
+      <Table name="d_resposta_avaliacao" schema="public" />
+      <Level
+         name="RespostaAvaliacao" table="d_resposta_avaliacao" column="texto" type="String"
+         uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="resposta" />
+    </Hierarchy>
+  </Dimension>
 
   <Cube name="Quantidade de Atendimentos" cache="true" enabled="true">
     <Table name="f_quantidade_atendimentos" schema="public" alias="QuantidadeAtendimentos" />
@@ -207,7 +224,6 @@
 
   </Cube>
 
-  
   <Cube name="Quantidade por Estado por Tempo" cache="true" enabled="true">
     <Table name="f_quantidade_estados" schema="public" alias="QuantidadeAtendimentos" />
     <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
@@ -228,9 +244,80 @@
        name="Pessoas em atendimento" column="quantidade_atendimento" datatype="Integer"
        aggregator="avg" visible="true" />
     <Measure
-       name="Pessoas ausentes" column="quantidade_no_show" datatype="Integer"
+       name="Pessoas em avaliacao" column="quantidade_avaliacao" datatype="Integer"
        aggregator="avg" visible="true" />
   </Cube>
 
+  <Cube name="Quantidade por Estado de Guiche" cache="true" enabled="true">
+    <Table name="f_estados_guiches" schema="public" alias="EstadosGuiches" />
+    <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
+    <DimensionUsage source="Horario" name="Horario" foreignKey="horario" />
+    <DimensionUsage source="Anos" name="Anos" foreignKey="data" />
+    <DimensionUsage source="Meses" name="Meses" foreignKey="data" />
+    <DimensionUsage source="DiasDoMes" name="DiasDoMes" foreignKey="data" />
+    <DimensionUsage source="DiasDaSemana" name="DiasDaSemana" foreignKey="data" />
+    <Measure
+       name="Guiches Fechados" column="quantidade_fechado" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Operando" column="quantidade_publico" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches em Pausa" column="quantidade_pausa" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches em Serv Interno" column="quantidade_interno" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Disponiveis" column="quantidade_disponivel" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Chamando" column="quantidade_chamando" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Atendendo" column="quantidade_atendendo" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Avaliando" column="quantidade_avaliacao" datatype="Integer"
+       aggregator="avg" visible="true" />
+    <Measure
+       name="Guiches Concluidos" column="quantidade_concluido" datatype="Integer"
+       aggregator="avg" visible="true" />
+  </Cube>
+
+
+  <Cube name="Avaliacao" cache="true" enabled="true">
+    <Table name="f_avaliacao" schema="public" alias="Avaliacoes" />
+    <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
+    <DimensionUsage source="Guiche" name="Guiche" foreignKey="id_guiche" />
+    <DimensionUsage source="Horario" name="Horario" foreignKey="horario" />
+    <DimensionUsage source="Atendente" name="Atendente" foreignKey="id_atendente" />
+    <DimensionUsage source="CategoriaPrioritaria" name="CategoriaPrioritaria" foreignKey="id_categoria" />
+    <DimensionUsage source="CategoriaNome" name="CategoriaNome" foreignKey="id_categoria" />
+    <DimensionUsage source="Anos" name="Anos" foreignKey="data" />
+    <DimensionUsage source="Meses" name="Meses" foreignKey="data" />
+    <DimensionUsage source="DiasDoMes" name="DiasDoMes" foreignKey="data" />
+    <DimensionUsage source="DiasDaSemana" name="DiasDaSemana" foreignKey="data" />
+    <DimensionUsage source="PerguntaAvaliacao" name="PerguntaAvaliacao" foreignKey="id_pergunta" />
+    <DimensionUsage source="RespostaAvaliacao" name="RespostaAvaliacao" foreignKey="id_resposta" />
+    <Measure
+       name="Quantidade" column="quantidade" datatype="Integer"
+       aggregator="sum" visible="true" />
+  </Cube>
+
+  <Cube name="Ausentes" cache="true" enabled="true">
+    <Table name="f_no_show" schema="public" alias="Ausentes" />
+    <DimensionUsage source="Local" name="Local" foreignKey="id_local" />
+    <DimensionUsage source="Horario" name="Horario" foreignKey="horario" />
+    <DimensionUsage source="CategoriaPrioritaria" name="CategoriaPrioritaria" foreignKey="id_categoria" />
+    <DimensionUsage source="CategoriaNome" name="CategoriaNome" foreignKey="id_categoria" />
+    <DimensionUsage source="Anos" name="Anos" foreignKey="data" />
+    <DimensionUsage source="Meses" name="Meses" foreignKey="data" />
+    <DimensionUsage source="DiasDoMes" name="DiasDoMes" foreignKey="data" />
+    <DimensionUsage source="DiasDaSemana" name="DiasDaSemana" foreignKey="data" />
+    <Measure
+       name="Quantidade" column="quantidade" datatype="Integer"
+       aggregator="sum" visible="true" />
+  </Cube>
 
 </Schema>
