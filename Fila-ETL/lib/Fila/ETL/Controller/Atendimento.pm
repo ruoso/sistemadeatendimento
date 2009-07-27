@@ -245,300 +245,102 @@ sub estados :Chained('atendimento') :PathPart :Args(0) {
        my $local = $c->model('Federado')->target($c, $id, 'Local')->find
 	 ({ id_local => $id });
 
-       my $sql = q#;
+       my $sql_times = q{
 SELECT
+ DISTINCT DATE_TRUNC('minute', estado_atendimento.vt_ini) + '59.9999999 seconds' AS vt_fac
+FROM
+ atendimento LEFT JOIN 
+ estado_atendimento USING (id_atendimento)
+WHERE
+ atendimento.id_local = ? AND
+ atendimento.vt_ini >= ? AND
+ atendimento.vt_ini < ? AND
+ estado_atendimento.vt_ini >= ? AND
+ estado_atendimento.vt_ini < ?
+};
 
- date_trunc('minute',times.vt_fac) AS datahora,
- COUNT(es_espe_ini.*) AS espe_ini,
- COUNT(es_espe_fim.*) AS espe_fim,
- COUNT(es_cham_ini.*) AS cham_ini,
- COUNT(es_cham_fim.*) AS cham_fim,
- COUNT(es_aten_ini.*) AS aten_ini,
- COUNT(es_aten_fim.*) AS aten_fim,
- COUNT(es_no_show.*) AS no_show,
- ct_espe_ini.id_categoria AS  ct_espe_ini_id_categoria,
- ct_espe_ini.nome AS  ct_espe_ini_nome,
- ct_espe_ini.codigo AS  ct_espe_ini_codigo,
- ct_espe_fim.id_categoria AS  ct_espe_fim_id_categoria,
- ct_espe_fim.nome AS  ct_espe_fim_nome,
- ct_espe_fim.codigo AS  ct_espe_fim_codigo,
- ct_cham_ini.id_categoria AS  ct_cham_ini_id_categoria,
- ct_cham_ini.nome AS  ct_cham_ini_nome,
- ct_cham_ini.codigo AS  ct_cham_ini_codigo,
- ct_cham_fim.id_categoria AS  ct_cham_fim_id_categoria,
- ct_cham_fim.nome AS  ct_cham_fim_nome,
- ct_cham_fim.codigo AS  ct_cham_fim_codigo,
- ct_aten_ini.id_categoria AS  ct_aten_ini_id_categoria,
- ct_aten_ini.nome AS  ct_aten_ini_nome,
- ct_aten_ini.codigo AS  ct_aten_ini_codigo,
- ct_aten_fim.id_categoria AS  ct_aten_fim_id_categoria,
- ct_aten_fim.nome AS  ct_aten_fim_nome,
- ct_aten_fim.codigo AS  ct_aten_fim_codigo,
- ct_no_show.id_categoria AS  ct_no_show_id_categoria,
- ct_no_show.nome AS  ct_no_show_nome,
- ct_no_show.codigo AS ct_no_show_codigo
+         my $sql_estados_categorias = q{
+SELECT
+ COUNT(tipo_estado_atendimento.*) as quantidade,
+ categoria.nome, categoria.codigo, categoria.id_categoria,
+ tipo_estado_atendimento.nome as nome_estado
 
 FROM
+ categoria LEFT JOIN
+ categoria_atendimento
+   ON (categoria.id_categoria=categoria_atendimento.id_categoria AND
+       categoria_atendimento.vt_ini <= ? AND
+       categoria_atendimento.vt_fim > ?) LEFT JOIN
+ atendimento
+   ON (atendimento.id_atendimento=categoria_atendimento.id_atendimento AND
+       atendimento.id_local = ? ) LEFT JOIN
+ estado_atendimento
+   ON (atendimento.id_atendimento=estado_atendimento.id_atendimento AND
+       estado_atendimento.vt_ini <= ? AND
+       estado_atendimento.vt_fim > ?) LEFT JOIN
+ tipo_estado_atendimento USING (id_estado)
 
- ( SELECT vt_ini AS vt_fac FROM estado_atendimento estados_ini
-   WHERE (
-     ( estados_ini.vt_ini >= ? ) AND
-     ( estados_ini.vt_ini < ? ) )
-   UNION
-   SELECT vt_fim AS vt_fac FROM estado_atendimento estados_fim
-   WHERE (
-     ( estados_fim.vt_fim >= ? ) AND
-     ( estados_fim.vt_fim < ? ) )
- ) AS times
+WHERE tipo_estado_atendimento.nome IS NOT NULL
 
- LEFT JOIN estado_atendimento AS es_espe_ini ON (times.vt_fac = es_espe_ini.vt_ini
-       AND es_espe_ini.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='espera'))
+GROUP BY
+  categoria.nome, categoria.codigo, categoria.id_categoria,
+  tipo_estado_atendimento.nome
 
- LEFT JOIN atendimento AS at_espe_ini ON
-      ( es_espe_ini.id_atendimento = at_espe_ini.id_atendimento AND
-        at_espe_ini.id_local = ? )
 
- LEFT JOIN categoria_atendimento AS cs_espe_ini ON
-      ( at_espe_ini.id_atendimento = cs_espe_ini.id_atendimento)
-
- LEFT JOIN categoria AS ct_espe_ini ON
-      ( cs_espe_ini.id_categoria = ct_espe_ini.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_espe_fim ON (times.vt_fac = es_espe_fim.vt_fim
-       AND es_espe_fim.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='espera'))
-
- LEFT JOIN atendimento AS at_espe_fim ON
-      ( es_espe_fim.id_atendimento = at_espe_fim.id_atendimento AND
-        at_espe_fim.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_espe_fim ON
-      ( at_espe_fim.id_atendimento = cs_espe_fim.id_atendimento)
-
- LEFT JOIN categoria AS ct_espe_fim ON
-      ( cs_espe_fim.id_categoria = ct_espe_fim.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_cham_ini ON (times.vt_fac = es_cham_ini.vt_ini
-       AND es_cham_ini.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='chamando'))
-
- LEFT JOIN atendimento AS at_cham_ini ON
-      ( es_cham_ini.id_atendimento = at_cham_ini.id_atendimento AND
-        at_cham_ini.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_cham_ini ON
-      ( at_cham_ini.id_atendimento = cs_cham_ini.id_atendimento)
-
- LEFT JOIN categoria AS ct_cham_ini ON
-      ( cs_cham_ini.id_categoria = ct_cham_ini.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_cham_fim ON (times.vt_fac = es_cham_fim.vt_fim
-       AND es_cham_fim.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='chamando'))
-
- LEFT JOIN atendimento AS at_cham_fim ON
-      ( es_cham_fim.id_atendimento = at_cham_fim.id_atendimento AND
-        at_cham_fim.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_cham_fim ON
-      ( at_cham_fim.id_atendimento = cs_cham_fim.id_atendimento)
-
- LEFT JOIN categoria AS ct_cham_fim ON
-      ( cs_cham_fim.id_categoria = ct_cham_fim.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_aten_ini ON (times.vt_fac = es_aten_ini.vt_ini
-       AND es_aten_ini.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='atendimento'))
-
- LEFT JOIN atendimento AS at_aten_ini ON
-      ( es_aten_ini.id_atendimento = at_aten_ini.id_atendimento AND
-        at_aten_ini.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_aten_ini ON
-      ( at_aten_ini.id_atendimento = cs_aten_ini.id_atendimento)
-
- LEFT JOIN categoria AS ct_aten_ini ON
-      ( cs_aten_ini.id_categoria = ct_aten_ini.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_aten_fim ON (times.vt_fac = es_aten_fim.vt_fim
-       AND es_aten_fim.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='atendimento'))
-
- LEFT JOIN atendimento AS at_aten_fim ON
-      ( es_aten_fim.id_atendimento = at_aten_fim.id_atendimento AND
-        at_aten_fim.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_aten_fim ON
-      ( at_aten_fim.id_atendimento = cs_aten_fim.id_atendimento)
-
- LEFT JOIN categoria AS ct_aten_fim ON
-      ( cs_aten_fim.id_categoria = ct_aten_fim.id_categoria)
-
- LEFT JOIN estado_atendimento AS es_no_show  ON (times.vt_fac = es_no_show.vt_ini
-       AND es_no_show.id_estado=(SELECT id_estado FROM tipo_estado_atendimento WHERE nome='no_show'))
-
- LEFT JOIN atendimento AS at_no_show ON
-      ( es_no_show.id_atendimento = at_no_show.id_atendimento AND
-        at_no_show.id_local = ? )
-
- LEFT JOIN categoria_atendimento AS cs_no_show ON
-      ( at_no_show.id_atendimento = cs_no_show.id_atendimento)
-
- LEFT JOIN categoria AS ct_no_show ON
-      ( cs_no_show.id_categoria = ct_no_show.id_categoria)
-
-GROUP BY date_trunc('minute',times.vt_fac),
-  ct_espe_ini.id_categoria, ct_espe_ini.nome, ct_espe_ini.codigo,
-  ct_espe_fim.id_categoria, ct_espe_fim.nome, ct_espe_fim.codigo,
-  ct_cham_ini.id_categoria, ct_cham_ini.nome, ct_cham_ini.codigo,
-  ct_cham_fim.id_categoria, ct_cham_fim.nome, ct_cham_fim.codigo,
-  ct_aten_ini.id_categoria, ct_aten_ini.nome, ct_aten_ini.codigo,
-  ct_aten_fim.id_categoria, ct_aten_fim.nome, ct_aten_fim.codigo,
-  ct_no_show.id_categoria, ct_no_show.nome, ct_no_show.codigo
-
-ORDER BY datahora
-
-#;
+};
 
        my $storage = $c->model('Federado')->storage($c, $id);
        $storage->ensure_connected;
        my $dbi = $storage->dbh;
 
-       my $sth = $dbi->prepare($sql);
-       $sth->execute( $c->stash->{last_vt_base}, $c->stash->{vt_base},
-		      $c->stash->{last_vt_base}, $c->stash->{vt_base},
-		      map { $id } 1..7 );
+       my $sth = $dbi->prepare($sql_times);
+       $sth->execute( $id,
+                      $c->stash->{last_vt_base}, $c->stash->{vt_base},
+                      $c->stash->{last_vt_base}, $c->stash->{vt_base},
+                    );
+
+       my $sth_inner = $dbi->prepare($sql_estados_categorias);
 
        my $dlocal = $c->model('DB::DLocal')->get_dimension($local);
-       my $last_datahora;
-       my $counters_cat = {};
-       my $last_data;
+       my $cat_cache = {};
 
-       while (my $item = $sth->fetchrow_hashref) {
+       while (my ($datahora) = $sth->fetchrow_array) {
+         my $datahora_dt = DateTime::Format::Pg->parse_datetime($datahora);
+         my $data = $c->model('DB::DData')->get_dimension($datahora_dt);
+         my $horario = $c->model('DB::DHorario')->get_dimension($datahora_dt);
+         my $counters_cat = {};
 
-	 if ($last_datahora && $item->{datahora} ne $last_datahora) {
+         $sth_inner->execute($datahora,$datahora,$id,$datahora,$datahora);
+         while (my $item = $sth_inner->fetchrow_hashref) {
+           my $id_categoria = $item->{id_categoria};
+           $counters_cat->{$id_categoria}{$item->{nome_estado}} = $item->{quantidade};
+           $counters_cat->{$id_categoria}{categoria}{codigo} = $item->{codigo};
+           $counters_cat->{$id_categoria}{categoria}{codigo} = $item->{nome};
+         }
 
-	   # inserir registros para cada categoria
-	   my $data = $c->model('DB::DData')->get_dimension
-	     ( DateTime::Format::Pg->parse_datetime($last_datahora) );
-	   my $horario = $c->model('DB::DHorario')->get_dimension
-	     ( DateTime::Format::Pg->parse_datetime($last_datahora) );
-
-	   foreach my $id_categoria (keys %{$counters_cat}) {
-
-	     my $categoria = $c->model('DB::DCategoria')->get_dimension
+         foreach my $id_categoria (keys %{$counters_cat}) {
+           unless (exists $cat_cache->{$id_categoria}) {
+             $cat_cache->{$id_categoria} = $c->model('DB::DCategoria')->get_dimension
 	       (Fila::Servico::DB::Categoria->new
 		({ map { $_ => $counters_cat->{$id_categoria}{categoria}{$_}
 		       } qw(id_categoria nome codigo) }));
+           }
+           my $categoria = $cat_cache->{$id_categoria};
 
+           $c->model('DB::FQuantidadeEstados')->create
+             ({ id_local => $dlocal,
+                id_categoria => $categoria,
+                data => $data,
+                horario => $horario,
 
-	     $c->model('DB::FQuantidadeEstados')->create
-	       ({ id_local => $dlocal,
-		  id_categoria => $categoria,
-		  data => $data,
-		  horario => $horario,
-
-		  ( map { 'quantidade_'.$_ => ($counters_cat->{$id_categoria}{$_} || 0) }
-		    'espera',
-		    'chamando',
-		    'atendimento',
-		    'no_show'
-		  )
-		});
-
-	     $counters_cat->{$id_categoria}{no_show} = 0;
-	   }
-
-	   $last_datahora = $item->{datahora};
-	   if ($last_data ne $data) {
-	     $last_datahora = undef;
-	     $last_data = undef;
-	   }
-
-	 }
-	 if (not $last_datahora ) {
-	   # vamos obter os contadores iniciais para aquela datahora
-
-	   my $sql_quant = q#
-
-SELECT
-  cat_est.estado,
-  cat_est.id_categoria,
-  cat_est.codigo,
-  cat_est.nome,
-  COUNT(categoria_atendimento.*) as total
-FROM
-  ( SELECT tipo_estado_atendimento.id_estado,
-    tipo_estado_atendimento.nome AS estado, categoria.id_categoria,
-    categoria.codigo, categoria.nome FROM tipo_estado_atendimento,
-    categoria
-     WHERE
-    tipo_estado_atendimento.nome IN ('espera','chamando','atendimento')
-  ) AS cat_est
-  INNER JOIN estado_atendimento
-   ON (estado_atendimento.id_estado = cat_est.id_estado AND
-       ? BETWEEN estado_atendimento.vt_ini AND estado_atendimento.vt_fim)
-  INNER JOIN atendimento
-   ON (estado_atendimento.id_atendimento = atendimento.id_atendimento AND
-       ? BETWEEN atendimento.vt_ini AND atendimento.vt_fim)
-  INNER JOIN categoria_atendimento
-   ON (atendimento.id_atendimento = categoria_atendimento.id_atendimento AND
-       categoria_atendimento.id_categoria = cat_est.id_categoria)
-GROUP BY
-  cat_est.estado,
-  cat_est.id_categoria,
-  cat_est.codigo,
-  cat_est.nome
-
-#;
-
-	   my $sth = $dbi->prepare($sql_quant);
-	   $sth->execute($item->{datahora}, $item->{datahora});
-
-           $counters_cat = {};
-
-	   while (my $cat_est = $sth->fetchrow_hashref) {
-	     $counters_cat->{$cat_est->{id_categoria}}{categoria} = $cat_est;
-	     $counters_cat->{$cat_est->{id_categoria}}{$cat_est->{estado}} = $cat_est->{total};
-	     $counters_cat->{$cat_est->{id_categoria}}{no_show} = 0;
-	   }
-
-	   $last_datahora = $item->{datahora};
-	   $last_data = $last_datahora;
-	   $last_data =~ s/\s.+$//;
-	 }
-
-	 # vamos calcular os contadores
-	 if ($item->{espe_ini}) {
-	   $counters_cat->{$item->{ct_espe_ini_id_categoria}}{espera} += $item->{espe_ini};
-	   $counters_cat->{$item->{ct_espe_ini_id_categoria}}{categoria}{codigo} = $item->{ct_espe_ini_codigo};
-	   $counters_cat->{$item->{ct_espe_ini_id_categoria}}{categoria}{nome} = $item->{ct_espe_ini_nome};
-	 }
-	 if ($item->{espe_fim}) {
-	   $counters_cat->{$item->{ct_espe_fim_id_categoria}}{espera} -= $item->{espe_fim};
-	   $counters_cat->{$item->{ct_espe_fim_id_categoria}}{categoria}{codigo} = $item->{ct_espe_fim_codigo};
-	   $counters_cat->{$item->{ct_espe_fim_id_categoria}}{categoria}{nome} = $item->{ct_espe_fim_nome};
-	 }
-	 if ($item->{cham_ini}) {
-	   $counters_cat->{$item->{ct_cham_ini_id_categoria}}{chamando} += $item->{cham_ini};
-	   $counters_cat->{$item->{ct_cham_ini_id_categoria}}{categoria}{codigo} = $item->{ct_cham_ini_codigo};
-	   $counters_cat->{$item->{ct_cham_ini_id_categoria}}{categoria}{nome} = $item->{ct_cham_ini_nome};
-	 }
-	 if ($item->{cham_fim}) {
-	   $counters_cat->{$item->{ct_cham_fim_id_categoria}}{chamando} -= $item->{cham_fim};
-	   $counters_cat->{$item->{ct_cham_fim_id_categoria}}{categoria}{codigo} = $item->{ct_cham_fim_codigo};
-	   $counters_cat->{$item->{ct_cham_fim_id_categoria}}{categoria}{nome} = $item->{ct_cham_fim_nome};
-	 }
-	 if ($item->{aten_ini}) {
-	   $counters_cat->{$item->{ct_aten_ini_id_categoria}}{atendimento} += $item->{aten_ini};
-	   $counters_cat->{$item->{ct_aten_ini_id_categoria}}{categoria}{codigo} = $item->{ct_aten_ini_codigo};
-	   $counters_cat->{$item->{ct_aten_ini_id_categoria}}{categoria}{nome} = $item->{ct_aten_ini_nome};
-	 }
-	 if ($item->{aten_fim}) {
-	   $counters_cat->{$item->{ct_aten_fim_id_categoria}}{atendimento} -= $item->{aten_fim};
-	   $counters_cat->{$item->{ct_aten_fim_id_categoria}}{categoria}{codigo} = $item->{ct_aten_fim_codigo};
-	   $counters_cat->{$item->{ct_aten_fim_id_categoria}}{categoria}{nome} = $item->{ct_aten_fim_nome};
-	 }
-	 if ($item->{no_show}) {
-	   $counters_cat->{$item->{ct_no_show_id_categoria}}{no_show} += $item->{no_show};
-	   $counters_cat->{$item->{ct_no_show_id_categoria}}{categoria}{codigo} = $item->{ct_no_show_codigo};
-	   $counters_cat->{$item->{ct_no_show_id_categoria}}{categoria}{nome} = $item->{ct_no_show_nome};
-	 }
+                ( map { 'quantidade_'.$_ => ($counters_cat->{$id_categoria}{$_} || 0) }
+                  'espera',
+                  'chamando',
+                  'atendimento',
+                  'avaliacao'
+                )
+              });
+         }
 
        }
 
@@ -550,8 +352,107 @@ GROUP BY
 
      });
 
+}
 
+sub no_show :Chained('atendimento') :PathPart :Args(0) {
+  my ($self, $c) = @_;
+
+  $c->model('Federado')->doeach
+    ($c, sub {
+       my $id = shift;
+
+       my $result = $c->model('DB::ActivityLog')->search
+         ({ activity_type => '/atendimento/no_show',
+            id_local => $id },
+          { order_by => 'vt_base DESC' });
+
+       if (my $last = $result->first) {
+         $c->stash->{last_vt_base} = $last->vt_base;
+       } else {
+         $c->stash->{last_vt_base} = '-Infinity';
+       }
+
+       my $local = $c->model('Federado')->target($c, $id, 'Local')->find
+	 ({ id_local => $id });
+
+       my $sql = q#
+SELECT
+ DATE_TRUNC('minute', estado_atendimento.vt_ini) AS datahora,
+ COUNT(estado_atendimento.*) AS quantidade,
+ categoria.nome, categoria.codigo, categoria.id_categoria
+
+FROM
+ tipo_estado_atendimento INNER JOIN
+ estado_atendimento
+  ON (tipo_estado_atendimento.id_estado=estado_atendimento.id_estado AND
+      estado_atendimento.vt_ini > ? AND
+      estado_atendimento.vt_ini <= ?) INNER JOIN
+ atendimento
+  ON (estado_atendimento.id_atendimento=atendimento.id_atendimento AND
+      atendimento.id_local = ? AND
+      atendimento.vt_ini > ? AND
+      atendimento.vt_ini <= ?) INNER JOIN
+ categoria_atendimento
+  ON (categoria_atendimento.id_atendimento=atendimento.id_atendimento AND
+      categoria_atendimento.vt_ini <= estado_atendimento.vt_ini AND
+      categoria_atendimento.vt_fim > estado_atendimento.vt_ini) INNER JOIN
+ categoria USING (id_categoria)
+
+WHERE tipo_estado_atendimento.nome='no_show'
+
+GROUP BY
+ DATE_TRUNC('minute', estado_atendimento.vt_ini),
+ categoria.nome, categoria.codigo, categoria.id_categoria
+
+#;
+
+       my $storage = $c->model('Federado')->storage($c, $id);
+       $storage->ensure_connected;
+       my $dbi = $storage->dbh;
+
+       my $sth = $dbi->prepare($sql);
+       $sth->execute( $c->stash->{last_vt_base}, $c->stash->{vt_base},
+                      $id,
+                      $c->stash->{last_vt_base}, $c->stash->{vt_base},
+                    );
+
+       my $dlocal = $c->model('DB::DLocal')->get_dimension($local);
+       my $cat_cache = {};
+
+       while (my $item = $sth->fetchrow_hashref) {
+         my $datahora = $item->{datahora};
+         my $datahora_dt = DateTime::Format::Pg->parse_datetime($datahora);
+         my $data = $c->model('DB::DData')->get_dimension($datahora_dt);
+         my $horario = $c->model('DB::DHorario')->get_dimension($datahora_dt);
+         my $id_categoria = $item->{id_categoria};
+
+         unless (exists $cat_cache->{$id_categoria}) {
+           $cat_cache->{$id_categoria} = $c->model('DB::DCategoria')->get_dimension
+             (Fila::Servico::DB::Categoria->new
+              ({ map { $_ => $item->{$_}
+                     } qw(id_categoria nome codigo) }));
+         }
+         my $categoria = $cat_cache->{$id_categoria};
+
+         $c->model('DB::FQuantidadeEstados')->create
+           ({ id_local => $dlocal,
+              id_categoria => $categoria,
+              data => $data,
+              horario => $horario,
+              quantidade => $item->{quantidade}
+            });
+       }
+
+
+       $c->model('DB::ActivityLog')->create
+         ({ activity_type => '/atendimento/no_show',
+            id_local => $id,
+            vt_base => $c->stash->{vt_base},
+            vt_ini => $c->stash->{now} });
+
+     });
 
 }
+
 
 1;

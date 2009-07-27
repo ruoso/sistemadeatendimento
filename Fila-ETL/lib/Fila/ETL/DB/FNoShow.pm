@@ -1,4 +1,4 @@
-package Fila::ETL::DB::FQuantidadeEstados;
+package Fila::ETL::DB::FNoShow;
 # Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
 #
 # Este arquivo é parte do programa FILA - Sistema de Atendimento
@@ -21,7 +21,7 @@ use warnings;
 use base qw(DBIx::Class);
 
 __PACKAGE__->load_components(qw(Core));
-__PACKAGE__->table('f_quantidade_estados');
+__PACKAGE__->table('f_no_show');
 __PACKAGE__->add_columns
   (
    id_local =>
@@ -40,22 +40,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'char(5)',
    },
-   quantidade_espera =>
+   quantidade =>
    {
     data_type => 'integer',
-   },
-   quantidade_chamando =>
-   {
-    data_type => 'integer',
-   },
-   quantidade_atendimento =>
-   {
-    data_type => 'integer',
-   },
-   quantidade_avaliacao =>
-   {
-    data_type => 'integer',
-   },
+   }
   );
 
 

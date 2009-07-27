@@ -1,4 +1,4 @@
-package Fila::ETL::DB::FQuantidadeEstados;
+package Fila::ETL::DB::FEstadosGuiches;
 # Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
 #
 # Este arquivo é parte do programa FILA - Sistema de Atendimento
@@ -21,14 +21,10 @@ use warnings;
 use base qw(DBIx::Class);
 
 __PACKAGE__->load_components(qw(Core));
-__PACKAGE__->table('f_quantidade_estados');
+__PACKAGE__->table('f_estados_guiches');
 __PACKAGE__->add_columns
   (
    id_local =>
-   {
-    data_type => 'integer',
-   },
-   id_categoria =>
    {
     data_type => 'integer',
    },
@@ -40,7 +36,23 @@ __PACKAGE__->add_columns
    {
     data_type => 'char(5)',
    },
-   quantidade_espera =>
+   quantidade_fechado =>
+   {
+    data_type => 'integer',
+   },
+   quantidade_publico =>
+   {
+    data_type => 'integer',
+   },
+   quantidade_pausa =>
+   {
+    data_type => 'integer',
+   },
+   quantidade_interno =>
+   {
+    data_type => 'integer',
+   },
+   quantidade_disponivel =>
    {
     data_type => 'integer',
    },
@@ -53,6 +65,10 @@ __PACKAGE__->add_columns
     data_type => 'integer',
    },
    quantidade_avaliacao =>
+   {
+    data_type => 'integer',
+   },
+   quantidade_concluido =>
    {
     data_type => 'integer',
    },

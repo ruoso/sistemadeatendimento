@@ -16,7 +16,7 @@ Model::DBSERVI:
     schema_class: 'Fila::Servico::DB'
     connect_info:
         - 'dbi:Pg:host=localhost;database=fila'
-        - ruoso
+        - fila
         - teste
 Model::Federado:
     federacao:
