@@ -55,16 +55,23 @@ use base 'DBIx::Class::ResultSet';
 
 sub get_dimension {
   my ($self, $categoria) = @_;
-  my $nome = $categoria->nome;
+  my ($codigo, $nome);
+  if (ref $categoria eq 'HASH') {
+    $codigo = $categoria->{codigo};
+    $nome = $categoria->{nome};
+  } else {
+    $codigo = $categoria->{codigo};
+    $nome = $categoria->nome;
+  }
   if (my $dim = $self->find({ nome => $nome })) {
     return $dim->id_categoria;
   } else {
     # Aqui vamos presumir que se a categoria tem "preferencial" ou
     # "prioritaria" no nome, ela é prioritária, senão ela é normal.
     return $self->create
-      ({ nome => $categoria->nome,
-	 codigo => $categoria->codigo,
-	 prioritaria => $categoria->nome =~ /(prefer|priorit)/i ? 1 : 0
+      ({ nome => $nome,
+	 codigo => $codigo,
+	 prioritaria => $nome =~ /(prefer|priorit)/i ? 1 : 0
        })->id_categoria;
   }
 }

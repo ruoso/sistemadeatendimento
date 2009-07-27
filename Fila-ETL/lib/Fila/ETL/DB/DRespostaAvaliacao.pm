@@ -1,4 +1,4 @@
-package Fila::ETL::DB::DGuiche;
+package Fila::ETL::DB::DRespostaAvaliacao;
 # Copyright 2008, 2009 - Oktiva Comércio e Serviços de Informática Ltda.
 #
 # Este arquivo é parte do programa FILA - Sistema de Atendimento
@@ -21,47 +21,34 @@ use warnings;
 use base qw(DBIx::Class);
 
 __PACKAGE__->load_components(qw(Core PK::Auto));
-__PACKAGE__->table('d_guiche');
+__PACKAGE__->table('d_resposta_avaliacao');
 __PACKAGE__->add_columns
   (
-   id_guiche =>
+   id_resposta =>
    {
     data_type => 'integer',
     is_auto_increment => 1
    },
-   identificador =>
+   valor =>
    {
-    data_type => 'varchar',
-    is_nullable => 1,
+    data_type => "varchar"
    }
   );
 
-__PACKAGE__->set_primary_key('id_guiche');
-__PACKAGE__->resultset_class('Fila::ETL::DB::DGuiche::RS');
+__PACKAGE__->set_primary_key('id_resposta');
+__PACKAGE__->resultset_class('Fila::ETL::DB::DAtendente::RS');
 
-package Fila::ETL::DB::DGuiche::RS;
+package Fila::ETL::DB::DRespostaAvaliacao::RS;
 use base 'DBIx::Class::ResultSet';
 
-
 sub get_dimension {
-    my ($self, $guiche) = @_;
-    my $ident;
-    if (ref $guiche) {
-      $ident = $guiche->identificador;
+    my ($self, $resposta) = @_;
+    my $valor = (qw(otimo bom regular ruim))[$resposta - 1];
+    if (my $dim = $self->find({ id_resposta => $resposta })) {
+	return $resposta;
     } else {
-      $ident = $guiche;
-    }
-    if (my $dim = $self->find({ identificador => $ident })) {
-	return $dim->id_guiche;
-    } else {
-	# TODO: Aqui deveríamos ter um conjunto maior de informações
-	# sobre o guichê, como por exemplo, a distância entre o guichê
-	# e a porta, a distância entre o guichê e a cadeira mais
-	# próxima, a distância entre o guichê e a cadeira mais longe
-	# para que pudéssemos obter mais informações. Por enquanto,
-	# consolidamos apenas no número do guichê.
 	return $self->create
-	    ({ identificador => $ident ? $ident : '' })->id_guiche;
+          ({ valor => $valor, id_resposta => $resposta })->id_resposta;
     }
 }
 
@@ -71,10 +58,10 @@ __END__
 
 =head1 NAME
 
-DGuiche - Tabela da dimensão "Guiche"
+DRespostaAvaliacao - Tabela da dimensão "Resposta Avaliacao"
 
 =head1 SYNOPSIS
 
-Essa tabela lista todas as entradas da dimensão "Guiche".
+Essa tabela lista todas as entradas da dimensão "Resposta Avaliacao".
 
 =cut

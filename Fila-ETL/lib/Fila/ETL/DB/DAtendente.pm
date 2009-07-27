@@ -49,15 +49,23 @@ use base 'DBIx::Class::ResultSet';
 
 sub get_dimension {
     my ($self, $atendente) = @_;
-    my $matricula = $atendente->jid;
-    $matricula =~ s/\@.+$//;
+    my ($matricula, $nome);
+    if (ref $atendente ne 'HASH') {
+      $matricula = $atendente->jid;
+      $matricula =~ s/\@.+$//;
+      $nome = $atendente->nome;
+    } else {
+      $matricula = $atendente->{jid};
+      $matricula =~ s/\@.+$//;
+      $nome = $atendente->{nome};
+    }
     if (my $dim = $self->find({ matricula => $matricula })) {
 	return $dim->id_atendente;
     } else {
 	# TODO: Obter isso de um lugar mais inteligente;
 	return $self->create
 	    ({ matricula => $matricula ? $matricula : '',
-	       nome => $atendente->nome })->id_atendente;
+	       nome => $nome })->id_atendente;
     }
 }
 
