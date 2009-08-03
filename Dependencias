@@ -14,6 +14,7 @@ Fila-Servico:
  Sub::Name
  XML::Compile::SOAP
  XML::CompileX::Transport::SOAPXMPP
+ SQL::Translator
 
 Fila-Web:
 
@@ -51,6 +52,7 @@ Fila-Agendamento:
  DBIx::Class
  DBIx::Class::Schema
  Business::BR::Ids
+ SQL::Translator
 
 Fila-ETL:
 
@@ -59,6 +61,7 @@ Fila-ETL:
  DBIx::Class
  DBIx::Class::Schema
  DateTime::Format::Pg
+ SQL::Translator
 
 Fila-Opiniometro:
 

@@ -434,7 +434,7 @@ GROUP BY
          }
          my $categoria = $cat_cache->{$id_categoria};
 
-         $c->model('DB::FQuantidadeEstados')->create
+         $c->model('DB::FNoShow')->create
            ({ id_local => $dlocal,
               id_categoria => $categoria,
               data => $data,

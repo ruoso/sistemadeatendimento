@@ -37,7 +37,7 @@ __PACKAGE__->add_columns
   );
 
 __PACKAGE__->set_primary_key('id_pergunta');
-__PACKAGE__->resultset_class('Fila::ETL::DB::DAtendente::RS');
+__PACKAGE__->resultset_class('Fila::ETL::DB::DPerguntaAvaliacao::RS');
 
 package Fila::ETL::DB::DPerguntaAvaliacao::RS;
 use base 'DBIx::Class::ResultSet';

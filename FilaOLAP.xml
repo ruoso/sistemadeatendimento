@@ -160,7 +160,7 @@
     <Hierarchy hasAll="true" primaryKey="id_resposta" primaryKeyTable="d_resposta_avaliacao">
       <Table name="d_resposta_avaliacao" schema="public" />
       <Level
-         name="RespostaAvaliacao" table="d_resposta_avaliacao" column="texto" type="String"
+         name="RespostaAvaliacao" table="d_resposta_avaliacao" column="valor" type="String"
          uniqueMembers="false" levelType="Regular" hideMemberIf="Never" caption="resposta" />
     </Hierarchy>
   </Dimension>
