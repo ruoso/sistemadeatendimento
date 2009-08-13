@@ -76,7 +76,7 @@ A configuração do banco de dados é feita nos arquivos:
 Esses arquivos contém a configuração dos endereços para conexão e do
 nome do banco de dados. A configuração padrão presente no código como
 distribuído utiliza o banco de dados em "localhost", no banco de dados
-"fila" utilizando o usuário "postgres" com a senha "123". Você deve
+"fila" utilizando o usuário "fila" com a senha "senha". Você deve
 personalizar esses arquivos de acordo com a situação real no seu
 ambiente.
 
