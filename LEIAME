@@ -123,7 +123,7 @@ Uma vez o servidor Jabber rodando, é possível iniciar o módulo de
 regras de negócio. Para isso, pode-se executar:
 
   # dentro do diretório Fila-Servico
-  ./script/fila_servico_server.pl
+  ./script/fila_servico_xmpp.pl
 
 Neste momento, pode-se então iniciar o Apache2, utilizando a
 configuração de exemplo, que presume a cópia desse diretório para o
