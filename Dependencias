@@ -30,6 +30,7 @@ Fila-Web:
  EV
  XML::Compile::SOAP
  XML::CompileX::Transport::SOAPXMPP
+ Catalyst::Engine::Apache::MP20
 
 Fila-Administracao:
 
