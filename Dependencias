@@ -4,6 +4,7 @@ Fila-Servico:
  Catalyst::Controller::SOAP
  Catalyst::Model::SOAP
  Catalyst::Model::DBIC::Schema
+ Catalyst::Controller::DBIC::Transaction
  DBIx::Class
  DBIx::Class::Schema
  DateTime
