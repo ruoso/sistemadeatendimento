@@ -25,6 +25,7 @@ Fila-Web:
  Catalyst::View::TT
  Catalyst::Plugin::Prototype
  Catalyst::Plugin::Session
+ Catalyst::Plugin::Session::State::Cookie
  DateTime
  DateTime::Format::XSD
  Net::XMPP2
