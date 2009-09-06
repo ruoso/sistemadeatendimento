@@ -215,6 +215,7 @@
     <xsd:element name="id_servico" minOccurs="0" type="xsd:integer" />
     <xsd:element name="id_guiche" minOccurs="0" type="xsd:integer" />
     <xsd:element name="id_classe" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="classe" minOccurs="0" type="xsd:string" />
     <xsd:element name="vt_ini" minOccurs="0" type="xsd:dateTime" />
     <xsd:element name="vt_fim" minOccurs="0" type="xsd:dateTime" />
     <xsd:element name="nome" minOccurs="0" type="xsd:string" />

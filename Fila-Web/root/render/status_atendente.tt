@@ -57,13 +57,25 @@
             [% IF lista_servicos %]
                 <h3 id="TitServicos" class="titulos">Serviços:</h3><br>
                 <DIV ID="servicos">
-                    <UL>
+                 <UL>
+                        [% SET classe_servico = 0 %]
                         [% FOREACH servico IN lista_servicos.lista_servicos.servico %]
-                            <li>
-                                Serviço: [% servico.nome %] - Classe: [% servico.id_classe %] [% c.prototype.link_to_remote('Ir para', { url => '/cb/atendente/iniciar_servico_interno/' _ servico.id_servico }) %] 
-                            </li>
+                          [% IF classe_servico != servico.classe %]
+                            [% IF classe_servico != 0 %]
+                    </UL>
+                   </LI>
+                            [% END %]
+                   <LI>[% servico.classe %][% SET classe_servico = servico.classe %]
+                    <UL>
+                          [% END %]
+                     <li>
+                      [% servico.nome %]
+                          [% c.prototype.link_to_remote('Ir para', { url => '/cb/atendente/iniciar_servico_interno/' _ servico.id_servico }) %] 
+                     </li>
                         [% END %]
                     </UL>
+                  </LI>
+                 </UL>
                 </DIV>              
             [% END %]
         [% END %]
@@ -72,14 +84,26 @@
             [% IF lista_servicos_atendimento %]
                 <h3 id="TitServicos" class="titulos">Serviços:</h3><br>
                 <DIV ID="servicos">
-                    <UL>
+                 <UL>
+                        [% SET classe_servico = 0 %]
                         [% FOREACH servico IN lista_servicos_atendimento.lista_servicos.servico %]
-                            <li>
-                                Serviço: [% servico.nome %] - Classe: [% servico.id_classe %] [% c.prototype.link_to_remote('Iniciar Serviço', { url => '/cb/atendente/iniciar_servico_atendimento/' _ servico.id_servico }) %] 
-                            </li>
+                          [% IF classe_servico != servico.classe %]
+                            [% IF classe_servico != 0 %]
+                    </UL>
+                   </LI>
+                            [% END %]
+                   <LI>[% servico.classe %][% SET classe_servico = servico.classe %]
+                    <UL>
+                          [% END %]
+                     <li>
+                      [% servico.nome %]
+                          [% c.prototype.link_to_remote('Iniciar Serviço', { url => '/cb/atendente/iniciar_servico_atendimento/' _ servico.id_servico }) %] 
+                     </li>
                         [% END %]
                     </UL>
-                 </DIV>                    
+                  </LI>
+                 </UL>
+                </DIV>              
             [% END %]
 
         [% END %]

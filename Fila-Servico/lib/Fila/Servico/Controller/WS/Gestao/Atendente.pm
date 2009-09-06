@@ -1151,17 +1151,17 @@ sub listar_servicos  :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
     #pega no model todos os serviços
     my $servicos = $c->model('DB::ServicoInterno')->search
       ({ 'me.vt_ini' => { '<=', $now },
-         'me.vt_fim' => { '>', $now }
-      });
+         'me.vt_fim' => { '>', $now } },
+       { prefetch => 'classe',
+         order_by => ['classe.nome', 'me.nome'] });
 
     my $lista_servicos = [];
 
     while (my $servico = $servicos->next) {
         push @$lista_servicos,
-          { 
-             (map { $_ => $servico->$_() }
-             qw/id_servico id_classe nome/ )
-           }; 
+          { (map { $_ => $servico->$_() }
+             qw/id_servico id_classe nome/ ),
+            classe => $servico->classe->nome };
     }
 
     #retorna uma lista dos serviços
@@ -1178,17 +1178,17 @@ sub listar_servicos_atendimento  :WSDLPort('GestaoAtendente') :DBICTransaction('
     #pega no model todos os serviços
     my $servicos = $c->model('DB::Servico')->search
       ({ 'me.vt_ini' => { '<=', $now },
-         'me.vt_fim' => { '>', $now }
-      });
+         'me.vt_fim' => { '>', $now } },
+       { order_by => ['classe.nome', 'me.nome'],
+         prefetch => 'classe' });
 
     my $lista_servicos_atendimento = [];
 
     while (my $servico = $servicos->next) {
         push @$lista_servicos_atendimento,
-          { 
-             (map { $_ => $servico->$_() }
-             qw/id_servico id_classe nome/ )
-           }; 
+          { (map { $_ => $servico->$_() }
+             qw/id_servico id_classe nome/ ),
+            classe => $servico->classe->nome };
     }
 
     #retorna uma lista dos serviços
