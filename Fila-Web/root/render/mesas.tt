@@ -28,11 +28,12 @@
                         <h3 class='titulos'>Encaminhados</h3>
                         <TABLE id='TabEncaminhamentos' cellspacing='0' cellpadding='5' border='1'>
                             <TR class='titulosTabela'>
-                                <TD>Horário:</TD><TD>Mesa de Origem:</TD><TD>Mesa de Destino:</TD><TD>Nº do Atendimento</TD><TD>Motivo:</TD>
+                                <TD>Horário:</TD><TD>Atendido:</TD><TD>Mesa de Origem:</TD><TD>Mesa de Destino:</TD><TD>Nº do Atendimento</TD><TD>Motivo:</TD>
                             </TR>
                                 [% FOREACH encaminhamento IN lista_encaminhamentos.lista_encaminhamentos.encaminhamento %]
                                     <TR>
                                         <TD>[% dtf.f(encaminhamento.vt_ini) %]</TD>
+                                        <TD>[% dtf.f(encaminhamento.vt_fim) %]</TD>
                                         <TD>[% encaminhamento.id_guiche_origem %]</TD>
                                         <TD>[% encaminhamento.id_guiche %]</TD>
                                         <TD>[% encaminhamento.id_atendimento %]</TD>

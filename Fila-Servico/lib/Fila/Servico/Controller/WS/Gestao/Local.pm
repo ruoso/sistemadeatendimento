@@ -1158,9 +1158,9 @@ sub listar_encaminhamentos: WSDLPort('GestaoLocal') :DBICTransaction('DB'): MI {
                ( map { $_ => $encaminhamento->get_column($_) }
                  qw( id_guiche id_guiche_origem id_atendimento informacoes ) 
                ),
-               ( map { ($encaminhamento->get_column($_) && $c->stash->{local}->$_->is_infinite) ?
-                         () : ($_ => DateTime::Format::XSD->format_datetime(DateTime::Format::Pg->parse_datetime($encaminhamento->get_column($_))->set_time_zone('local'))) }
-                 qw/ vt_ini vt_fim / 
+               ( map { ($encaminhamento->$_ && $encaminhamento->$_->is_infinite) ?
+                         () : ($_ => DateTime::Format::XSD->format_datetime($encaminhamento->$_->set_time_zone('local'))) }
+                 qw/ vt_ini vt_fim /
                ),
               }
           }
