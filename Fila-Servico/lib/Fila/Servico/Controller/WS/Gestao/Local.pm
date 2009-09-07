@@ -22,6 +22,7 @@ use Net::XMPP2::Util 'bare_jid';
 use DateTime;
 use DateTime::Format::Pg;
 use DateTime::Format::XSD;
+use List::Util qw(reduce);
 use Carp qw(croak);
 use base
   'Fila::Servico::Controller',
@@ -240,7 +241,7 @@ sub status_local :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 
     my $estado_local_aberto = $c->model('DB::TipoEstadoLocal')->find
       ({ nome => 'aberto' });
-    
+
     unless ($estado_local_aberto) {
         die $c->stash->{soap}->fault
           ({code => 'Server',
@@ -257,7 +258,7 @@ sub status_local :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
     print STDERR "O hash é ", Data::Dumper::Dumper( \$gerente ), "\n";
 
     # agora tah faltando 'mandar 'o $gerente para ser mostrado no template
-	
+
     # obter o tempo maximo em espera por categoria,
     # o agregado pode ser obtido sem outra consulta.
     my $lista = $c->stash->{local}->configuracoes_categoria_atual->search
@@ -416,49 +417,42 @@ sub status_local :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 
     my $estado_local  = $c->stash->{local}->estado_atual->search
       ({ },
-       {
-        prefetch =>  'estado' })->first;
+       { prefetch =>  'estado' })->first;
 
     #encaminhamentos
 
     #pegar ultimo vt_ini do ultimo estadoaberto do local.
     my $ultimo_aberto  = $c->stash->{local}->estados->search
-      ({ 
-        'estado.nome' => $estado_local_aberto->nome }, { 
-                                                        join => 'estado', 
-                                                        order_by => 'vt_ini DESC'
-                                                       })->first;
+      ({ 'estado.nome' => $estado_local_aberto->nome },
+       { join => 'estado',
+         order_by => 'vt_ini DESC' })->first;
 
     my $total_enc=0;
     my $total_enc_abertos=0;
 
     if ($ultimo_aberto) {
 
-        my $enc = $c->model('DB::GuicheEncaminhamento')->find(
-                                                              {
-                                                               'me.vt_ini' => { '>=', $ultimo_aberto->get_column('vt_ini') }
-                                                              },
-                                                              {
-                                                               select => [ { count => 'me.id_atendimento' } ],
-                                                               as     => [ 'encaminhamentos' ]
-                                                              }
-                                                             );
+      my @e_g = $c->model('DB::GuicheEncaminhamento')->search
+        ({ 'me.vt_ini' => { '>=', $ultimo_aberto->get_column('vt_ini') }},
+         { select => [ { count => 'me.id_atendimento' },
+                       \"CASE WHEN vt_fim > NOW() THEN 1 ELSE 0 END" ],
+           as     => [ 'encaminhamentos',
+                       'esperando' ],
+           group_by => \"CASE WHEN vt_fim > NOW() THEN 1 ELSE 0 END" })->all;
 
-        $total_enc = $enc->get_column('encaminhamentos');
+      my @e_c = $c->model('DB::CategoriaEncaminhamento')->search
+        ({ 'me.vt_ini' => { '>=', $ultimo_aberto->get_column('vt_ini') }},
+         { select => [ { count => 'me.id_atendimento' },
+                       \"CASE WHEN vt_fim > NOW() THEN 1 ELSE 0 END" ],
+           as     => [ 'encaminhamentos',
+                       'esperando' ],
+           group_by => \"CASE WHEN vt_fim > NOW() THEN 1 ELSE 0 END" })->all;
 
-        #encaminhamentos ainda sem atendimento
-        $enc = $c->model('DB::GuicheEncaminhamento')->find(
-                                                           { 
-                                                            'me.vt_ini' => { '>=', $ultimo_aberto->get_column('vt_ini') },
-                                                            'me.vt_fim' => 'Infinity'
-                                                           },
-                                                           {
-                                                            select => [ { count => 'me.id_atendimento' } ],
-                                                            as     => [ 'encaminhamentos' ]
-                                                           }
-                                                          );
+      my @tot = (@e_g, @e_c);
+      my @esp = grep { $_->get_column('esperando') } @tot;
 
-        $total_enc_abertos = $enc->get_column('encaminhamentos');
+      $total_enc = reduce { $a + $b->get_column('encaminhamentos') } 0, @tot;
+      $total_enc_abertos = reduce { $a + $b->get_column('encaminhamentos') } 0, @esp;
     }
 
     return $c->stash->{soap}->compile_return
@@ -801,28 +795,44 @@ sub escalonar_senha :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 	  # de categorias.
 	  my @ids = map { $_->id_categoria } $guiche->categorias_atuais;
 	  my %restringir;
+	  my %restringir_c;
 	  if (@ids) {
 	    %restringir = ( 'categoria_atual.id_categoria' => { 'IN' => \@ids });
+	    %restringir_c = ( 'id_categoria' => { 'IN' => \@ids });
 	  }
 
-	  # descobrir os atendimentos em espera.  O escalonamento vai ter o
-	  # conceito de proporção entre o tempo de espera dependendo da
-	  # prioridade da categoria. A prioridade vai representar um
-	  # multiplicador para o tempo de espera, o que significa que, se
-	  # uma categoria tem prioridade 1, o tempo de espera vai ter a
-	  # proporção de 1 para 1. Uma categoria com prioridade 2 significa
-	  # que o tempo de espera vai significar o dobro. Ou seja, se uma
-	  # pessoa está esperando 10 minutos em uma categoria de prioridade
-	  # 2 vai representar para o sistema como se ela já estivesse
-	  # esperando a 20 minutos.
-	  $atendimento = $c->stash->{local}->atendimentos_atuais->find
-	    ({ 'estado.nome' => 'espera',
-	       'configuracoes_atuais.id_local' => $c->stash->{local}->id_local,
-	       %restringir  },
-	     { 'join' =>
-	       [{ 'estado_atual' => 'estado' },
-		{ 'categoria_atual' => { 'categoria' => 'configuracoes_atuais' }}],
-	       'order_by' => '((now() - estado_atual.vt_ini) * configuracoes_atuais.prioridade) DESC'});
+          # agora também precisamos descobrir se existe algum
+          # encaminhamento esperando para alguma das categorias que
+          # esse guichê atende.
+          my $enc = $c->stash->{local}->encaminhamentos_categoria->search
+            ({ vt_ini => { '<=' => $now },
+               vt_fim => { '>' => $now },
+               %restringir_c },
+             { order_by => 'vt_ini' })->next;
+
+          if ($enc) {
+            $atendimento = $enc->atendimento;
+            $enc->update({ vt_fim => $now });
+          } else {
+            # descobrir os atendimentos em espera.  O escalonamento vai ter o
+            # conceito de proporção entre o tempo de espera dependendo da
+            # prioridade da categoria. A prioridade vai representar um
+            # multiplicador para o tempo de espera, o que significa que, se
+            # uma categoria tem prioridade 1, o tempo de espera vai ter a
+            # proporção de 1 para 1. Uma categoria com prioridade 2 significa
+            # que o tempo de espera vai significar o dobro. Ou seja, se uma
+            # pessoa está esperando 10 minutos em uma categoria de prioridade
+            # 2 vai representar para o sistema como se ela já estivesse
+            # esperando a 20 minutos.
+            $atendimento = $c->stash->{local}->atendimentos_atuais->find
+              ({ 'estado.nome' => 'espera',
+                 'configuracoes_atuais.id_local' => $c->stash->{local}->id_local,
+                 %restringir  },
+               { 'join' =>
+                 [{ 'estado_atual' => 'estado' },
+                  { 'categoria_atual' => { 'categoria' => 'configuracoes_atuais' }}],
+                 'order_by' => '((now() - estado_atual.vt_ini) * configuracoes_atuais.prioridade) DESC'});
+          }
 	}
 
         if ($atendimento) {
@@ -1130,40 +1140,70 @@ sub listar_encaminhamentos: WSDLPort('GestaoLocal') :DBICTransaction('DB'): MI {
     if ($ultimo_aberto) {
         my $vt_ini = $ultimo_aberto->get_column('vt_ini');
 
-        my $enc =
+        my $enc_guiches =
           $c->model('DB::GuicheEncaminhamento')->search
             ({ 'me.vt_ini' => { '>=', $vt_ini } },
              { join => [ 'guiche' , 'guiche_origem' ],
-               select => [
-                          'me.vt_ini',
-                          'guiche.identificador',
-                          'guiche_origem.identificador',
-                          'me.id_atendimento',
-                          'me.informacoes',
-                          'me.vt_fim'
-                         ],
-               as     => [
-                          'vt_ini' ,
-                          'id_guiche',
-                          'id_guiche_origem',
-                          'id_atendimento',
-                          'informacoes',
-                          'vt_fim'
-                         ],
-               order_by => [ 'me.vt_ini DESC' ]});
+               select => [ 'me.vt_ini',
+                           'guiche.identificador',
+                           'guiche_origem.identificador',
+                           'me.id_atendimento',
+                           'me.informacoes',
+                           'me.vt_fim' ],
+               as     => [ 'vt_ini' ,
+                           'id_guiche',
+                           'id_guiche_origem',
+                           'id_atendimento',
+                           'informacoes',
+                           'vt_fim'  ],
+               order_by => 'me.vt_ini DESC'});
 
-        while (my $encaminhamento = $enc->next) {
-            push @$ret,
-              {
-               ( map { $_ => $encaminhamento->get_column($_) }
-                 qw( id_guiche id_guiche_origem id_atendimento informacoes ) 
-               ),
-               ( map { ($encaminhamento->$_ && $encaminhamento->$_->is_infinite) ?
-                         () : ($_ => DateTime::Format::XSD->format_datetime($encaminhamento->$_->set_time_zone('local'))) }
-                 qw/ vt_ini vt_fim /
-               ),
-              }
+        my $enc_categorias =
+          $c->model('DB::CategoriaEncaminhamento')->search
+            ({ 'me.vt_ini' => { '>=', $vt_ini } },
+             { join => [ 'categoria' , 'guiche_origem' ],
+               select => [ 'me.vt_ini',
+                           'categoria.codigo',
+                           'guiche_origem.identificador',
+                           'me.id_atendimento',
+                           'me.informacoes',
+                           'me.vt_fim' ],
+               as     => [ 'vt_ini' ,
+                           'id_categoria',
+                           'id_guiche_origem',
+                           'id_atendimento',
+                           'informacoes',
+                           'vt_fim'  ],
+               order_by => 'me.vt_ini DESC'});
+
+        my $eg = $enc_guiches->next;
+        my $ec = $enc_categorias->next;
+
+        while ($eg || $ec) {
+          my $encaminhamento;
+          my %add;
+          if (($eg && $ec) && ($eg->vt_ini > $ec->vt_ini) ||
+              ($eg && !$ec)) {
+            $encaminhamento = $eg;
+            $eg = $enc_guiches->next;
+            $add{id_guiche} = $encaminhamento->get_column('id_guiche');
+          } else {
+            $encaminhamento = $ec;
+            $ec = $enc_categorias->next;
+            $add{id_categoria} = $encaminhamento->get_column('id_categoria');
           }
+
+          push @$ret,
+            {( map { $_ => $encaminhamento->get_column($_) }
+               qw( id_guiche_origem id_atendimento informacoes ) ),
+             ( map { ($encaminhamento->$_ && $encaminhamento->$_->is_infinite) ?
+                       () : ($_ => DateTime::Format::XSD->format_datetime($encaminhamento->$_->set_time_zone('local'))) }
+               qw/ vt_ini vt_fim /),
+             %add
+            };
+        }
+
+
     }
     return $c->stash->{soap}->compile_return
       ({ lista_encaminhamentos => { encaminhamento => $ret } });

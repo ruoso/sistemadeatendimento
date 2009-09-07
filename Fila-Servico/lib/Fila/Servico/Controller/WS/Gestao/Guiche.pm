@@ -99,6 +99,29 @@ sub listar_guiches :WSDLPort('GestaoGuiche') :DBICTransaction('DB') :MI {
       ({ lista_guiches => { guiche => $lista_guiches } });
 }
 
+sub listar_categorias :WSDLPort('GestaoGuiche') :DBICTransaction('DB') :MI {
+    my ($self, $c, $query) = @_;
+    my $now = $c->stash->{now};
+
+    my $categorias = $c->stash->{local}->configuracoes_categoria->search
+      ({ 'me.vt_ini' => { '<=', $now },
+         'me.vt_fim' => { '>', $now }},
+       { prefetch => 'categoria',
+         order_by => 'codigo' });
+
+    my $lista_categorias = [];
+
+    while (my $categoria = $categorias->next) {
+      my $ca = $categoria->categoria;
+        push @$lista_categorias,
+          {( map { $_ => $ca->$_() }
+             qw/id_categoria codigo nome/ )};
+    }
+
+    $c->stash->{soap}->compile_return
+      ({ lista_categorias => { categoria => $lista_categorias } });
+}
+
 sub abrir_guiche :WSDLPort('GestaoGuiche') :DBICTransaction('DB') :MI {
     my ($self, $c, $query) = @_;
 

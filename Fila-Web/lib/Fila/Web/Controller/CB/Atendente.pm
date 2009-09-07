@@ -79,6 +79,22 @@ sub encaminhar_atendimento : Local {
               value => $id_guiche } ]}});
 }
 
+sub encaminhar_atendimento_categoria : Local {
+    my ($self, $c) = @_;
+
+    my $id_categoria  = $c->req->param('id_categoria');
+    my $motivo  = $c->req->param('motivoEnc');
+
+    $c->model('SOAP')->transport
+        ->addrs([$c->session->{user_jid}.'/cb/atendente']);
+
+    my $req = $c->model('SOAP::Atendente')->encaminhar_atendimento_categoria
+     ({ callback_request =>
+        { param =>
+          [ { name => $motivo,
+              value => $id_categoria } ]}});
+}
+
 sub devolver_senha : Local {
     my ($self, $c) = @_;
 

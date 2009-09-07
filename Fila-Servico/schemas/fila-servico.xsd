@@ -145,6 +145,7 @@
    </xsd:sequence>
   </xsd:complexType>
 
+
   <xsd:complexType name="TipoDadosAtendimento">
    <xsd:sequence>
     <xsd:element name="id_atendimento" minOccurs="0" type="xsd:integer" />
@@ -233,6 +234,7 @@
    <xsd:sequence>
     <xsd:element name="id_atendimento" minOccurs="0" type="xsd:integer" />
     <xsd:element name="id_guiche" minOccurs="0" type="xsd:string" />
+    <xsd:element name="id_categoria" minOccurs="0" type="xsd:string" />
     <xsd:element name="id_guiche_origem" minOccurs="0" type="xsd:string" />
     <xsd:element name="vt_ini" minOccurs="0" type="xsd:dateTime" />
     <xsd:element name="vt_fim" minOccurs="0" type="xsd:dateTime" />
@@ -250,6 +252,7 @@
   <xsd:element name="guiche" type="fila:TipoDadosGuiche" />
   <xsd:element name="lista_guiches" type="fila:TipoDadosListaGuiches" />
   <xsd:element name="atendimento" type="fila:TipoDadosAtendimento" />
+  <xsd:element name="encaminhamento" type="fila:TipoDadosEncaminhamento" />
   <xsd:element name="categoria" type="fila:TipoDadosCategoria" />
   <xsd:element name="lista_categorias" type="fila:TipoDadosListaCategorias" />
   <xsd:element name="funcionario" type="fila:TipoDadosFuncionario" />
@@ -257,7 +260,6 @@
   <xsd:element name="lista_atendimentos" type="fila:TipoDadosListaAtendimentos" />
   <xsd:element name="servico" type="fila:TipoDadosServico" />
   <xsd:element name="lista_servicos" type="fila:TipoDadosListaServicos" />
-  <xsd:element name="encaminhamento" type="fila:TipoDadosEncaminhamento" />
   <xsd:element name="lista_encaminhamentos" type="fila:TipoDadosListaEncaminhamentos" />
   <xsd:element name="lista_funcionarios" type="fila:TipoDadosListaFuncionarios" />
   

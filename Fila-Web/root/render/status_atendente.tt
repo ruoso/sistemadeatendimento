@@ -125,6 +125,21 @@
                 </DIV>
         [% END %]
 
+        [% IF lista_categorias_encaminhar %]
+            <H3 class="titulos">Encaminhar para outra categoria</h3>
+                <DIV ID="lista_categorias_encaminhar" class="encaminhar">
+                    <form name="encaminhar_categoria" id="encaminhar_categoria" onsubmit="return encaminhar_atendimento_categoria()"> 
+                        Categorias: <select name="id_categoria" id="id_categoria_destino" size="1" style="width: 300px">
+                        [% FOREACH categoria IN lista_categorias_encaminhar.lista_categorias.categoria %]
+                            <option value="[% categoria.id_categoria %]">[% categoria.codigo %] - [% categoria.nome %]</option>
+                        [% END %]
+                        </select><br /><br />
+                        Motivo: <input type="text" name="motivoEnc" id="motivoEncCat" style="width: 300px" maxlength="100"><br /><br />
+                        <button value="Encaminhar" id="BtEncCat" type="submit">Encaminhar</button>         
+                    </form>
+                </DIV>
+        [% END %]
+
         [% IF status_guiche.guiche.estado == 'interno' %]
             <h3 id="TitServicos" class="titulos">Serviço em andamento:</h3><br>
             <DIV ID="servicos">

@@ -740,26 +740,16 @@ sub encaminhar_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :
     my ($self, $c, $query) = @_;
 
     my $now = $c->stash->{now};
-    
+
     my $guiche_origem = $c->model('DB::Guiche')->find
       ( id_guiche => $c->stash->{guiche}->id_guiche );
-      
-    my $outro_guiche = $c->model('DB::Guiche')->find
-      ( $query->{guiche} );
 
-    my $motivo = $query->{guiche}{pausa_motivo};
+    my $motivo = $query->{encaminhamento}{informacoes};
     unless ($motivo) {
         die $c->stash->{soap}->fault
           ({ code => 'Server',
              reason => 'Motivo Invalido',
              detail => 'E necessário um motivo para o encaminhamento.' });
-    }
-
-    unless ($outro_guiche) {
-        die $c->stash->{soap}->fault
-          ({ code => 'Server',
-             reason => 'Guiche Invalido',
-             detail => 'Nao conseguiu encontrar guiche.' });
     }
 
     my $atendimento = $c->stash->{guiche}->atendimento_atual->first;
@@ -796,13 +786,35 @@ sub encaminhar_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :
          vt_fim => 'Infinity',
          id_estado => $estado_encaminhado->id_estado });
 
-    $outro_guiche->encaminhamentos->create
-      ({ vt_ini => $now,
-         vt_fim => 'Infinity',
-         id_atendimento => $atendimento->id_atendimento,
-         id_guiche_origem => $guiche_origem->id_guiche,
-         informacoes => $motivo
-         });
+    if ($query->{encaminhamento}{id_guiche}) {
+      my $outro_guiche = $c->model('DB::Guiche')
+        ->find({ id_guiche => $query->{encaminhamento}{id_guiche} })
+          or die $c->stash->{soap}->fault
+            ({ code => 'Server',
+               reason => 'Nao encontrou guiche',
+               detail => 'O guiche informado não existe.' });
+
+      $outro_guiche->encaminhamentos->create
+        ({ vt_ini => $now,
+           vt_fim => 'Infinity',
+           id_atendimento => $atendimento->id_atendimento,
+           id_guiche_origem => $guiche_origem->id_guiche,
+           informacoes => $motivo });
+    } elsif ($query->{encaminhamento}{id_categoria}) {
+      $c->stash->{local}->encaminhamentos_categoria->create
+        ({ id_categoria => $query->{encaminhamento}{id_categoria},
+           vt_ini => $now,
+           vt_fim => 'Infinity',
+           id_atendimento => $atendimento->id_atendimento,
+           id_guiche_origem => $guiche_origem->id_guiche,
+           informacoes => $motivo });
+
+    } else {
+      die $c->stash->{soap}->fault
+        ({ code => 'Client',
+           reason => 'Faltou parâmetros',
+           detail => 'É preciso indicar ou um guiche ou uma categoria' });
+    }
 
     $c->stash->{guiche}->estado_atual->first->update
       ({ vt_fim => $now });

@@ -154,6 +154,15 @@
         });
         return false;
     }
+    function encaminhar_atendimento_categoria() {
+        var url = '/cb/atendente/encaminhar_atendimento_categoria';
+        var params =  $('encaminhar_categoria').serialize(true);
+        new Ajax.Request(url, { 
+            method: 'post', 
+            parameters: params
+        });
+        return false;
+    }
     function setar_info_interno() {
         var url = '/cb/atendente/setar_info_interno';
         var params =  $('interno').serialize(true);

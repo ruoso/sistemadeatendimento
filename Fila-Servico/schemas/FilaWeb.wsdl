@@ -192,6 +192,9 @@
   <wsdl:operation name="encaminhar_atendimento">
    <wsdl:input message="filasv:callback_request" />
   </wsdl:operation>
+  <wsdl:operation name="encaminhar_atendimento_categoria">
+   <wsdl:input message="filasv:callback_request" />
+  </wsdl:operation>
   <wsdl:operation name="listar_no_show">
    <wsdl:input message="filasv:callback_request" />
   </wsdl:operation>
@@ -264,6 +267,10 @@
    <wsdl:input><soap:body namespace="urn:oktiva:fila:web:servico" use="literal"/></wsdl:input>
   </wsdl:operation>
   <wsdl:operation name="encaminhar_atendimento">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:web:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+  <wsdl:operation name="encaminhar_atendimento_categoria">
    <soap:operation style="rpc" />
    <wsdl:input><soap:body namespace="urn:oktiva:fila:web:servico" use="literal"/></wsdl:input>
   </wsdl:operation>

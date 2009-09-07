@@ -55,9 +55,6 @@
   <wsdl:part name="lista_funcionarios" element="filatp:lista_funcionarios" />
  </wsdl:message>
 
- <wsdl:message name="solicitacao_encaminhamento">
-  <wsdl:part name="encaminhamento" element="filatp:encaminhamento" />
- </wsdl:message>
  <wsdl:message name="resposta_lista_encaminhamentos">
   <wsdl:part name="lista_encaminhamentos" element="filatp:lista_encaminhamentos" />
  </wsdl:message>
@@ -113,7 +110,7 @@
    <wsdl:input message="filasv:solicitacao_guiche" />
   </wsdl:operation>
   <wsdl:operation name="listar_encaminhamentos">
-   <wsdl:input message="filasv:solicitacao_encaminhamento" />
+   <wsdl:input message="filasv:solicitacao_guiche" />
    <wsdl:output message="filasv:resposta_lista_encaminhamentos" />
   </wsdl:operation>
   <wsdl:operation name="associar_gerente">
@@ -212,10 +209,15 @@
  <wsdl:message name="solicitacao_guiche">
   <wsdl:part name="guiche" element="filatp:guiche" />
  </wsdl:message>
+ <wsdl:message name="solicitacao_encaminhamento">
+  <wsdl:part name="encaminhamento" element="filatp:encaminhamento" />
+ </wsdl:message>
  <wsdl:message name="resposta_guiche">
   <wsdl:part name="guiche" element="filatp:guiche" />
  </wsdl:message>
-
+ <wsdl:message name="resposta_lista_categorias">
+  <wsdl:part name="lista_categorias" element="filatp:lista_categorias" />
+ </wsdl:message>
  
  <wsdl:portType name="GestaoGuiche">
   <wsdl:operation name="dados_local">
@@ -225,6 +227,10 @@
   <wsdl:operation name="listar_guiches">
    <wsdl:input message="filasv:solicitacao_local" />
    <wsdl:output message="filasv:resposta_lista_guiches" />
+  </wsdl:operation>
+  <wsdl:operation name="listar_categorias">
+   <wsdl:input message="filasv:solicitacao_local" />
+   <wsdl:output message="filasv:resposta_lista_categorias" />
   </wsdl:operation>
   <wsdl:operation name="abrir_guiche">
    <wsdl:input message="filasv:solicitacao_guiche" />
@@ -243,6 +249,11 @@
    <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
    <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
   </wsdl:operation>
+  <wsdl:operation name="listar_categorias">
+   <soap:operation style="rpc" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+   <wsdl:output><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:output>
+  </wsdl:operation>
   <wsdl:operation name="abrir_guiche">
    <soap:operation style="rpc" />
    <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
@@ -254,9 +265,6 @@
  </wsdl:message>
  <wsdl:message name="resposta_atendimento">
   <wsdl:part name="atendimento" element="filatp:atendimento" />
- </wsdl:message>
- <wsdl:message name="resposta_lista_categorias">
-  <wsdl:part name="lista_categorias" element="filatp:lista_categorias" />
  </wsdl:message>
  <wsdl:message name="resposta_lista_atendimentos">
   <wsdl:part name="lista_atendimentos" element="filatp:lista_atendimentos" />
@@ -342,7 +350,7 @@
    <wsdl:input message="filasv:solicitacao_guiche" />
   </wsdl:operation>
   <wsdl:operation name="encaminhar_atendimento">
-   <wsdl:input message="filasv:solicitacao_guiche" />
+   <wsdl:input message="filasv:solicitacao_encaminhamento" />
   </wsdl:operation>
   <wsdl:operation name="setar_motivo_pausa">
    <wsdl:input message="filasv:solicitacao_guiche" />

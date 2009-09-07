@@ -89,6 +89,10 @@ __PACKAGE__->has_many('configuracoes_categoria', 'Fila::Servico::DB::Configuraca
                       { 'foreign.id_local' => 'self.id_local' },
                       { join_type => 'left' });
 
+__PACKAGE__->has_many('encaminhamentos_categoria', 'Fila::Servico::DB::CategoriaEncaminhamento',
+                      { 'foreign.id_local' => 'self.id_local' },
+                      { join_type => 'left' });
+
 __PACKAGE__->has_many('configuracoes_limite', 'Fila::Servico::DB::ConfiguracaoLimite',
                       { 'foreign.id_local' => 'self.id_local' },
                       { join_type => 'left' });

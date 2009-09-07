@@ -67,11 +67,21 @@ sub listar_guiches_encaminhar : WSDLPort('FilaWebAtendenteCallback') {
         return $c->forward('/render/error_message');
     }
 
+    $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/guiche']);
+    my $lista_categorias = $c->model('SOAP::Gestao::Guiche')
+      ->listar_categorias({ local => {} });
+
+    if ($lista_categorias->{Fault}) {
+        $c->stash->{error_message} = $lista_guiches->{Fault}{faultstring};
+        return $c->forward('/render/error_message');
+    }
+
     $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/atendente']);
     $c->stash->{status_guiche} = $c->model('SOAP::Gestao::Atendente')
           ->status_guiche({ guiche => {} });
 
     $c->stash->{lista_guiches_encaminhar} = $lista_guiches;
+    $c->stash->{lista_categorias_encaminhar} = $lista_categorias;
 
     $c->stash->{template} = 'cb/atendente/refresh.tt';
     $c->forward($c->view());
@@ -83,10 +93,21 @@ sub encaminhar_atendimento : WSDLPort('FilaWebAtendenteCallback') {
 
     my $id_guiche = $query->{callback_request}{param}[0]{value};
     my $motivo = $query->{callback_request}{param}[0]{name};
-    
+
     $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/atendente']);
     my $encaminhar_atendimento = $c->model('SOAP::Gestao::Atendente')
-          ->encaminhar_atendimento({ guiche => { id_guiche => $id_guiche, pausa_motivo => $motivo } });
+      ->encaminhar_atendimento({ encaminhamento => { id_guiche => $id_guiche, informacoes => $motivo } });
+}
+
+sub encaminhar_atendimento_categoria : WSDLPort('FilaWebAtendenteCallback') {
+    my ($self, $c,$query) = @_;
+
+    my $id_categoria = $query->{callback_request}{param}[0]{value};
+    my $motivo = $query->{callback_request}{param}[0]{name};
+
+    $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/atendente']);
+    my $encaminhar_atendimento = $c->model('SOAP::Gestao::Atendente')
+      ->encaminhar_atendimento({ encaminhamento => { id_categoria => $id_categoria, informacoes => $motivo } });
 }
 
 sub atender_no_show : WSDLPort('FilaWebAtendenteCallback') {
