@@ -1,0 +1,28 @@
+diff -uNard /srv/perl/lib/site_perl/5.10.0/Net/XMPP2/Connection.pm /usr/share/perl5/Net/XMPP2/Connection.pm
+--- /srv/perl/lib/site_perl/5.10.0/Net/XMPP2/Connection.pm	2008-08-01 07:11:23.000000000 -0300
++++ /usr/share/perl5/Net/XMPP2/Connection.pm	2009-06-09 17:01:13.000000000 -0300
+@@ -609,7 +609,6 @@
+    return $self->{writer}->send_iq (
+       $iqnode->attr ('id'), $type, $create_cb,
+       (defined $iqnode->attr ('from') ? (to => $iqnode->attr ('from')) : ()),
+-      (defined $iqnode->attr ('to') ? (from => $iqnode->attr ('to')) : ()),
+       %attrs
+    );
+ }
+diff -uNard /srv/perl/lib/site_perl/5.10.0/Net/XMPP2/Parser.pm /usr/share/perl5/Net/XMPP2/Parser.pm
+--- /srv/perl/lib/site_perl/5.10.0/Net/XMPP2/Parser.pm	2008-04-11 11:43:42.000000000 -0300
++++ /usr/share/perl5/Net/XMPP2/Parser.pm	2009-06-09 17:42:55.000000000 -0300
+@@ -163,8 +163,12 @@
+ 
+ sub cb_start_tag {
+    my ($self, $p, $el, %attrs) = @_;
+-   my $node = Net::XMPP2::Node->new ($p->namespace ($el), $el, \%attrs, $self);
++
++   my %prefixes = map { $p->expand_ns_prefix($_) => $_ } $p->new_ns_prefixes;
++   my $node = Net::XMPP2::Node->new ($p->namespace ($el), $el, \%attrs, $self, \%prefixes);
++
+    $node->append_raw ($p->recognized_string);
++
+    if (not @{$self->{nodestack}}) {
+       $self->{stream_cb}->($node);
+    }

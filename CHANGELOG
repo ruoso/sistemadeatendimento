@@ -1,0 +1,10 @@
+V1.2
+
+* Adicionado o encaminhamento para categoria, faz-se necessária a
+  criação da tabela categoria_encaminhamento.
+
+* Adicionados os campos timeout_chamando e timeout_concluido no
+  guiche, onde será possível configurar, para cada guichê, o tempo que
+  ele irá passar nesses estados antes de automaticamente marcar como
+  ausente e tornar-se disponível, respectivamente.
+

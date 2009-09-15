@@ -216,3 +216,14 @@ background: url('../images/bt_enviar_chat.jpg') no-repeat; width: 182px; height:
 #ConteudoAjuda a { color: blue; text-decoration: underline; font-weight : bold;}
 #ConteudoAjuda p { text-indent: 30px; margin: 15px 15px 0 15px; text-align: justify;}
 
+.aviso_timeout {
+  color: red;
+  position: absolute;
+  left: 400px;
+  top: 20px;
+  font-weight: bold;
+  background-color: white;
+  padding: 20px;
+  border: solid 1px black;
+  font-size: 20px;
+}
