@@ -23,11 +23,37 @@
         <link rel="stylesheet" href="/static/css/main.css" type="text/css" >
 <SCRIPT LANGUAGE='javascript'>
 var page_loaded = 0;
+var waiting_for = '';
+var timeout = 0;
+var timeout_callback;
 function disconnected_so_move_away() {
     if (page_loaded) {
         window.location='about:blank';
     }
-}        
+}
+
+function check_timeout() {
+    if (timeout == 0) {
+        if (waiting_for) {
+           timeout_callback();
+        }
+        $('aviso_timeout').replace('<DIV id="aviso_timeout"></DIV>');
+    } else {
+        $('aviso_timeout').replace('<DIV id="aviso_timeout" class="aviso_timeout">' +
+               timeout + ' segundos para ' + waiting_for +'</DIV>');
+
+        window.setTimeout(function() { check_timeout() }, 1000);
+        timeout--;
+    }
+}
+
+function set_timeout(tempo, motivo, callback) {
+    waiting_for = motivo;
+    timeout = tempo;
+    timeout_callback = callback;
+    check_timeout();
+}
+
 </script> 
     </HEAD>
     <BODY onload='disconnected_so_move_away()'>
@@ -37,4 +63,5 @@ function disconnected_so_move_away() {
 	    	<DIV id="header2"> </DIV>
 	    </div>
     </DIV>
+    <DIV id="aviso_timeout"></DIV>
     <DIV id="content_main">

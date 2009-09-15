@@ -38,6 +38,8 @@
             </table>
         </DIV>              
 
+
+
         [% IF status_guiche.guiche.estado == 'concluido' || status_guiche.guiche.estado == 'disponivel' %]
         [% IF lista_no_show %]
         <h3 id="TitAtendAtrasados" class="titulos">Atendimentos Atrasados:</h3><br>
@@ -323,3 +325,15 @@
 	[% END %]
 
     $('header2').replace("[% bloco_senha | js %]"); 
+
+        [% IF status_guiche.guiche.estado == 'concluido' %]
+          set_timeout([% status_guiche.guiche.timeout_concluido %],'disponivel',function() {
+             new Ajax.Request('/cb/atendente/disponivel', { asynchronous: 1 });
+          });
+        [% ELSIF status_guiche.guiche.estado == 'chamando' %]
+          set_timeout([% status_guiche.guiche.timeout_chamando %],'chamando',function() {
+             new Ajax.Request('/cb/atendente/registrar_no_show', { asynchronous: 1 });
+          });
+        [% ELSE %]
+          set_timeout(0,'',null);
+        [% END %]
