@@ -127,7 +127,9 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
                        'agendamento.nome',
                        'agendamento.tipopessoa',
                        'agendamento.cnpjf',
-                       'agendamento.email'],
+                       'agendamento.email',
+                       'me.timeout_chamando',
+                       'me.timeout_concluido' ],
          'as'     => [ 'id_guiche',
                        'identificador',
                        'id_funcionario',
@@ -143,7 +145,9 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
                        'agendamento_nome',
                        'agendamento_tipopessoa',
                        'agendamento_cnpjf',
-                       'agendamento_email' ]});
+                       'agendamento_email',
+                       'timeout_chamando',
+                       'timeout_concluido' ]});
 
     #pega o estado do guiche, se for interno entao seleciona do servicoguiche, senao do servicoatendimento
     my $estado_guiche = $c->stash->{guiche}->estados->search
@@ -236,7 +240,7 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
                   ( map { $_ => $servico->get_column($_) }
                   qw/ id_servico id_classe nome informacoes / ),
                 }
-        } 
+        }
     }
 
     my $guiche = $guiches->next;
@@ -250,7 +254,8 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
         { guiche =>
           { ( map { $_ => $guiche->get_column($_) }
               qw( id_guiche identificador estado estado_atendimento
-                      funcionario id_funcionario jid pausa_motivo ) ),
+                  funcionario id_funcionario jid pausa_motivo
+                  timeout_chamando timeout_concluido) ),
             ( map { $guiche->get_column($_) ?
                       ($_ => DateTime::Format::XSD->format_datetime
                        (DateTime::Format::Pg->parse_datetime

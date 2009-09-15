@@ -50,6 +50,16 @@ __PACKAGE__->add_columns
    pular_opiniometro =>
    {
     data_type => 'integer',
+   },
+   timeout_chamando =>
+   {
+    data_type => 'integer',
+    default => 180,
+   },
+   timeout_concluido =>
+   {
+    data_type => 'integer',
+    default => 20,
    }
   );
 __PACKAGE__->set_primary_key(qw(id_guiche));

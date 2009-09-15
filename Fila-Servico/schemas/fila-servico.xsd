@@ -119,6 +119,8 @@
     <xsd:element name="pausa_motivo" minOccurs="0" type="xsd:string" />
     <xsd:element name="nome_servico" minOccurs="0" type="xsd:string" />
     <xsd:element name="pular_opiniometro" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="timeout_chamando" minOccurs="0" type="xsd:integer" />
+    <xsd:element name="timeout_concluido" minOccurs="0" type="xsd:integer" />
     <xsd:element name="servicos" minOccurs="0">
         <xsd:complexType>
             <xsd:sequence>
