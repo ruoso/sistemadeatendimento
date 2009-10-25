@@ -35,10 +35,11 @@ function disconnected_so_move_away() {
 
 function check_timeout(tk) {
     if (timeout == 0) {
+        $('aviso_timeout').replace('<DIV id="aviso_timeout"></DIV>');
         if (waiting_for) {
+           waiting_for = '';
            timeout_callback();
         }
-        $('aviso_timeout').replace('<DIV id="aviso_timeout"></DIV>');
     } else {
         $('aviso_timeout').replace('<DIV id="aviso_timeout" class="aviso_timeout">' +
                timeout + ' segundos para ' + waiting_for +'</DIV>');
