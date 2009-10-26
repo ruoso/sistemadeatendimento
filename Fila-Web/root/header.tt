@@ -26,13 +26,14 @@ var page_loaded = 0;
 var waiting_for = '';
 var timeout = 0;
 var timeout_callback;
+var timeout_key;
 function disconnected_so_move_away() {
     if (page_loaded) {
         window.location='about:blank';
     }
 }
 
-function check_timeout() {
+function check_timeout(tk) {
     if (timeout == 0) {
         if (waiting_for) {
            timeout_callback();
@@ -42,16 +43,27 @@ function check_timeout() {
         $('aviso_timeout').replace('<DIV id="aviso_timeout" class="aviso_timeout">' +
                timeout + ' segundos para ' + waiting_for +'</DIV>');
 
-        window.setTimeout(function() { check_timeout() }, 1000);
+        window.setTimeout(function() {
+           if (tk == timeout_key) { check_timeout(tk) }
+        }, 1000);
         timeout--;
     }
 }
 
 function set_timeout(tempo, motivo, callback) {
-    waiting_for = motivo;
-    timeout = tempo;
-    timeout_callback = callback;
-    check_timeout();
+    if (motivo && waiting_for == motivo) {
+       return
+    } else if (motivo && waiting_for) {
+       waiting_for = motivo;
+       timeout = tempo;
+       timeout_callback = callback;
+    } else {
+       waiting_for = motivo;
+       timeout = tempo;
+       timeout_callback = callback;
+       timeout_key = Math.random();
+       check_timeout(timeout_key);
+    }
 }
 
 </script> 
