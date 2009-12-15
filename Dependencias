@@ -1,85 +1,307 @@
-Fila-Servico:
-
- Catalyst::Runtime
- Catalyst::Controller::SOAP
- Catalyst::Model::SOAP
- Catalyst::Model::DBIC::Schema
- Catalyst::Controller::DBIC::Transaction
- DBIx::Class
- DBIx::Class::Schema
- DateTime
- DateTime::Format::Pg
- DateTime::Format::XSD
- Digest::MD5
- Net::XMPP2
- Sub::Name
- XML::Compile::SOAP
- XML::CompileX::Transport::SOAPXMPP
- SQL::Translator
-
-Fila-Web:
-
- Catalyst::Runtime
- Catalyst::Controller::SOAP
- Catalyst::Model::SOAP
- Catalyst::View::TT
- Catalyst::Plugin::Prototype
- Catalyst::Plugin::Session
- Catalyst::Plugin::Session::State::Cookie
- DateTime
- DateTime::Format::XSD
- Net::XMPP2
- EV
- XML::Compile::SOAP
- XML::CompileX::Transport::SOAPXMPP
- Catalyst::Engine::Apache::MP20
-
-Fila-Administracao:
-
- Catalyst::Runtime
- Catalyst::View::TT
- Catalyst::Model::DBIC::Schema
- DateTime
- DateTime::Format::Pg
- DBIx::Class
- DBIx::Class::Schema
-
-Fila-Agendamento:
-
- Catalyst::Runtime
- Catalyst::Model::DBIC::Schema
- Catalyst::View::Email::Template
- Catalyst::View::TT
- DateTime
- DateTime::Format::Pg
- DBIx::Class
- DBIx::Class::Schema
- Business::BR::Ids
- SQL::Translator
-
-Fila-ETL:
-
- Catalyst::Runtime
- Catalyst::Model::DBIX::Schema
- DBIx::Class
- DBIx::Class::Schema
- DateTime::Format::Pg
- SQL::Translator
-
-Fila-Opiniometro:
-
- Catalyst::Runtime
- Catalyst::Controller::SOAP
- Catalyst::Model::SOAP
- EV
- XML::CompileX::Transport::SOAPXMPP
-
-Fila-Painel:
-
- Catalyst::Runtime
- Catalyst::Controller::SOAP
- Catalyst::Model::SOAP
- DateTime::Format::XSD
- EV
- Net::XMPP2
- XML::CompileX::Transport::SOAPXMPP
+libalgorithm-c3-perl
+libaliased-perl
+libalien-wxwidgets-perl
+libanydata-perl
+libanyevent-perl
+libapache2-reload-perl
+libappconfig-perl
+libauthen-pam-perl
+libauthen-sasl-perl
+libauthen-simple-pam-perl
+libauthen-simple-perl
+libautobox-core-perl
+libautobox-perl
+libb-hooks-endofscope-perl
+libb-hooks-op-check-perl
+libbit-vector-perl
+libbs-event-perl
+libbsd-resource-perl
+libbusiness-br-ids-perl
+libcache-cache-perl
+libcache-fastmmap-perl
+libcarp-assert-more-perl
+libcarp-assert-perl
+libcarp-clan-perl
+libcatalyst-component-accept-context-perl
+libcatalyst-component-instancepercontext-perl
+libcatalyst-controller-dbic-transaction-perl
+libcatalyst-controller-html-formfu-perl
+libcatalyst-controller-soap-perl
+libcatalyst-engine-apache-perl
+libcatalyst-engine-embeddable-perl
+libcatalyst-engine-xmpp2-perl
+libcatalyst-model-cdbi-perl
+libcatalyst-model-soap-perl
+libcatalyst-model-xml-feed-perl
+libcatalyst-modules-extra-perl
+libcatalyst-modules-perl
+libcatalyst-perl
+libcatalyst-plugin-authentication-credential-http-perl
+libcatalyst-view-tt-perl
+libcgi-formbuilder-perl
+libcgi-simple-perl
+libclass-accessor-chained-perl
+libclass-accessor-grouped-perl
+libclass-accessor-perl
+libclass-base-perl
+libclass-c3-componentised-perl
+libclass-c3-perl
+libclass-c3-xs-perl
+libclass-codestyler-perl
+libclass-data-accessor-perl
+libclass-data-inheritable-perl
+libclass-dbi-abstractsearch-perl
+libclass-dbi-loader-perl
+libclass-dbi-mysql-perl
+libclass-dbi-perl
+libclass-dbi-pg-perl
+libclass-dbi-sqlite-perl
+libclass-factory-util-perl
+libclass-inspector-perl
+libclass-makemethods-perl
+libclass-mop-perl
+libclass-publisher-perl
+libclass-singleton-perl
+libclass-stl-containers-perl
+libclass-throwable-perl
+libclass-trigger-perl
+libclone-perl
+libcompress-raw-zlib-perl
+libcompress-zlib-perl
+libconfig-any-perl
+libconfig-general-perl
+libconfig-tiny-perl
+libconvert-nls-date-format-perl
+libcoro-perl
+libcpanplus-dist-deb-perl
+libcrypt-passwdmd5-perl
+libdanga-socket-perl
+libdata-dump-perl
+libdata-optlist-perl
+libdata-page-perl
+libdata-visitor-perl
+libdate-calc-perl
+libdate-manip-perl
+libdatetime-format-builder-perl
+libdatetime-format-db2-perl
+libdatetime-format-iso8601-perl
+libdatetime-format-mail-perl
+libdatetime-format-mysql-perl
+libdatetime-format-oracle-perl
+libdatetime-format-pg-perl
+libdatetime-format-strptime-perl
+libdatetime-format-w3cdtf-perl
+libdatetime-format-xsd-perl
+libdatetime-locale-perl
+libdatetime-perl
+libdatetime-timezone-perl
+libdbd-anydata-perl
+libdbd-csv-perl
+libdbd-mysql-perl
+libdbd-pg-perl
+libdbd-sqlite3-perl
+libdbi-perl
+libdbix-class-perl
+libdbix-class-schema-loader-perl
+libdbix-contextualfetch-perl
+libdbix-oraclesequence-perl
+libdevel-cycle-perl
+libdevel-declare-perl
+libdevel-stacktrace-perl
+libdevel-symdump-perl
+libdevel-trace-perl
+libdigest-hmac-perl
+libdigest-sha1-perl
+libdjabberd-authen-dbi-perl
+libdjabberd-perl
+libdjabberd-plugin-balancer-perl
+libemail-abstract-perl
+libemail-address-perl
+libemail-date-format-perl
+libemail-messageid-perl
+libemail-mime-contenttype-perl
+libemail-mime-creator-perl
+libemail-mime-encodings-perl
+libemail-mime-modifier-perl
+libemail-mime-perl
+libemail-send-io-perl
+libemail-send-perl
+libemail-simple-creator-perl
+libemail-simple-perl
+libemail-valid-loose-perl
+libemail-valid-perl
+liberror-perl
+libetl-pequel3-perl
+libev-perl
+libevent-perl
+libexporter-lite-perl
+libextutils-autoinstall-perl
+libextutils-install-perl
+libextutils-parsexs-perl
+libfcgi-perl
+libfile-copy-recursive-perl
+libfile-modified-perl
+libfile-remove-perl
+libfile-sharedir-perl
+libfile-slurp-perl
+libfile-spec-perl
+libfilter-perl
+libfont-afm-perl
+libformvalidator-simple-perl
+libgd-gd2-perl
+libgd-graph-perl
+libgd-graph3d-perl
+libgd-securityimage-perl
+libgd-text-perl
+libgraph-perl
+libgraphviz-perl
+libguard-perl
+libheap-perl
+libhtml-fillinform-perl
+libhtml-format-perl
+libhtml-formfu-model-dbic-perl
+libhtml-formfu-perl
+libhtml-parser-perl
+libhtml-prototype-perl
+libhtml-scrubber-perl
+libhtml-tagset-perl
+libhtml-tree-perl
+libhtml-widget-perl
+libhttp-body-perl
+libhttp-request-ascgi-perl
+libhttp-server-simple-perl
+libima-dbi-perl
+libio-all-perl
+libio-compress-base-perl
+libio-compress-zlib-perl
+libio-pty-perl
+libio-socket-ssl-perl
+libio-stringy-perl
+libipc-run-perl
+libipc-shareable-perl
+libipc-sharelite-perl
+libjcode-pm-perl
+libjson-any-perl
+libjson-perl
+libjson-xs-perl
+liblingua-en-inflect-number-perl
+liblingua-en-inflect-perl
+liblist-moreutils-perl
+liblocale-gettext-perl
+liblocale-maketext-lexicon-perl
+liblog-dispatch-perl
+liblog-log4perl-perl
+liblog-report-perl
+libmailtools-perl
+libmime-types-perl
+libmodule-corelist-perl
+libmodule-find-perl
+libmodule-install-perl
+libmodule-pluggable-fast-perl
+libmodule-pluggable-perl
+libmodule-scandeps-perl
+libmoose-perl
+libmro-compat-perl
+libnet-daemon-perl
+libnet-dns-perl
+libnet-domain-tld-perl
+libnet-ip-perl
+libnet-libidn-perl
+libnet-ssleay-perl
+libnet-xmpp2-perl
+libobject-event-perl
+libobject-signature-perl
+libole-storage-lite-perl
+libossp-uuid-perl
+libpar-dist-perl
+libparams-util-perl
+libparams-validate-perl
+libparent-perl
+libparse-recdescent-perl
+libpath-class-perl
+libplrpc-perl
+libre-engine-tre-perl
+libreaction-perl
+libregexp-copy-perl
+libreturn-value-perl
+librpc-xml-perl
+libscope-guard-perl
+libset-object-perl
+libspiffy-perl
+libspreadsheet-parseexcel-perl
+libspreadsheet-writeexcel-perl
+libsql-abstract-limit-perl
+libsql-abstract-perl
+libsql-statement-perl
+libsql-tokenizer-perl
+libsql-translator-perl
+libstring-compare-perl
+libstring-escape-perl
+libsub-exporter-perl
+libsub-identify-perl
+libsub-install-perl
+libsub-name-perl
+libsub-uplevel-perl
+libsys-syscall-perl
+libtemplate-perl
+libtemplate-plugin-class-perl
+libtemplate-plugin-dbi-perl
+libtemplate-plugin-gd-perl
+libtemplate-plugin-javascript-perl
+libtemplate-plugin-xml-perl
+libtemplate-provider-encoding-perl
+libtemplate-timer-perl
+libtest-exception-perl
+libtest-longstring-perl
+libtest-mockobject-perl
+libtest-simple-perl
+libtest-use-ok-perl
+libtest-www-mechanize-perl
+libtext-charwidth-perl
+libtext-csv-pp-perl
+libtext-csv-xs-perl
+libtext-iconv-perl
+libtext-simpletable-perl
+libtext-wrapi18n-perl
+libtie-ixhash-perl
+libtie-toobject-perl
+libtime-piece-mysql-perl
+libtime-piece-perl
+libtimedate-perl
+libtree-simple-perl
+libtree-simple-visitorfactory-perl
+libunicode-map-perl
+libuniversal-can-perl
+libuniversal-exports-perl
+libuniversal-isa-perl
+libuniversal-moniker-perl
+libuniversal-require-perl
+liburi-perl
+libvariable-magic-perl
+libwww-mechanize-perl
+libwww-perl
+libxml-compile-cache-perl
+libxml-compile-perl
+libxml-compile-soap-perl
+libxml-compile-tester-perl
+libxml-compile-tranport-soapxmpp-perl
+libxml-compilex-tranport-soapxmpp-perl
+libxml-dom-perl
+libxml-libxml-common-perl
+libxml-libxml-perl
+libxml-mini-perl
+libxml-namespacesupport-perl
+libxml-parser-perl
+libxml-perl
+libxml-regexp-perl
+libxml-rss-perl
+libxml-sax-expat-perl
+libxml-sax-perl
+libxml-simple-perl
+libxml-twig-perl
+libxml-writer-perl
+libxml-xpath-perl
+libyaml-libyaml-perl
+libyaml-perl
+libyaml-syck-perl
+libyaml-tiny-perl

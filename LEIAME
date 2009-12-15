@@ -52,13 +52,24 @@ diretórios:
 PREPARACAO DAS DEPENDENCIAS
 ================================================================================
 
-Cada um dos módulos pode ser instalado em uma máquina diferente. De
-forma a facilitar essa decisão, o arquivo Dependencias lista as
-dependências de módulos da CPAN para cada módulo do sistema. Para
-instalar esses módulos, verifique se não há um procedimento específico
-no seu sistema operacional, mas de maneira genérica, você usa o comando
+Em uma máquina recém-instalada Debian Lenny, baixar o arquivo
+dependencias.tar.gz e descompactá-lo no diretório /srv/, criando então
+um diretório /srv/debs-pm.
 
- # cpan install Nome::Do::Modulo
+Alterar o arquivo /etc/apt/sources.list (como root) adicionando a seguinte linha:
+
+deb file:///srv/debs-pm . .
+
+Depois disso, rodar (como root) o comando
+
+apt-get update
+
+Baixar o arquivo Dependencias e salvá-lo no /tmp. Depois disso,
+executar o comando (como root):
+
+apt-get install `cat /tmp/Dependencias`
+
+Com esse comando, todos os pacotes necessários deverão ser instalados.
 
 INSTALACAO DO BANCO DE DADOS
 ================================================================================
