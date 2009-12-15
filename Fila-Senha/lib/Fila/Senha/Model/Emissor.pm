@@ -176,7 +176,7 @@ sub _check_rb {
 
     my $buf = $self->read_buffer;
     return unless $buf;
-    return unless length $buf >= 5;
+    return unless length $buf >= 2;
 
     while ($buf) {
         if (substr($buf,0,1) ne '@') {

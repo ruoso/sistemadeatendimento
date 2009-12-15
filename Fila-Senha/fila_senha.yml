@@ -7,7 +7,7 @@ Engine::XMPP2:
     override_host: 127.0.0.1
 portas:
     impressora: emulate
-    emissor: emulate
+    emissor: /dev/ttyUSB0
 categorias:
     - 1
     - 2

@@ -1,0 +1,10 @@
+<script language='javascript'>
+    [% USE JavaScript %]
+    
+    [% novo_guiche = BLOCK %]
+      [% INCLUDE 'render/guiche.tt' %]
+    [% END %]
+
+    $('info_guiche_[% guiche.id_guiche %]').replace("[% novo_guiche | js %]");
+
+</script>

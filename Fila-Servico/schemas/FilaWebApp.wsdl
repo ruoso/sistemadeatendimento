@@ -56,6 +56,12 @@
   </wsdl:operation>
  </wsdl:portType>
 
+ <wsdl:portType name="render_guiche_gerente">
+  <wsdl:operation name="render_guiche_gerente">
+   <wsdl:input message="filasv:render_atendente" />
+  </wsdl:operation>
+ </wsdl:portType>
+
  <wsdl:portType name="render_atendente">
   <wsdl:operation name="render_atendente">
    <wsdl:input message="filasv:render_atendente" />
@@ -77,6 +83,14 @@
  <wsdl:binding name="render_gerente_soapxmpp" type="filasv:render_gerente">
   <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
   <wsdl:operation name="render_gerente">
+   <soap:operation style="document" />
+   <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
+  </wsdl:operation>
+ </wsdl:binding>
+
+ <wsdl:binding name="render_guiche_gerente_soapxmpp" type="filasv:render_guiche_gerente">
+  <soap:binding transport="http://jabber.org/protocol/soap" style="document"/>
+  <wsdl:operation name="render_guiche_gerente">
    <soap:operation style="document" />
    <wsdl:input><soap:body namespace="urn:oktiva:fila:servico" use="literal"/></wsdl:input>
   </wsdl:operation>
@@ -109,6 +123,9 @@
  <wsdl:service name="FilaWebAppCallback">
   <wsdl:port name="render_gerente" binding="filasv:render_gerente_soapxmpp">
    <soap:address location="xmpp://gerente@people.fila.vhost/cb/render/gerente" />
+  </wsdl:port>
+  <wsdl:port name="render_guiche_gerente" binding="filasv:render_guiche_gerente_soapxmpp">
+   <soap:address location="xmpp://gerente@people.fila.vhost/cb/render/guiche_gerente" />
   </wsdl:port>
   <wsdl:port name="render_atendente" binding="filasv:render_atendente_soapxmpp">
    <soap:address location="xmpp://atendente@people.fila.vhost/cb/render/atendente" />

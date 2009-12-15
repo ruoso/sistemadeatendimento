@@ -1,0 +1,64 @@
+                    <table class="mesas" cellspacing="0" cellpadding="2" id="info_guiche_[% guiche.id_guiche %]">
+                        <TR>
+                                [% SWITCH guiche.estado %]
+                                    [% CASE ['atendimento' 'disponivel' 'chamando'  ] %]
+                                        <TD class='guiche guiche_ativo' valign="top" ROWSPAN="6" [% IF guiche.alert %]style="background-color: red"[% END %]>[% guiche.identificador %]
+                                    [% CASE ['interno' 'pausa'] %]
+                                        <TD class='guiche guiche_pausa' valign="top" ROWSPAN="6" [% IF guiche.alert %]style="background-color: red"[% END %]>[% guiche.identificador %]
+                                    [% CASE ['avaliacao' 'concluido'] %]
+                                        <TD class='guiche guiche_inativo' valign="top" ROWSPAN="6" [% IF guiche.alert %]style="background-color: red"[% END %]>[% guiche.identificador %]
+                                    [% CASE ['fechado'] %]
+                                       <TD class='guiche guiche_fechado' valign="top" ROWSPAN="6" >[% guiche.identificador %]
+
+                                [% END %]
+                                [% IF guiche.pular_opiniometro == 0 %]
+                                    <SPAN class="opi acao_opi_on">
+                                        [% c.prototype.link_to_remote('(Desab.)', { url => '/cb/gerente/pular_opiniometro/1/' _ guiche.id_guiche, confirm => 'confirmar(\'Deseja mesmo desabilitar o opiniometro da mesa?\')' }) %]
+                                    </SPAN>
+                                [% ELSE %]
+                                    <SPAN class="opi acao_opi_off">
+                                        [% c.prototype.link_to_remote('(Habil.)', { url => '/cb/gerente/pular_opiniometro/0/' _ guiche.id_guiche, confirm => 'confirmar(\'Deseja habilitar o opiniometro da mesa?\')' }) %]
+                                    </SPAN>
+                                [% END %]
+                                </TD>
+                                
+                            
+                            <TD>[% guiche.estado %]&nbsp;[%guiche.senha%]
+                            [% SWITCH guiche.estado %]
+                                [% CASE 'pausa' %]
+                                    <SPAN class="motivo">
+                                        <a href="#" title="Motivo da Pausa: [% guiche.pausa_motivo %]">(Motivo)</a> 
+                                    </SPAN>
+                                [% CASE 'interno' %]
+                                    <SPAN class="motivo">
+                                        <a href="#" title="Descrição do Serviço: [% guiche.nome_servico %]&nbsp;">(Serviço)</a>
+                                    </SPAN>
+                            [% END %]
+                            </TD>
+                                
+                        </TR>
+                        <TR><TD>[% dtf.f(guiche.estado_desde) %]&nbsp;</TD></TR>
+                        <TR><TD>[% guiche.funcionario %]&nbsp;</TD></TR>
+                        [% SWITCH guiche.estado %]
+                            [% CASE 'pausa' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Fechar Mesa)', { url => '/cb/gerente/fechar_guiche/' _ guiche.id_guiche , confirm => 'confirmar(\'Deseja mesmo fechar a mesa?\')' }) %]</TD></TR>
+                            [% CASE 'interno' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Fechar Mesa)', { url => '/cb/gerente/fechar_guiche/' _ guiche.id_guiche , confirm => 'confirmar(\'Deseja mesmo fechar a mesa?\')' }) %]</TD></TR>
+                            [% CASE 'chamando' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Devolver Senha)', { url => '/cb/gerente/devolver_senha/' _ guiche.id_guiche }) %]</TD></TR>
+                            [% CASE 'concluido' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Fechar Mesa)', { url => '/cb/gerente/fechar_guiche/' _ guiche.id_guiche , confirm => 'confirmar(\'Deseja mesmo fechar a mesa?\')' }) %]</TD></TR>
+                            [% CASE 'atendimento' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Encerrar)', { url => '/cb/gerente/concluir_atendimento/' _ guiche.id_guiche , confirm => 'confirmar(\'Deseja mesmo concluir o atendimento?\')' }) %]</TD></TR>
+                            [% CASE 'disponivel' %]
+                                <TR><TD>[% c.prototype.link_to_remote('(Fechar Mesa)', { url => '/cb/gerente/fechar_guiche/' _ guiche.id_guiche , confirm => 'confirmar(\'Deseja mesmo fechar a mesa?\')' }) %]</TD></TR>
+                            [% CASE %]
+                                [% IF guiche.estado_atendimento == 'avaliacao' %]
+                                    <TR><TD>
+                                    [% c.prototype.link_to_remote('(Encerrar)', { url => '/cb/gerente/encerrar_atendimento/' _ guiche.id_atendimento }) %]
+                                    </TD></TR>
+                                [% ELSE %]
+                                    [%# <TR><TD>&nbsp;</TD></TR> %]
+                                [% END %]
+                        [% END %]
+                    </table>

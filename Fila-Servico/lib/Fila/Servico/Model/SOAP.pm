@@ -27,6 +27,7 @@ __PACKAGE__->register_wsdl
   ({ wsdl => Fila::Servico->path_to('/schemas/FilaWebApp.wsdl'),
      schema => Fila::Servico->path_to('/schemas/fila-servico.xsd') },
    { render_gerente => 'CB::Gerente',
+     render_guiche_gerente => 'CB::GuicheGerente',
      render_atendente => 'CB::Atendente',
      render_error => 'CB::Error' });
 

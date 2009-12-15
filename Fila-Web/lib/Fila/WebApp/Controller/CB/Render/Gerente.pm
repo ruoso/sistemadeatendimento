@@ -35,6 +35,13 @@ sub render_gerente :WSDLPort('render_gerente') {
     $c->forward($c->view());
 }
 
+sub render_guiche_gerente :WSDLPort('render_guiche_gerente') {
+    my ($self, $c, $dados) = @_;
+    $c->stash->{guiche} = $dados->{guiche};
+    $c->stash->{template} = 'render/guiche_gerente.tt';
+    $c->forward($c->view());
+}
+
 1;
 
 __END__

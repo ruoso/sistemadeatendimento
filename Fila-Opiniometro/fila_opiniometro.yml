@@ -1,13 +1,13 @@
 ---
 name: Fila::Opiniometro
 Engine::XMPP2:
-    username: opiniometro1
+    username: opiniometro
     domain: agents.fila.vhost
     password: password
     override_host: localhost
 timeout: 5
 portas:
-    opiniometro: emulate
+    opiniometro: /dev/ttyUSB0
 perguntas:
     - 1
     - 2

@@ -25,14 +25,7 @@ use Pod::Usage;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use EV;
-use AnyEvent;
-use Net::XMPP2::Connection;
 use Catalyst::Engine::XMPP2;
-{
-    no warnings;
-    *Catalyst::Engine::XMPP2::loop = *EV::loop;
-}
 
 my $debug             = 0;
 my $help              = 0;

@@ -79,16 +79,15 @@ sub refresh_atendente :Private {
 
     my $guiche = $self->status_guiche($c, {});
 
-    my $atendente = $c->stash->{guiche}->atendente_atual->first;
+    my $atendente = $c->stash->{guiche}->atendente_atual->first || $c->stash->{atendente};
 
     if ($atendente) {
         $c->model('SOAP')->transport->connection($c->engine->connection($c));
         $c->model('SOAP')->transport->addrs([$atendente->funcionario->jid.'/cb/render/atendente']);
         $c->model('SOAP::CB::Atendente')->render_atendente({ %$guiche });
-    } elsif ($c->stash->{atendente}) {
-        $c->model('SOAP')->transport->connection($c->engine->connection($c));
-        $c->model('SOAP')->transport->addrs([$c->stash->{atendente}->funcionario->jid.'/cb/render/atendente']);
-        $c->model('SOAP::CB::Atendente')->render_atendente({ %$guiche });
+
+        $c->model('SOAP')->transport->addrs([$c->stash->{gerente}->funcionario->jid.'/cb/render/guiche_gerente']);
+        $c->model('SOAP::CB::GuicheGerente')->render_guiche_gerente({ %$guiche });
     }
 
     $c->stash->{soap}->compile_return($old);
@@ -348,7 +347,6 @@ sub registrar_no_show :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
          vt_fim => 'Infinity',
          id_estado => $estado_concluido->id_estado });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -444,7 +442,6 @@ sub atender_no_show :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
          vt_fim => 'Infinity',
          id_estado => $estado_atendendo_gu->id_estado });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -517,7 +514,6 @@ sub iniciar_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI 
 
 
     $c->stash->{refresh_painel} = 1;
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -593,7 +589,6 @@ sub devolver_senha :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
       ({ vt_fim => $now });
 
     $c->stash->{refresh_painel} = 1;
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -681,7 +676,7 @@ sub concluir_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI
         $c->model('SOAP')->transport->connection($c->engine->connection($c));
         $c->model('SOAP')->transport->addrs([$c->stash->{guiche}->jid_opiniometro . '/callback']);
         $c->model('SOAP::Opiniometro')
-              ->iniciar_opiniometro({ refresh_request => '' });
+              ->iniciar_opiniometro({ refresh_request => 'abc' });
     } else {
         #encerra atendimento
         my $estado_atual = $atendimento->atendimento->estado_atual->search
@@ -727,16 +722,15 @@ sub concluir_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI
 
         $c->model('SOAP')->transport->connection($c->engine->connection($c));
 
-        $c->model('SOAP')->transport->addrs([$guiche->jid_opiniometro . '/callback/']);
+        $c->model('SOAP')->transport->addrs([$guiche->jid_opiniometro . '/callback']);
         $c->model('SOAP::Opiniometro')
-              ->encerrar_opiniometro({ refresh_request => '' });
+              ->encerrar_opiniometro({ refresh_request => 'abc' });
 
         $c->stash->{refresh_guiche} ||= [];
         push @{$c->stash->{refresh_guiche}}, $guiche->id_guiche;
     }
 
     $c->stash->{refresh_painel} = 1;
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -882,7 +876,6 @@ sub iniciar_pausa :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
          motivo => '' });
 
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -911,7 +904,6 @@ sub setar_motivo_pausa : WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI 
     $pausa_atual->update
     ({ motivo => $pausa_motivo });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -956,7 +948,6 @@ sub fechar_servico_interno: WSDLPort('GestaoAtendente') :DBICTransaction('DB') :
          vt_fim => 'Infinity',
          id_estado => $estado_concluido->id_estado });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -1017,7 +1008,6 @@ sub disponivel :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
          id_estado => $estado_disponivel->id_estado });
 
 
-    $c->stash->{escalonar_gerente} = 1;
     $c->stash->{escalonar_senha} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
@@ -1154,7 +1144,6 @@ sub iniciar_servico_interno :WSDLPort('GestaoAtendente') :DBICTransaction('DB') 
          id_servico =>  $id_servico,
          informacoes => '' });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 
@@ -1238,7 +1227,6 @@ sub setar_info_interno : WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI 
     $servico_atual->update
     ({ informacoes => $informacoes });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -1287,7 +1275,6 @@ sub iniciar_servico_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('D
          id_servico =>  $id_servico,
          informacoes => '' });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 
@@ -1338,7 +1325,6 @@ sub fechar_servico_atendimento: WSDLPort('GestaoAtendente') :DBICTransaction('DB
     $servico_atual->update
       ({ vt_fim => $now });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -1393,7 +1379,6 @@ sub setar_info_atendimento : WSDLPort('GestaoAtendente') :DBICTransaction('DB') 
     $servico_atual->update
     ({ informacoes => $informacoes });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
 }
@@ -1437,7 +1422,6 @@ sub retornar_pausa : WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
          vt_fim => 'Infinity',
          id_estado => $estado_concluido->id_estado });
 
-    $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];
     push @{$c->stash->{refresh_guiche}}, $c->stash->{guiche}->id_guiche;
     
