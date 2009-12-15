@@ -32,6 +32,8 @@
         [% END %]</LABEL></P>
 <P><LABEL>Identificador: <INPUT TYPE='text' NAME='identificador' VALUE='[% c.req.param('identificador') | html %]' /></LABEL></P>
 <P><LABEL>JID Opiniometro: <INPUT TYPE='text' NAME='jid_opiniometro' VALUE='[% c.req.param('jid_opiniometro') | html %]' /></LABEL></P>
+<P><LABEL>Timer para "chamando": <INPUT TYPE='text' NAME='timeout_chamando' VALUE='[% c.req.param('timeout_chamando') | html %]' /></LABEL></P>
+<P><LABEL>Timer para "concluído": <INPUT TYPE='text' NAME='timeout_concluido' VALUE='[% c.req.param('timeout_concluido') | html %]' /></LABEL></P>
 <P><INPUT TYPE='submit' VALUE='Salvar'/></P>
 </FORM>
 

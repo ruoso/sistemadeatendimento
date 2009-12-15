@@ -45,7 +45,7 @@ sub ver :Chained('preload') :PathPart('') :Args(0) {
 
     unless ($c->req->param('submitted')) {
         $c->req->param($_, $c->stash->{guiche}->get_column($_))
-          for qw(identificador jid_opiniometro);
+          for qw(identificador jid_opiniometro timeout_chamando timeout_concluido);
     }
 }
 
@@ -72,7 +72,7 @@ sub salvar :Chained('preload') :PathPart :Args(0) {
     my ($self, $c) = @_;
     $c->stash->{guiche}->update
       ({ map { $_ => $c->req->param($_) }
-         qw(identificador jid_opiniometro) });
+         qw(identificador jid_opiniometro timeout_chamando timeout_concluido) });
     $c->res->redirect($c->uri_for('/locais/'.$c->stash->{local}->id_local));
 }
 
@@ -92,7 +92,7 @@ sub criar :Chained('/locais/preload') :PathPart('guiche/criar') :Args(0) {
 	             vt_fim => 'Infinity',
 	             pular_opiniometro => 0,
 	             ( map { $_ => $c->req->param($_) }
-	               qw(identificador jid_opiniometro) ) });
+	               qw(identificador jid_opiniometro timeout_chamando timeout_concluido) ) });
 		   $guiche->estados->create
     	      ({ vt_ini => DateTime->now(time_zone => 'local'),
     	         vt_fim => 'Infinity',
