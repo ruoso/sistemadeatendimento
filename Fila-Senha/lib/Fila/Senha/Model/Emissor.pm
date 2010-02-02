@@ -37,11 +37,12 @@ sub bloquear {
     }
 }
 
+my $cats;
 sub abrir {
     my $self = shift;
 
 	warn 'Buscando categorias..';
-	my $cats = Fila::Senha->model('SOAP::Senha')->listar_categorias
+	$cats ||= Fila::Senha->model('SOAP::Senha')->listar_categorias
       ({ local => {} });
 
 	unless ($cats) {
