@@ -128,7 +128,9 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
                        'agendamento.cnpjf',
                        'agendamento.email',
                        'me.timeout_chamando',
-                       'me.timeout_concluido' ],
+                       'me.timeout_concluido',
+		       'atendimento.id_atendimento',
+		       'me.pular_opiniometro' ],
          'as'     => [ 'id_guiche',
                        'identificador',
                        'id_funcionario',
@@ -146,7 +148,9 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
                        'agendamento_cnpjf',
                        'agendamento_email',
                        'timeout_chamando',
-                       'timeout_concluido' ]});
+                       'timeout_concluido',
+		       'id_atendimento',
+		       'pular_opiniometro' ]});
 
     #pega o estado do guiche, se for interno entao seleciona do servicoguiche, senao do servicoatendimento
     my $estado_guiche = $c->stash->{guiche}->estados->search
@@ -254,7 +258,8 @@ sub status_guiche :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI {
           { ( map { $_ => $guiche->get_column($_) }
               qw( id_guiche identificador estado estado_atendimento
                   funcionario id_funcionario jid pausa_motivo
-                  timeout_chamando timeout_concluido) ),
+                  timeout_chamando timeout_concluido id_atendimento
+        	  pular_opiniometro ) ),
             ( map { $guiche->get_column($_) ?
                       ($_ => DateTime::Format::XSD->format_datetime
                        (DateTime::Format::Pg->parse_datetime
