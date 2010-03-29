@@ -313,7 +313,6 @@
     $('bloco_lista_acoes').replace("[% ACOES_ATENDENTE | js %]");
 	
     [% bloco_senha = BLOCK %]
-   		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
    		<DIV id='header2' style='padding:0 0 0 330px; '>
 		    <P style='color:gray;'>
 		    	[% IF status_guiche.guiche.funcionario %]
