@@ -131,8 +131,7 @@ sub dados_local :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
     my $status  = $c->stash->{local}->estados->search
       ({ 'me.vt_ini' => { '<=', $now },
          'me.vt_fim' => { '>', $now }},
-       {
-        prefetch =>  'estado' })->first;
+       { prefetch =>  'estado' })->first;
 
     $c->stash->{soap}->compile_return
       ({ local =>
@@ -187,7 +186,7 @@ sub abrir_local :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 
     $c->model('SOAP')->transport->connection($c->engine->connection($c));
     $c->model('SOAP')->transport->addrs([$c->stash->{local}->jid_senhas.'/callback']);
-    $c->model('SOAP::Senha')->local_aberto({ refresh_request => '' });
+    $c->model('SOAP::Senha')->local_aberto({ refresh_request => 'non-empty' });
 
     $c->stash->{refresh_gerente} = 1;
 }
@@ -228,7 +227,7 @@ sub encerrar_senhas :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 
     $c->model('SOAP')->transport->connection($c->engine->connection($c));
     $c->model('SOAP')->transport->addrs([$c->stash->{local}->jid_senhas.'/callback']);
-    $c->model('SOAP::Senha')->senhas_encerradas({ refresh_request => '' });
+    $c->model('SOAP::Senha')->senhas_encerradas({ refresh_request => 'non-empty' });
 
     $c->stash->{refresh_gerente} = 1;
 }
@@ -989,7 +988,7 @@ sub encerrar_atendimento :WSDLPort('GestaoLocal') :DBICTransaction('DB') :MI {
 
     $c->model('SOAP')->transport->addrs([$guiche->jid_opiniometro . '/callback/']);
     $c->model('SOAP::Opiniometro')
-      ->encerrar_opiniometro({ refresh_request => '' });
+      ->encerrar_opiniometro({ refresh_request => 'non-empty' });
 
     $c->stash->{refresh_gerente} = 1;
     $c->stash->{refresh_guiche} ||= [];

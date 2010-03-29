@@ -164,7 +164,8 @@ sub registrar_avaliacao_praca :WSDLPort('GestaoOpiniometro') :DBICTransaction('D
    		);
    	}
 
-	my %perguntas = map { $_ => $ordem_perguntas->get_column("pergunta$_") } 1..5;
+    my %perguntas = map { $_ => $ordem_perguntas->get_column("pergunta$_") } 1..5;
+    warn "Pergunta $_ eh $perguntas{$_}" for keys %perguntas;
 
     foreach my $resposta (@{$query->{avaliacao_atendimento}{resposta}}) {
         $c->stash->{local}->respostas_avaliacao->create

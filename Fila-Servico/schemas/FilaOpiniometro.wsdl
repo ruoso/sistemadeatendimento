@@ -28,8 +28,15 @@
   xmlns:filasv="urn:oktiva:fila:web:servico"
   targetNamespace="urn:oktiva:fila:web:servico">
 
+ <wsdl:types>
+  <xsd:schema targetNamespace="urn:oktiva:fila:web:tipos"
+   elementFormDefault="qualified">
+   <xsd:element name="refresh_request" type="xsd:string" />
+  </xsd:schema>
+ </wsdl:types>
+
  <wsdl:message name="refresh_request">
-  <wsdl:part name="refresh_request" element="xsd:string" />
+  <wsdl:part name="refresh_request" element="filatp:refresh_request" />
  </wsdl:message>
 
  <wsdl:portType name="FilaOpiniometroCallback">

@@ -625,7 +625,7 @@ sub concluir_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI
              detail => 'Ocorreu um erro de configuracao no sistema.' });
     }
 
-    my $atendimento = $c->stash->{guiche}->atendimento_atual->find;
+    my $atendimento = $c->stash->{guiche}->atendimento_atual->find({ });
     
     unless ($atendimento) {
         die $c->stash->{soap}->fault
@@ -645,7 +645,7 @@ sub concluir_atendimento :WSDLPort('GestaoAtendente') :DBICTransaction('DB') :MI
     }
     
     #checa se existem servicos abertos.
-    my $servico_atual = $atendimento->atendimento->servico_atual->find;
+    my $servico_atual = $atendimento->atendimento->servico_atual->find({ });
 
     if ($servico_atual) {
         die $c->stash->{soap}->fault
