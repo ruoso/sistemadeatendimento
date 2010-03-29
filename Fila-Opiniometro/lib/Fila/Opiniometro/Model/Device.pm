@@ -114,12 +114,16 @@ sub _check_wb {
     return if $write_watcher || !$self->write_buffer;
 
     $write_watcher = EV::io $self->fh, EV::WRITE, sub {
-        use bytes;
+	use bytes;
         my $buf = $self->write_buffer;
         my $len = length $buf;
         my $wrt = $self->fh->syswrite($buf, $len);
+        unless (defined $wrt) {
+           EV::unloop(EV::UNLOOP_ALL);
+	   return;
+	}
         my $wrote = substr($buf,0,$wrt,'');
-        warn 'Wrote '.$wrt.' bytes ('.$wrote.')';
+	warn 'Wrote '.$wrt.' bytes ('.$wrote.') ['.$_.']';
         $self->write_buffer($buf);
         $write_watcher = undef unless $buf;
     };
