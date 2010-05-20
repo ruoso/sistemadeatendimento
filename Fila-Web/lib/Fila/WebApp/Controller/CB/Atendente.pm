@@ -22,7 +22,9 @@ use Encode;
 use base 'Catalyst::Controller::SOAP';
 
 __PACKAGE__->config->{wsdl} =
-  {wsdl => Fila::WebApp->path_to('schemas/FilaWeb.wsdl')};
+  { wsdl => Fila::WebApp->path_to('schemas/FilaWeb.wsdl') };
+__PACKAGE__->config->{pode_encaminhar_para_mesa} = 1;
+__PACKAGE__->mk_accessors('pode_encaminhar_para_mesa');
 
 sub registrar_no_show : WSDLPort('FilaWebAtendenteCallback') {
     my ($self, $c) = @_;
@@ -58,13 +60,17 @@ sub listar_no_show : WSDLPort('FilaWebAtendenteCallback') {
 sub listar_guiches_encaminhar : WSDLPort('FilaWebAtendenteCallback') {
     my ($self, $c) = @_;
 
-    $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/guiche']);
-    my $lista_guiches = $c->model('SOAP::Gestao::Guiche')
-      ->listar_guiches({ local => {} });
+    if ($self->pode_encaminhar_para_mesa) {
+        $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/guiche']);
+        my $lista_guiches = $c->model('SOAP::Gestao::Guiche')
+          ->listar_guiches({ local => {} });
 
-    if ($lista_guiches->{Fault}) {
-        $c->stash->{error_message} = $lista_guiches->{Fault}{faultstring};
-        return $c->forward('/render/error_message');
+        if ($lista_guiches->{Fault}) {
+            $c->stash->{error_message} = $lista_guiches->{Fault}{faultstring};
+            return $c->forward('/render/error_message');
+        }
+
+        $c->stash->{lista_guiches_encaminhar} = $lista_guiches;
     }
 
     $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/guiche']);
@@ -72,16 +78,15 @@ sub listar_guiches_encaminhar : WSDLPort('FilaWebAtendenteCallback') {
       ->listar_categorias({ local => {} });
 
     if ($lista_categorias->{Fault}) {
-        $c->stash->{error_message} = $lista_guiches->{Fault}{faultstring};
+        $c->stash->{error_message} = $lista_categorias->{Fault}{faultstring};
         return $c->forward('/render/error_message');
     }
+
+    $c->stash->{lista_categorias_encaminhar} = $lista_categorias;
 
     $c->model('SOAP')->transport->addrs(['motor@gestao.fila.vhost/ws/gestao/atendente']);
     $c->stash->{status_guiche} = $c->model('SOAP::Gestao::Atendente')
           ->status_guiche({ guiche => {} });
-
-    $c->stash->{lista_guiches_encaminhar} = $lista_guiches;
-    $c->stash->{lista_categorias_encaminhar} = $lista_categorias;
 
     $c->stash->{template} = 'cb/atendente/refresh.tt';
     $c->forward($c->view());
