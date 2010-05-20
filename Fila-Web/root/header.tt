@@ -91,6 +91,7 @@ function aplicar_filtro_servicos(text) {
 }
 
 </script> 
+<STYLE>.escondido { display: none }</STYLE>
     </HEAD>
     <BODY onload='disconnected_so_move_away()'>
     <DIV id="BackHeader">
