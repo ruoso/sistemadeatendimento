@@ -57,7 +57,8 @@
 
         [% IF status_guiche.guiche.estado == 'concluido' || status_guiche.guiche.estado == 'disponivel' %]
             [% IF lista_servicos %]
-                <h3 id="TitServicos" class="titulos">Serviços:</h3><br>
+                <h3 id="TitServicos" class="titulos">Serviços (utilize o campo para filtrar):</h3><br>
+                <INPUT TYPE="text" NAME="filter" ONKEYUP="apply_filter(this.value)" />
                 <DIV ID="servicos">
                  <UL>
                         [% SET classe_servico = 0 %]
