@@ -191,10 +191,13 @@ sub solicitar_senha :WSDLPort('GestaoSenha') :DBICTransaction('DB') :MI {
         }
 
         # verificar se a senha está disponível.
-        my $verificar = $c->stash->{local}->atendimentos_atuais->search
-          ({ 'senha.id_categoria' => $id_categoria,
-             'senha.codigo' => $codigo_senha_atual },
-           { join => 'senha' });
+        my $verificar = $c->model('DB::Senha')->search
+          ({ 'me.id_categoria' => $id_categoria,
+             'me.codigo' => $codigo_senha_atual,
+             'atendimentos.vt_ini' => { '>=' => $now },
+             'atendimentos.vt_fim' => { '<'  => $now },
+             'atendimentos.id_local' => $c->stash->{local}->id_local },
+           { join => 'atendimentos' });
         if ($verificar->first) {
             goto CHECARSENHA;
         }
