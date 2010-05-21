@@ -67,6 +67,29 @@ function set_timeout(tempo, motivo, callback) {
     }
 }
 
+function aplicar_filtro_servicos(text) {
+    var rx;
+    if (text) {
+        rx = new RegExp(text,"i");
+    }
+    var servicos = $$('#servicos ul li ul li');
+    var len = servicos.length;
+    var index = 0;
+    for (index = 0; index < len; ++index) {
+        var item = servicos[index];
+        if (text) {
+           var value = item.firstChild.data;
+           if (value.match(rx) == null) {
+               item.addClassName('escondido');
+           } else {
+               item.removeClassName('escondido');
+           }
+        } else {
+           item.removeClassName('escondido');
+        }
+    }
+}
+
 </script> 
     </HEAD>
     <BODY onload='disconnected_so_move_away()'>
