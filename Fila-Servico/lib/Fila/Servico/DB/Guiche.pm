@@ -54,12 +54,12 @@ __PACKAGE__->add_columns
    timeout_chamando =>
    {
     data_type => 'integer',
-    default => 180,
+    default_value => 180,
    },
    timeout_concluido =>
    {
     data_type => 'integer',
-    default => 20,
+    default_value => 20,
    }
   );
 __PACKAGE__->set_primary_key(qw(id_guiche));

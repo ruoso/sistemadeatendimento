@@ -1,3 +1,7 @@
+screen
+postgresql-8.3
+apache2-mpm-prefork
+libapache2-mod-fastcgi
 libalgorithm-c3-perl
 libaliased-perl
 libalien-wxwidgets-perl
@@ -284,7 +288,6 @@ libxml-compile-cache-perl
 libxml-compile-perl
 libxml-compile-soap-perl
 libxml-compile-tester-perl
-libxml-compile-tranport-soapxmpp-perl
 libxml-compilex-tranport-soapxmpp-perl
 libxml-dom-perl
 libxml-libxml-common-perl

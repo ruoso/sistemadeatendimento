@@ -49,6 +49,21 @@ diretórios:
   documentacao: contém um conjunto diverso de documentações geradas
     sobre o sistema, incluindo materiais utilizados em treinamentos.
 
+DESCOMPACTANDO OS ARQUIVOS
+================================================================================
+
+Uma vez que você tenha o arquivo do sistema, vc pode descompactá-lo em
+qualquer lugar utilizando o comando:
+
+tar xzf "Sistema de Atendimento - v1.2.tar.gz"
+
+Depois que descompactar, como root execute:
+
+mv trunk /usr/share/fila
+
+Isso é importante porque as configurações padrão que vêm com o sistema
+indicam essa localização.
+
 PREPARACAO DAS DEPENDENCIAS
 ================================================================================
 
@@ -69,7 +84,19 @@ executar o comando (como root):
 
 apt-get install `cat /tmp/Dependencias`
 
-Com esse comando, todos os pacotes necessários deverão ser instalados.
+Com esse comando, todos os pacotes necessários deverão ser
+instalados. Sempre que for mencionado alguma pasta do sistema,
+entende-se que é a partir do diretório /usr/share/fila.
+
+Existe um patch que precisa ser aplicado (foi submetido aos autores do
+módulo mas ainda não foi aceito), isso é fundamental para o correto
+funcionamento do sistema. Para isso execute:
+
+cd /usr/share/perl5
+patch -p4 /usr/share/fila/patches/DBIx-Class-ResultSource.patch
+
+Ele deve dar uma mensagem como "Hunk xxxx succeeded", o que indica que
+funcionou.
 
 INSTALACAO DO BANCO DE DADOS
 ================================================================================
@@ -79,43 +106,52 @@ PostgreSql devido ao uso extensivo de cálculos temporais,
 funcionalidade essa que é uma das características fortes desse banco
 de dados.
 
-A configuração do banco de dados é feita nos arquivos:
+O sistema de atendimento está homologado apenas com o Postgresql 8.3
+(versão disponível no Debian Lenny). O servidor de banco de dados já
+foi instalado com as dependências.
 
-  Fila-Servico/fila_servico.yml
-  Fila-Administracao/fila_administracao.yml.
+O sistema de atendimento está configurado por padrão para utilizar o
+usuário "fila" com a senha "senha" no banco de dados, conectando-se ao
+banco "fila". Para configurar o servidor de banco de dados execute
+(como root):
 
-Esses arquivos contém a configuração dos endereços para conexão e do
-nome do banco de dados. A configuração padrão presente no código como
-distribuído utiliza o banco de dados em "localhost", no banco de dados
-"fila" utilizando o usuário "fila" com a senha "senha". Você deve
-personalizar esses arquivos de acordo com a situação real no seu
-ambiente.
+su -c 'su postgres'
 
-Adicionalmente, o sistema de agendamento tem a configuração presente
-no arquivo:
+O comando acima vai abrir um novo prompt de comando, agora com o
+usuário administrador do postgres, então poderemos criar o usuário
+"fila" no banco de dados utilizando o comando.
 
-  Fila-Agendamento/fila_agendamento.yml
+createuser -P fila
 
-O sistema de Agendamento usa um banco de dados diferente, para
-permitir que o agendamento seja feito em uma máquina diferente ou até
-mesmo em uma rede diferente, uma vez que o sistema de agendamento deve
-ser visível para a internet, enquanto o sistema de agendamento deve
-ser preservado dentro de uma rede privada.
+Primeiro ele vai pedir a senha para o novo usuário. Digite "senha" e
+depois dê enter. Ele vai perguntar se o usuário deve ser um
+superusuário, você pode responder que não. Ele vai perguntar se ele
+pode criar outras "roles" (como o postgres chama os usuários), você
+pode responder que não, e finalmente ele vai perguntar também se ele
+pode criar bancos de dados, aí você responde que sim.
 
-Para popular os bancos de dados, você pode usar os scripts:
+Depois disso você pode digitar "exit" e dar enter, para sair do prompt
+do usuário postgres.
 
-  Fila-Servico/script/fila_servico_db.pl
+Para criar o banco de dados execute o seguinte comando (pode ser como
+usuário normal):
 
-e
+createdb -Ufila -h127.0.0.1 fila
 
-  Fila-Agendamento/script/fila_agendamento_db.pl
+Ele vai pedir a senha do usuário "fila", então é só digitar
+"senha". Então ele terá o banco de dados criado.
 
+Para popular os bancos de dados, você pode usar o script, (pode ser
+como usuário comum). De dentro do diretório Fila-Serviço, execute:
 
-para executar cada um desses scripts você deve entrar nos diretórios
-Fila-Servico e Fila-Agendamento respectivamente. Esses scripts geram
-um conjunto de instruções sql que podem ser utilizadas como entrada
-para o psql para a criação das estruturas de dados, incluindo alguns
-dados de exemplo.
+./script/fila_servico_db.pl | psql -Ufila -h127.0.0.1 fila
+
+Ele irá pedir a senha do banco de dados novamente, digite "senha",
+depois "enter"
+
+Esse script gera um conjunto de instruções sql que podem
+ser utilizadas como entrada para o psql para a criação das estruturas
+de dados, incluindo alguns dados de exemplo.
 
 
 EXECUTANDO O SISTEMA
@@ -128,17 +164,57 @@ plugin DJabberd::Plugin::Balancer, a implementação de um balanceamento
 de carga para os serviços. Desta forma, em primeiro lugar é necessário
 iniciar o servidor DJabberd. Para fazer isso, pode-se executar:
 
-  djabberd -conf DJabberd/djabberd.conf
+LOGLEVEL=DEBUG screen -dmS djabberd djabberd -conf DJabberd/djabberd.conf
 
 Uma vez o servidor Jabber rodando, é possível iniciar o módulo de
 regras de negócio. Para isso, pode-se executar:
 
-  # dentro do diretório Fila-Servico
-  ./script/fila_servico_xmpp.pl
+cd /usr/share/fila/Fila-Servico
+FILA_SERVICO_HOME=. screen -dmS servico ./script/fila_servico_xmpp.pl
 
 Neste momento, pode-se então iniciar o Apache2, utilizando a
 configuração de exemplo, que presume a cópia desse diretório para o
 diretório /usr/share/fila.
+
+INSTALACAO DO AMBIENTE WEB
+================================================================================
+
+Para configurar o ambiente web, execute (como root):
+
+cp /usr/share/fila/Apache2/fila-vhost.conf /etc/apache2/sites-available
+a2ensite fila-vhost.conf
+
+Depois disso é só reiniciar o apache:
+
+apache2ctl stop
+apache2ctl start
+
+A tela do gerente e do atendente é acessível através do endereço:
+
+http://localhost/
+
+Todos os usuários vem com senha "password" por padrão. Vem o usuário
+"gerente" e os usuários "atendente01" até "atendente10" para você
+testar.
+
+A tela do emissor de senhas manual é acessível através do endereço:
+
+http://localhost/emissor
+
+Usuário "emissor", senha "password".
+
+Para habilitar a interface de administração modifique o arquivo
+/etc/apache2/ports.conf e adicione a linha
+
+Listen 8081
+
+logo depois de "Listen 80". Reinicie o apache novamente. A interface
+fica então disponível no endereço:
+
+http://localhost:8081/
+
+É recomendável implantar um mecanismo de autenticação para essa
+interface, que deve ser acessível apenas para manutenção.
 
 
 DOCUMENTACOES
