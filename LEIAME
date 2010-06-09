@@ -55,11 +55,11 @@ DESCOMPACTANDO OS ARQUIVOS
 Uma vez que você tenha o arquivo do sistema, vc pode descompactá-lo em
 qualquer lugar utilizando o comando:
 
-tar xzf "Sistema de Atendimento - v1.2.tar.gz"
+tar xzf "Sistema de Atendimento - v1.3.tar.gz"
 
 Depois que descompactar, como root execute:
 
-mv trunk /usr/share/fila
+mv sistemadeatendimento /usr/share/fila
 
 Isso é importante porque as configurações padrão que vêm com o sistema
 indicam essa localização.
@@ -153,7 +153,6 @@ Esse script gera um conjunto de instruções sql que podem
 ser utilizadas como entrada para o psql para a criação das estruturas
 de dados, incluindo alguns dados de exemplo.
 
-
 EXECUTANDO O SISTEMA
 ================================================================================
 
@@ -165,6 +164,9 @@ de carga para os serviços. Desta forma, em primeiro lugar é necessário
 iniciar o servidor DJabberd. Para fazer isso, pode-se executar:
 
 LOGLEVEL=DEBUG screen -dmS djabberd djabberd -conf DJabberd/djabberd.conf
+
+É importante reiniciar o apache depois de iniciar o DJabberd para que
+as conexões do Apache sejam estabelecidas corretamente.
 
 Uma vez o servidor Jabber rodando, é possível iniciar o módulo de
 regras de negócio. Para isso, pode-se executar:
