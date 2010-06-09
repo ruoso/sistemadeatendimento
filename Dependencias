@@ -1,3 +1,7 @@
+screen
+postgresql-8.3
+apache2-mpm-prefork
+libapache2-mod-fastcgi
 libalgorithm-c3-perl
 libaliased-perl
 libalien-wxwidgets-perl

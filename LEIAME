@@ -107,10 +107,8 @@ funcionalidade essa que é uma das características fortes desse banco
 de dados.
 
 O sistema de atendimento está homologado apenas com o Postgresql 8.3
-(versão disponível no Debian Lenny). Para instalar o servidor de banco
-de dados execute (como root):
-
-apt-get install postgresql-8.3
+(versão disponível no Debian Lenny). O servidor de banco de dados já
+foi instalado com as dependências.
 
 O sistema de atendimento está configurado por padrão para utilizar o
 usuário "fila" com a senha "senha" no banco de dados, conectando-se ao
@@ -166,17 +164,57 @@ plugin DJabberd::Plugin::Balancer, a implementação de um balanceamento
 de carga para os serviços. Desta forma, em primeiro lugar é necessário
 iniciar o servidor DJabberd. Para fazer isso, pode-se executar:
 
-  djabberd -conf DJabberd/djabberd.conf
+LOGLEVEL=DEBUG screen -dmS djabberd djabberd -conf DJabberd/djabberd.conf
 
 Uma vez o servidor Jabber rodando, é possível iniciar o módulo de
 regras de negócio. Para isso, pode-se executar:
 
-  # dentro do diretório Fila-Servico
-  ./script/fila_servico_xmpp.pl
+cd /usr/share/fila/Fila-Servico
+FILA_SERVICO_HOME=. screen -dmS servico ./script/fila_servico_xmpp.pl
 
 Neste momento, pode-se então iniciar o Apache2, utilizando a
 configuração de exemplo, que presume a cópia desse diretório para o
 diretório /usr/share/fila.
+
+INSTALACAO DO AMBIENTE WEB
+================================================================================
+
+Para configurar o ambiente web, execute (como root):
+
+cp /usr/share/fila/Apache2/fila-vhost.conf /etc/apache2/sites-available
+a2ensite fila-vhost.conf
+
+Depois disso é só reiniciar o apache:
+
+apache2ctl stop
+apache2ctl start
+
+A tela do gerente e do atendente é acessível através do endereço:
+
+http://localhost/
+
+Todos os usuários vem com senha "password" por padrão. Vem o usuário
+"gerente" e os usuários "atendente01" até "atendente10" para você
+testar.
+
+A tela do emissor de senhas manual é acessível através do endereço:
+
+http://localhost/emissor
+
+Usuário "emissor", senha "password".
+
+Para habilitar a interface de administração modifique o arquivo
+/etc/apache2/ports.conf e adicione a linha
+
+Listen 8081
+
+logo depois de "Listen 80". Reinicie o apache novamente. A interface
+fica então disponível no endereço:
+
+http://localhost:8081/
+
+É recomendável implantar um mecanismo de autenticação para essa
+interface, que deve ser acessível apenas para manutenção.
 
 
 DOCUMENTACOES
